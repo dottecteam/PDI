@@ -14,15 +14,20 @@
     -fx-transition: -fx-opacity 0.2s ease-in-out;
     -fx-font-weight: bold;
     -fx-font-size: 20px;
+    -fx-max-width: 0;
 }
 
 .hBox:hover{
     -fx-background-color: #9032BB;
     -fx-cursor: hand;
+    -fx-pref-width: 325;
 }
 
 
 #leftMenu:hover .menuLabel{
     -fx-opacity: 1;
     -fx-cursor: hand;
+    -fx-max-width: use-computed-size;
 }
+
+
