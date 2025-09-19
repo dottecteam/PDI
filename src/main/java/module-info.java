@@ -4,5 +4,6 @@ module com.dottec.pdi.project.pdi {
 
 
     opens com.dottec.pdi.project.pdi to javafx.fxml;
+
     exports com.dottec.pdi.project.pdi;
 }
