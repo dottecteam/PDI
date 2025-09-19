@@ -14,14 +14,14 @@ public class Database {
     private static final String URL = dotenv.get("DB_URL");
     private static final String USER = dotenv.get("DB_USER");
     private static final String PASSWORD = dotenv.get("DB_PASSWORD");
-    private Connection connection;
+    private static Connection connection;
 
    // Constructor
     public Database() throws SQLException{
         this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public Connection getConnection(){
+    public static Connection getConnection(){
         return connection;
     }
 
