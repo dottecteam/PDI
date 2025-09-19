@@ -1,5 +1,6 @@
 module com.dottec.pdi.project.pdi {
     requires javafx.fxml;
+    requires java.sql;
     requires javafx.graphics;
     requires javafx.controls;
 
