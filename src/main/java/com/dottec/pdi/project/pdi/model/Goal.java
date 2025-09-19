@@ -139,6 +139,36 @@ public class Goal{
         return "Unknown activity";
     }
 
+    public String getActivityDescriptionById(int id){
+        for ( Activity activity : activities){
+            if(activity.getId() == id){
+                return activity.getDescription();
+            }
+        }
+        return "Unknown activity";
+    }
+
+    public String getDeadlineById(int id){
+        for ( Activity activity : activities){
+            if(activity.getId() == id){
+                return activity.getDeadline();
+            }
+        }
+
+        return "Unknown deadline";
+    }
+
+    public String getCreatedById(int id){
+        for ( Activity activity : activities){
+            if(activity.getId() == id){
+                return activity.getCreatedAt();
+            }
+        }
+
+        return "Unknown activity";
+    }
+
+
 
 
 
