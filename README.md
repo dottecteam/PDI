@@ -1,5 +1,5 @@
 # PDI
-Projeto acadêmico para <a href="https://youtan.com.br" target="_blank"> Youtan </a>.
+Projeto acadêmico com <a href="https://youtan.com.br" target="_blank"> Youtan </a>.
 
 <br>
 <br>
@@ -28,22 +28,22 @@ Este programa foi desenvolvido para otimizar o processo de criação e gestão d
 <br>
 <br>
 
-## Equipe
+## Equipe 🤝
 
 <br>
 
 <div align="center">
-  
-  Nome | Função
-  -|-
-  Breno Reis | Desenvolvedor
-  Cauã Mehiel | Desenvolvedor
-  Davi Andrade | Desenvolvedor
-  Gabriel Borges | Desenvolvedor
-  Jessica Katayama | Desenvolvedor
-  João Paulo | Desenvolvedor
-  Kauan Domingues | Product Owner
-  Nicolas Anderson | Desenvolvedor
-  Ramon Varjão | Scrum Master
-  
+
+Nome | Função | Contato
+-|-|-
+Breno Reis | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/breno-reis-893009321)
+Cauã Mehiel | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/cau%C3%A3-cursino-748485235)
+Davi Andrade | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/daviandrade007)
+Gabriel Borges | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/gabriel-borges-toledo)
+Jessica Katayama | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)]()
+João Paulo | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/joaosantos02)
+Kauan Domingues | Product Owner | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://linkedin.com/in/kauandomingues)
+Nicolas Anderson | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/nicolas-anderson-34b082302)
+Ramon Varjão | Scrum Master | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/ramon-varjao)
+
 </div>
