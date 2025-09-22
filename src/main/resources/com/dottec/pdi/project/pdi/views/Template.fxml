@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <left>
         <AnchorPane fx:id="leftMenu" prefHeight="200.0" prefWidth="70.0" stylesheets="@../static/style/style_template.css" BorderPane.alignment="CENTER">
             <children>
@@ -41,6 +41,9 @@
                                             <font><Font size="21.0" /></font>
                                         </Label>
                                     </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                                 </AnchorPane>
                                 <AnchorPane prefHeight="77.0" styleClass="hBox">
                                     <children>
