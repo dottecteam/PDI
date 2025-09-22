@@ -20,7 +20,7 @@
     <left>
         <AnchorPane fx:id="leftMenu" prefHeight="200.0" prefWidth="70.0" stylesheets="@../static/style/style_template.css" BorderPane.alignment="CENTER">
             <children>
-                <ImageView fitHeight="41.0" fitWidth="54.0" layoutX="24.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="menuLogo" fitHeight="41.0" fitWidth="54.0" layoutX="24.0" layoutY="14.0" onMouseClicked="#goToMain" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../static/img/logo.png" />
                     </image>
