@@ -1,0 +1,57 @@
+*{
+    -fx-background-color: #f6f6f6;
+}
+
+.label{
+    -fx-background-color: transparent;
+}
+
+.formInput {
+    -fx-border-radius: 10px;
+    -fx-border-color: #4B0081;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px
+}
+
+#selectDepartment{
+
+}
+
+/*Choice Box Select Department*/
+.choice-box .context-menu {
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+}
+
+.choice-box .arrow {
+    -fx-scale-shape: true;
+    -fx-padding: 10;
+    -fx-margin
+}
+
+.choice-box .menu-item{
+    -fx-background-radius: 10;
+}
+
+.choice-box .menu-item * {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4B0081;
+    -fx-font-size: 20;
+}
+
+.choice-box .menu-item:hover {
+    -fx-background-color: #a9a9a9;
+}
+
+
+.basicButton {
+    -fx-background-color: #AF69CD;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-align: center;
+}
+
+.basicButton:hover{
+    -fx-background-color: #9032BB;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 4)
+}
