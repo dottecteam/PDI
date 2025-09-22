@@ -27,7 +27,11 @@
 #leftMenu:hover .menuLabel{
     -fx-opacity: 1;
     -fx-cursor: hand;
-    -fx-max-width: use-computed-size;
+    -fx-max-width: 325;
+}
+
+#leftMenu:hover #tmpCenter{
+    -fx-background-color: gray;
 }
 
 
