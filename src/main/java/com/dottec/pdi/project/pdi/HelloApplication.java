@@ -19,7 +19,7 @@ public class HelloApplication extends Application {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
 
-        
+
         stage.setTitle("PDI");
         stage.setScene(scene);
         stage.setMaximized(true);
