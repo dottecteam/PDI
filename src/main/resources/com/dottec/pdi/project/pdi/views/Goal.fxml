@@ -19,7 +19,7 @@
 
 <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-radius: 30;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="-Infinity" prefViewportHeight="500.0" snapToPixel="false" style="-fx-border-color: #F4F4F4;">
+      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="-Infinity" prefViewportHeight="500.0" snapToPixel="false" style="-fx-border-color: #F4F4F4; -fx-background-radius: 30;">
          <content>
             <VBox alignment="CENTER" prefHeight="800.0" prefWidth="600.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);">
                <children>
