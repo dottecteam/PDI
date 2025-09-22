@@ -17,6 +17,10 @@
     -fx-max-width: 0;
 }
 
+.hBox{
+    -fx-background-color: transparent;
+}
+
 .hBox:hover{
     -fx-background-color: #9032BB;
     -fx-cursor: hand;
@@ -34,4 +38,7 @@
     -fx-background-color: gray;
 }
 
-
+.hBox.selecionado{
+    -fx-background-color: #9032BB;
+    -fx-background-radius: 100;
+}
