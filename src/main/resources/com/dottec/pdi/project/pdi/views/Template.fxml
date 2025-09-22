@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.HelloController">
     <left>
         <AnchorPane fx:id="leftMenu" prefHeight="200.0" prefWidth="70.0" stylesheets="@../static/style/style_template.css" BorderPane.alignment="CENTER">
             <children>
@@ -32,7 +32,7 @@
                     <top>
                         <VBox fillWidth="true" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane prefHeight="69.0" styleClass="hBox">
+                                <AnchorPane fx:id="Dashboard" prefHeight="69.0" styleClass="hBox">
                                     <children>
                                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="27.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                                             <image><Image url="@../static/img/arrow.png" /></image>
@@ -45,7 +45,7 @@
                               <Insets />
                            </VBox.margin>
                                 </AnchorPane>
-                                <AnchorPane prefHeight="77.0" styleClass="hBox">
+                                <AnchorPane fx:id="Collaborators" prefHeight="77.0" styleClass="hBox">
                                     <children>
                                         <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="27.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                                             <image><Image url="@../static/img/collaborator.png" /></image>
@@ -56,7 +56,7 @@
                                     </children>
                                     <VBox.margin><Insets top="20.0" /></VBox.margin>
                                 </AnchorPane>
-                                <AnchorPane prefHeight="79.0" styleClass="hBox">
+                                <AnchorPane fx:id="Models" prefHeight="79.0" styleClass="hBox">
                                     <children>
                                         <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="26.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                                             <image><Image url="@../static/img/sector.png" /></image>
@@ -67,7 +67,7 @@
                                     </children>
                                     <VBox.margin><Insets top="20.0" /></VBox.margin>
                                 </AnchorPane>
-                                <AnchorPane prefHeight="79.0" styleClass="hBox">
+                                <AnchorPane fx:id="Settings" prefHeight="79.0" styleClass="hBox">
                                     <children>
                                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="28.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
                                             <image><Image url="@../static/img/settings.png" /></image>
@@ -82,7 +82,7 @@
                         </VBox>
                     </top>
                     <bottom>
-                        <AnchorPane prefHeight="100.0" styleClass="hBox" BorderPane.alignment="CENTER">
+                        <AnchorPane fx:id="Profile" prefHeight="100.0" styleClass="hBox" BorderPane.alignment="CENTER">
                             <children>
                                 <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="29.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
                                     <image><Image url="@../static/img/profile.png" /></image>
@@ -97,4 +97,11 @@
             </children>
         </AnchorPane>
     </left>
+   <center>
+      <AnchorPane fx:id="tmpCenter" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text layoutX="532.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+         </children>
+      </AnchorPane>
+   </center>
 </BorderPane>
