@@ -1,5 +1,6 @@
 package com.dottec.pdi.project.pdi;
 
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,4 +34,6 @@ public class Application extends javafx.application.Application {
     public static void main(String[] args) {
         launch();
     }
+
+    // SAI DAQUI DANIEL, PORRA!!!!!!!!!!!!!!!!!!!
 }
