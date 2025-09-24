@@ -16,11 +16,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.TemplateController">
     <left>
         <AnchorPane fx:id="leftMenu" prefHeight="200.0" prefWidth="70.0" stylesheets="@../static/style/style_template.css" BorderPane.alignment="CENTER">
             <children>
-                <ImageView fitHeight="41.0" fitWidth="54.0" layoutX="24.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="menuLogo" fitHeight="41.0" fitWidth="54.0" layoutX="24.0" layoutY="14.0" onMouseClicked="#goToMain" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../static/img/logo.png" />
                     </image>
@@ -32,7 +32,7 @@
                     <top>
                         <VBox fillWidth="true" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane prefHeight="69.0" styleClass="hBox">
+                                <AnchorPane fx:id="menuDashboard" onMouseClicked="#goToDashboard" prefHeight="69.0" styleClass="hBox">
                                     <children>
                                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="27.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                                             <image><Image url="@../static/img/arrow.png" /></image>
@@ -45,7 +45,7 @@
                               <Insets />
                            </VBox.margin>
                                 </AnchorPane>
-                                <AnchorPane prefHeight="77.0" styleClass="hBox">
+                                <AnchorPane fx:id="menuCollaborators" onMouseClicked="#goToCollaborators" prefHeight="77.0" styleClass="hBox">
                                     <children>
                                         <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="27.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                                             <image><Image url="@../static/img/collaborator.png" /></image>
@@ -56,7 +56,7 @@
                                     </children>
                                     <VBox.margin><Insets top="20.0" /></VBox.margin>
                                 </AnchorPane>
-                                <AnchorPane prefHeight="79.0" styleClass="hBox">
+                                <AnchorPane fx:id="menuModels" onMouseClicked="#goToModels" prefHeight="79.0" styleClass="hBox">
                                     <children>
                                         <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="26.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                                             <image><Image url="@../static/img/sector.png" /></image>
@@ -67,7 +67,7 @@
                                     </children>
                                     <VBox.margin><Insets top="20.0" /></VBox.margin>
                                 </AnchorPane>
-                                <AnchorPane prefHeight="79.0" styleClass="hBox">
+                                <AnchorPane fx:id="menuSettings" onMouseClicked="#goToSettings" prefHeight="79.0" styleClass="hBox">
                                     <children>
                                         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="28.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
                                             <image><Image url="@../static/img/settings.png" /></image>
@@ -82,7 +82,7 @@
                         </VBox>
                     </top>
                     <bottom>
-                        <AnchorPane prefHeight="100.0" styleClass="hBox" BorderPane.alignment="CENTER">
+                        <AnchorPane fx:id="menuProfile" onMouseClicked="#goToProfile" prefHeight="100.0" styleClass="hBox" BorderPane.alignment="CENTER">
                             <children>
                                 <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="29.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
                                     <image><Image url="@../static/img/profile.png" /></image>
@@ -97,4 +97,7 @@
             </children>
         </AnchorPane>
     </left>
+   <center>
+      <AnchorPane fx:id="tmpCenter" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

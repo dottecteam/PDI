@@ -17,6 +17,10 @@
     -fx-max-width: 0;
 }
 
+.hBox{
+    -fx-background-color: transparent;
+}
+
 .hBox:hover{
     -fx-background-color: #9032BB;
     -fx-cursor: hand;
@@ -27,7 +31,14 @@
 #leftMenu:hover .menuLabel{
     -fx-opacity: 1;
     -fx-cursor: hand;
-    -fx-max-width: use-computed-size;
+    -fx-max-width: 325;
 }
 
+#leftMenu:hover #tmpCenter{
+    -fx-background-color: gray;
+}
 
+.hBox.selecionado{
+    -fx-background-color: #9032BB;
+    -fx-background-radius: 100;
+}
