@@ -20,15 +20,17 @@ Este programa foi desenvolvido para otimizar o processo de criação e gestão d
 <br>
 
 <p align="center">
-  <img alt= "Java" src="https://img.shields.io/badge/java-yellow?style=for-the-badge">
-  <img alt= "JavaFX" src="https://img.shields.io/badge/javafx-blue?style=for-the-badge">
-  <img alt= "MySQL" src="https://img.shields.io/badge/mysql-orange?style=for-the-badge">
+  <img align="center" alt="JavaIMG" height="100" width="100" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg" />&nbsp;&nbsp;&nbsp;&nbsp;
+  <img align="center" alt="MySqlIMG" height="110" width="110" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original-wordmark.svg" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img align="center" alt="GitIMG" height="120" width="120" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original-wordmark.svg" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img align="center" alt="FigmaIMG" height="70" width="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img align="center" alt="FigmaIMG" height="70" width="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/notion/notion-original.svg" />
 </p>
 
-<br>
+
 <br>
 
-## Equipe 🤝
+## Equipe Scrum 👥
 
 <br>
 
@@ -36,14 +38,14 @@ Este programa foi desenvolvido para otimizar o processo de criação e gestão d
 
 Nome | Função | Contato
 -|-|-
-Breno Reis | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/breno-reis-893009321)
-Cauã Mehiel | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/cau%C3%A3-cursino-748485235)
-Davi Andrade | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/daviandrade007)
-Gabriel Borges | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/gabriel-borges-toledo)
-Jessica Katayama | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)]()
-João Paulo | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/joaosantos02)
-Kauan Domingues | Product Owner | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://linkedin.com/in/kauandomingues)
-Nicolas Anderson | Desenvolvedor | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/nicolas-anderson-34b082302)
 Ramon Varjão | Scrum Master | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/ramon-varjao)
+Kauan Domingues | Product Owner | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://linkedin.com/in/kauandomingues)
+Breno Reis | Developer | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/breno-reis-893009321)
+Cauã Mehiel | Developer | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/cau%C3%A3-cursino-748485235)
+Davi Andrade | Developer | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/daviandrade007)
+Gabriel Borges | Developer | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/gabriel-borges-toledo)
+Jessica Katayama | Developer | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)]()
+João Paulo | Developer | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/joaosantos02)
+Nicolas Anderson | Developer | [![LinkedIn](https://img.shields.io/badge/linkedin-blue?style=for-the-badge)](https://www.linkedin.com/in/nicolas-anderson-34b082302)
 
 </div>
