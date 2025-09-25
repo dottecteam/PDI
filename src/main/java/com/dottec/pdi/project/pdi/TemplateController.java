@@ -70,7 +70,7 @@
 
         //Define a página que inicializa com o projeto
 
-        String paginaPadrao = "Goal.fxml";
+        String paginaPadrao = "AddGoal.fxml";
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -1,0 +1,5 @@
+/* Estilo quando o mouse passar por cima*/
+.card-conteudo:filled:hover {
+    -fx-background-color: #E6CCEF;
+    -fx-background-radius: 15;
+}
