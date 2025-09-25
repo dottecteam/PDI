@@ -3,6 +3,8 @@ package com.dottec.pdi.project.pdi.controllers;
 import com.dottec.pdi.project.pdi.Application;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.enums.Status;
+import com.dottec.pdi.project.pdi.utils.FieldValidator;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -13,6 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import java.io.IOException;
 
@@ -32,6 +36,7 @@ public class RegisterCollaboratorController {
     private TextField formAddCollaboratorExperience;
     @FXML
     private TextField formAddCollaboratorObservations;
+
     private Status status = Status.active;
 
     @FXML
@@ -103,24 +108,62 @@ public class RegisterCollaboratorController {
         }
     }
 
-    /*private void saveCollaborator(){
-        int id = 123;
+    // Button Click
+    @FXML
+    private void saveCollaborator(ActionEvent event){
+
+        if (!valideFields()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro de validação");
+            alert.setHeaderText(null);
+            alert.setContentText("Há algum campo inválido");
+            alert.showAndWait();
+            return;
+        }
+
         String name = formAddCollaboratorName.getText();
         String email = formAddCollaboratorEmail.getText();
         String cpf = formAddCollaboratorCPF.getText();
-        int department = 2;
-        String role = formAddCollaboratorRole.getText();
+
+        // Teste
+        // São valores que precisarão passar por busca no banco de dados para o select
+          int department = 1;
+          int role = 1;
+
         String experience = formAddCollaboratorExperience.getText();
         String observations = formAddCollaboratorObservations.getText();
 
-        Collaborator collaborator = new Collaborator(id, name, email, cpf, department, role, experience, observations, status);
-
-        collaboratorController.saveCollaborator(collaborator);
-    }*/
+        Collaborator collaborator = new Collaborator(0, name, email, cpf, department, role, experience, observations, status);
 
 
+        // Teste
+        // Observando se os valores estão chegando
+        System.out.println(collaborator.toString());
+//        collaboratorController.saveCollaborator(collaborator);
+    }
 
+    private boolean valideFields(){
+        if(!FieldValidator.validarCampo(formAddCollaboratorName.getText())) {
+            System.out.println("Nome Inválido");
+            return false;
+        }
+        if(!FieldValidator.validarCampo(formAddCollaboratorObservations.getText())){
+            System.out.println("Observação Inválido");
+            return false;
+        }
+        if(!FieldValidator.validarCampo(formAddCollaboratorExperience.getText())) {
+            System.out.println("Experiência Inválido");
+            return false;
+        }
+        if(!FieldValidator.validarCampo(formAddCollaboratorCPF.getText()) || !FieldValidator.validarCPF(formAddCollaboratorCPF.getText())) {
+            System.out.println("CPF Inválido");
+            return false;
+        }
+        if(!FieldValidator.validarCampo(formAddCollaboratorEmail.getText()) || !FieldValidator.validarEmail(formAddCollaboratorEmail.getText())) {
+            System.out.println("Email Inválido");
+            return false;
+        }
 
-
-
+        return true;
+    }
 }

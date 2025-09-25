@@ -13,7 +13,7 @@ import java.io.IOException;
 public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/Template.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/viewRegisterCollaborators.fxml"));
         Parent root = fxmlLoader.load();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
@@ -29,4 +29,6 @@ public class Application extends javafx.application.Application {
     public static void main(String[] args) {
         launch();
     }
+
+    // SAI DAQUI DANIEL, PORRA!!!!!!!!!!!!!!!!!!!
 }

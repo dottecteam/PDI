@@ -2,11 +2,15 @@ package com.dottec.pdi.project.pdi.utils;
 
 import java.util.regex.Pattern;
 
-public class CollaboratorValidator {
+public class FieldValidator {
     private static final String EMAIL_REGEX = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
 
     public static boolean validarEmail(String email) {
         return Pattern.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$", email);
+    }
+
+    public static boolean validarCampo(String text){
+        return text != null && !text.trim().isEmpty();
     }
 
     public static boolean validarCPF(String cpf) {
