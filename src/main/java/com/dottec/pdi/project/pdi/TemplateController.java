@@ -40,6 +40,7 @@
         private AnchorPane menuProfile;
 
 
+
         //Label
         @FXML
         private Label labelArrow;
@@ -55,6 +56,7 @@
 
         @FXML
         private Label labelProfile;
+
 
 
         //BorderPane
@@ -108,8 +110,14 @@
             carregarPagina("Profile.fxml");
         }
 
+        @FXML
+        void goToTeste(MouseEvent event){
+            carregarPagina("Dashboard.fxml");
+        }
+
+
         //Méeodo carregarPagina (para carregar uma pagina)
-        private void carregarPagina(String nomePagina) {
+        public void carregarPagina(String nomePagina) {
 
             //Configuracao pro 'selecionado' do menu
             menuDashboard.getStyleClass().remove("selecionado");
@@ -140,7 +148,14 @@
             Parent root = null;
             try{
                 String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/" + nomePagina;
-                root = FXMLLoader.load(getClass().getResource(caminhoCompleto));
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoCompleto));
+                root = loader.load();
+
+                Object controllerFilho = loader.getController();
+                if (controllerFilho instanceof ParentController) {
+                    ((ParentController) controllerFilho).setTemplateController(this);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
