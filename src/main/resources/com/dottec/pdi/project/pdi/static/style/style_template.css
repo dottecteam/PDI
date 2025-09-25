@@ -1,12 +1,3 @@
-@font-face{
-    font-family: 'Poppins';
-    src: url('./fonts/Poppins-Regular.ttf');
-}
-
-.label {
-    -fx-font-family: 'Poppins';
-}
-
 /*header*/
 .header-label{
     -fx-text-fill: #4B0081;
@@ -38,7 +29,6 @@
 
 .hBox:hover{
     -fx-background-color: #9032BB;
-    -fx-background-radius: 100;
     -fx-cursor: hand;
     -fx-pref-width: 325;
 }
@@ -48,7 +38,6 @@
     -fx-opacity: 1;
     -fx-cursor: hand;
     -fx-max-width: 325;
-    -fx-padding: 0 0 0 15;
 }
 
 #leftMenu:hover #tmpCenter{
@@ -83,7 +72,6 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-text-fill: #4B0081;
-    -fx-padding:0;
 }
 
 .filter-button:hover{
@@ -100,18 +88,11 @@
 }
 
 .search-bar:hover{
-    -fx-background-color: #d6d6d6;
+    -fx-background-color: #9F9F9F;
 }
 
 .search-bar:focused{
-    -fx-background-color: #d6d6d6;
+    -fx-background-color: #E6CCEF;
     -fx-border-color: #4B0081;
     -fx-border-radius: 15;
-}
-
-.return-button{
-    -fx-background-color: transparent;
-}
-.return-button:hover{
-    -fx-cursor: hand;
 }
