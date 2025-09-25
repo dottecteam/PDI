@@ -21,7 +21,7 @@ public class CategoryController {
         Category existingCategory  = categoryDAO.findById(category.getId());
 
         if( existingCategory != null) {
-            System.out.println(existingCategory + " already exists");
+            System.out.println(existingCategory + " já existe no banco de dados.");
             return;
         }
         try{
