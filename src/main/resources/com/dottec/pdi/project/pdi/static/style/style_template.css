@@ -1,3 +1,9 @@
+/*header*/
+.header-label{
+    -fx-text-fill: #4B0081;
+    -fx-font-size: 32;
+}
+
 #leftMenu {
     -fx-background-color: A066CB;
     -fx-background-radius: 0 25 25 0;
@@ -41,4 +47,52 @@
 .hBox.selecionado{
     -fx-background-color: #9032BB;
     -fx-background-radius: 100;
+}
+
+.button {
+    -fx-font-size: 24;
+}
+
+.basic-button {
+    -fx-background-color: #AF69CD;
+    -fx-border-radius: 15;
+    -fx-background-radius: 10;
+    -fx-text-align: center;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-padding: 3;
+}
+
+.basic-button:hover{
+    -fx-background-color: #9032BB;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 4, 0, 0, 4)
+}
+
+.filter-button{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #4B0081;
+}
+
+.filter-button:hover{
+    -fx-text-fill: #9032BB;
+    -fx-cursor: hand;
+}
+
+.search-bar{
+    -fx-background-color: #DDDDDD;
+    -fx-background-radius: 15;
+    -fx-pref-width: 250;
+    -fx-pref-height: 30;
+    -fx-font-size: 16;
+}
+
+.search-bar:hover{
+    -fx-background-color: #9F9F9F;
+}
+
+.search-bar:focused{
+    -fx-background-color: #E6CCEF;
+    -fx-border-color: #4B0081;
+    -fx-border-radius: 15;
 }
