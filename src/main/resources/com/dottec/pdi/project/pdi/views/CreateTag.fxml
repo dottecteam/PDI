@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="14.0" layoutY="14.0" prefHeight="274.0" prefWidth="573.0" style="-fx-border-color: #581687; -fx-border-width: 3; -fx-border-radius: 30;">
+         <children>
+            <Label fx:id="mainLabel" layoutX="32.0" layoutY="81.0" text="Soft Skill" textFill="#581687">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <TextField layoutX="19.0" layoutY="140.0" prefHeight="57.0" prefWidth="531.0" promptText="Categoria" style="-fx-border-color: #581687; -fx-border-width: 2; -fx-border-radius: 20; -fx-background-radius: 20;" />
+            <ImageView fx:id="switchBtn" fitHeight="49.0" fitWidth="49.0" layoutX="166.0" layoutY="77.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@switch.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <Line endX="100.0" layoutX="326.0" layoutY="102.0" startX="-100.0" stroke="#581687" strokeWidth="2.0" />
+            <Line endX="100.0" layoutX="438.0" layoutY="102.0" startX="-100.0" stroke="#581687" strokeWidth="2.0" />
+            <ImageView fitHeight="49.0" fitWidth="60.0" layoutX="490.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@up.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <Button layoutX="416.0" layoutY="222.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #AF69CD; -fx-background-radius: 10;" text="Confirmar" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button layoutX="279.0" layoutY="224.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #E6CCEF; -fx-background-radius: 10;" text="Cancelar">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
