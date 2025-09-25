@@ -9,20 +9,22 @@ import com.dottec.pdi.project.pdi.model.enums.CategoryType;
 public class CategoryController {
 
     private  final CategoryDAO  categoryDAO;
+
     public CategoryController(CategoryDAO dao) {
         this.categoryDAO = dao;
     }
 
     public void addCategory(Category category){
-        categoryDAO.insert(category);
+        this.categoryDAO.insert(category);
     }
 
-    public void deleteCategory(Category category){
-        categoryDAO.delete(category.getId());
+    public void deleteCategory(int id){
+        this.categoryDAO.delete(id); // Calling the delete method from the CategoryDAo class
     }
 
-    public void findCategory(Category category){
-        category = categoryDAO.findById(category.getId());
+    public void findCategory(int id){
+        this.categoryDAO.findById(id); // Calling the findById method from the given CategoryDAO class
+
     }
 
     public void updateCategory( int id , String newName , CategoryType newType){
@@ -31,19 +33,24 @@ public class CategoryController {
         Category category = categoryDAO.findById(id);
 
         // Making a verification to see if the category has an empty content or not
-        if(category == null){
-            System.out.println("Categoria não encontrada");
-            return;
+
+        try {
+            if (category == null) {
+                System.out.println("Categoria não encontrada");
+                return;
+            }
+
+            // Changing the attributes
+            category.setName(newName);
+            category.setType(newType);
+
+            // Persisting changes to the database
+            this.categoryDAO.update(category);
+            System.out.println("Categoria atualizada"); // Confirmation message
+        } catch (Exception e) {
+            System.out.println("Erro ao atualizar categoria");
         }
-
-        // Changing the attributes
-        category.setName(newName);
-        category.setType(newType);
-
-        // Persisting changes to the database
-        categoryDAO.update(category);
-        System.out.println("Categoria atualizada"); // Confirmation message
-
     }
+
 
 }
