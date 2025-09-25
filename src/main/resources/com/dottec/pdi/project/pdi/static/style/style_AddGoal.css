@@ -54,6 +54,6 @@
 
     -fx-background-color: #FFFFFF;
     -fx-border-color: transparent;
-    -fx-background-radius: 20;
+    /*-fx-background-radius: 20;*/
 
 }

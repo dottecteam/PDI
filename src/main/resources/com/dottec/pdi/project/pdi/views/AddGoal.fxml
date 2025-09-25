@@ -3,28 +3,31 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox prefHeight="300.0" prefWidth="200.0" spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.AddGoalController" >
+<VBox alignment="CENTER" prefHeight="300.0" prefWidth="200.0" spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.AddGoalController" >
    <padding>
       <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
    </padding>
    <children>
-      <ScrollPane minHeight="-Infinity" style="-fx-border-color: #F4F4F4;">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="473.0" prefWidth="841.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 30; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0);">
          <padding>
-            <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
-         <content>
-            <VBox prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30;">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-               <children>
-                  <ListView fx:id="goalsListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-               </children>
-            </VBox>
-         </content>
-      </ScrollPane>
+         <children>
+            <ScrollPane prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: #F6F6F6; -fx-background-insets: 0; -fx-background-color: transparent;">
+               <content>
+                  <ListView fx:id="goalsListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="776.0" style="-fx-border-color: #F6F6F6; -fx-background-color: #F6F6F6;" />
+               </content>
+            </ScrollPane>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </VBox>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </VBox>

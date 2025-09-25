@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" spacing="20.0" stylesheets="@../static/style/style_Goals.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox maxWidth="1.7976931348623157E308" prefHeight="314.0" prefWidth="900.0" spacing="10.0">
+            <children>
+                <GridPane alignment="CENTER" prefHeight="281.0" prefWidth="556.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-grid-lines-visible: red;" HBox.hgrow="ALWAYS">
+               <effect>
+                  <DropShadow />
+               </effect>
+               <rowConstraints>
+                  <RowConstraints fillHeight="false" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                  <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="ALWAYS" />
+               </rowConstraints>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" maxWidth="297.3333435058594" minWidth="10.0" prefWidth="278.6666564941406" />
+                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="275.3333435058594" minWidth="-Infinity" prefWidth="275.3333435058594" />
+               </columnConstraints>
+               <children>
+                  <Label style="-fx-text-fill: #4B0081;" text="Setor">
+                     <padding>
+                        <Insets left="30.0" top="20.0" />
+                     </padding>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" prefHeight="38.0" prefWidth="303.0" text="Nome" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="4.0" style="-fx-text-fill: #4B0081;" text="Observações" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets left="30.0" top="20.0" />
+                     </padding>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" layoutX="10.0" layoutY="55.0" prefHeight="40.0" prefWidth="301.0" text="Observações" GridPane.rowIndex="3">
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="90.0" style="-fx-text-fill: #4B0081;" text="Experiência" GridPane.rowIndex="4">
+                     <padding>
+                        <Insets left="30.0" top="20.0" />
+                     </padding>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" layoutX="10.0" layoutY="141.0" prefHeight="40.0" prefWidth="301.0" text="Experiência" GridPane.rowIndex="5">
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="179.0" prefHeight="55.0" prefWidth="271.0" style="-fx-text-fill: #4B0081;" text="CPF" GridPane.columnIndex="1">
+                     <padding>
+                        <Insets left="30.0" top="20.0" />
+                     </padding>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" layoutX="10.0" layoutY="230.0" prefHeight="40.0" prefWidth="301.0" text="000.000.000-00" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="291.0" layoutY="7.0" prefHeight="55.0" prefWidth="280.0" style="-fx-text-fill: #4B0081;" text="Cargo" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets left="30.0" top="20.0" />
+                     </padding>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_LEFT" layoutX="288.0" layoutY="58.0" prefHeight="40.0" prefWidth="301.0" text="cargo" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </GridPane>
+
+                <VBox alignment="CENTER" minHeight="-Infinity" prefHeight="187.0" prefWidth="297.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0);" HBox.hgrow="ALWAYS">
+               <effect>
+                  <DropShadow />
+               </effect></VBox>
+            </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="20.0" right="20.0" top="20.0" />
+         </padding>
+        </HBox>
+
+        <VBox minWidth="-Infinity" prefHeight="300.0" prefWidth="900.0" spacing="10.0" style="-fx-background-color: transparent;">
+            <children>
+                <Label style="-fx-background-color: transpa; -fx-text-fill: #4B0081;" text="Conteúdos em andamento" textFill="#575656">
+                    <font>
+                        <Font size="32.0" />
+                    </font>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+                </Label>
+
+                <ScrollPane fitToWidth="true" prefHeight="300.0" prefWidth="860.0" style="-fx-background-insets: 0; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="conteudosVbox" prefHeight="88.0" prefWidth="858.0" spacing="20.0">
+                     <children>
+                        <VBox style="-fx-background-color: #F6F6F6; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0);" styleClass="card-conteudo">
+                           <children>
+                              <Label text="Estudos">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Recrutamento e seleção">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" />
+                           </padding>
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                        </VBox>
+                        <VBox layoutX="20.0" layoutY="20.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0);" styleClass="card-conteudo">
+                           <children>
+                              <Label text="Estudos">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Recrutamento e seleção">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" />
+                           </padding>
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                        </VBox>
+                        <VBox layoutX="20.0" layoutY="120.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0);" styleClass="card-conteudo">
+                           <children>
+                              <Label text="Estudos">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Recrutamento e seleção">
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" />
+                           </padding>
+                           <effect>
+                              <DropShadow />
+                           </effect>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding></VBox>
+                    </content>
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </VBox.margin>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+   <padding>
+      <Insets bottom="40.0" />
+   </padding>
+</VBox>
