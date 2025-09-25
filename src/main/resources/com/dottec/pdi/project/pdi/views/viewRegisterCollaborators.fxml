@@ -141,7 +141,7 @@
                         <DropShadow />
                      </effect>
                   </VBox>
-                  <Button fx:id="formAddCollaboratorConfirmButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="basicButton" text="Confirmar" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                  <Button fx:id="formAddCollaboratorConfirmButton" onAction="#saveCollaborator" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="basicButton" text="Confirmar" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <font>
                         <Font size="24.0" />
                      </font>
