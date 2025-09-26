@@ -8,6 +8,7 @@
     import javafx.scene.control.Button;
     import javafx.scene.control.Label;
     import javafx.scene.control.TextField;
+    import javafx.scene.image.Image;
     import javafx.scene.image.ImageView;
     import javafx.scene.layout.AnchorPane;
     import javafx.scene.Parent;
@@ -37,7 +38,7 @@
         private AnchorPane menuCollaborators;
 
         @FXML
-        private AnchorPane menuModels;
+        private AnchorPane menuGoalTemplates;
 
         @FXML
         private AnchorPane menuSettings;
@@ -98,98 +99,137 @@
 
         @FXML
         private HBox headerFilterButtonField;
-        
+
+        @FXML
+        private HBox headerReturnButtonField;
+
 
 
         //Define a página que inicializa com o projeto
 
+        String currentPage = "Dashboard.fxml";
+        String lastPage = "";
         private static TemplateController instance;
-
-        String paginaPadrao = "Dashboard.fxml";
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
+            carregarPagina(currentPage);
+
+            Button buttonFilterDashboard = new Button("Filtrar");
+            buttonFilterDashboard.setId("filterDashboard");
+            buttonFilterDashboard.getStyleClass().add("filter-button");
+
+            buildHeader(false,"Dashboard", buttonFilterDashboard);
             instance = this;
-            carregarPagina(paginaPadrao);
         }
 
         //Define os métodos que "chamam" as páginas para a tela
         @FXML
+        void goToLastPage(MouseEvent event){
+            String tempPage = currentPage;
+            currentPage = lastPage;
+            lastPage = tempPage;
+            carregarPagina(currentPage);
+        }
+
+        @FXML
         void goToMain(MouseEvent event){
-            carregarPagina(paginaPadrao);
+            lastPage = currentPage;
+            currentPage = "Dashboard.fxml";
+            carregarPagina(currentPage);
+
+            Button buttonFilterDashboard = new Button("Filtrar");
+            buttonFilterDashboard.setId("filterDashboard");
+            buttonFilterDashboard.getStyleClass().add("filter-button");
+
+            buildHeader(false,"Dashboard", buttonFilterDashboard);
         }
 
         @FXML
         void goToDashboard(MouseEvent event) {
-            carregarPagina("Dashboard.fxml");
+            lastPage = currentPage;
+            currentPage = "Dashboard.fxml";
+            carregarPagina(currentPage);
+
+            Button buttonFilterDashboard = new Button("Filtrar");
+            buttonFilterDashboard.setId("filterDashboard");
+            buttonFilterDashboard.getStyleClass().add("filter-button");
+
+            buildHeader(false,"Dashboard", buttonFilterDashboard);
         }
 
         @FXML
         void goToCollaborators(MouseEvent event) {
-            carregarPagina("Collaborators.fxml");
+            lastPage = currentPage;
+            currentPage = "Collaborators.fxml";
+            carregarPagina(currentPage);
+
+            Button buttonAddCollaborator = new Button("Adicionar Colaborador");
+            buttonAddCollaborator.setId("buttonAddCollaborator");
+
+            Button buttonFilterCollaborators = new Button("Filtrar");
+            buttonFilterCollaborators.getStyleClass().add("filter-button");
+            buttonFilterCollaborators.setId("buttonFilterCollaborators");
+
+            TextField searchBarCollaborators = new TextField();
+            searchBarCollaborators.setId("searchBarCollaborators");
+
+            buildHeader(false,"Colaboradores", buttonAddCollaborator, buttonFilterCollaborators, searchBarCollaborators);
         }
 
         @FXML
-        void goToModels(MouseEvent event) {
-            carregarPagina("Models.fxml");
+        void goToGoalTemplates(MouseEvent event) {
+            lastPage = currentPage;
+            currentPage = "GoalTemplates.fxml";
+            carregarPagina(currentPage);
+
+            buildHeader(false, "Modelos");
         }
 
         @FXML
         void goToSettings(MouseEvent event) {
-            carregarPagina("Settings.fxml");
+            lastPage = currentPage;
+            currentPage = "Settings.fxml";
+            carregarPagina(currentPage);
+
+            buildHeader(false, "Gerenciamento");
         }
 
         @FXML
         void goToProfile(MouseEvent event) {
-            carregarPagina("Profile.fxml");
+            lastPage = currentPage;
+            currentPage = "Profile.fxml";
+            carregarPagina(currentPage);
+
+            buildHeader(false, "Perfil");
         }
 
-        //Méeodo carregarPagina (para carregar uma pagina)
+        //Método carregarPagina (para carregar uma pagina)
         public void carregarPagina(String nomePagina) {
 
             //Configuracao pro 'selecionado' do menu
             menuDashboard.getStyleClass().remove("selecionado");
             menuCollaborators.getStyleClass().remove("selecionado");
-            menuModels.getStyleClass().remove("selecionado");
+            menuGoalTemplates.getStyleClass().remove("selecionado");
             menuSettings.getStyleClass().remove("selecionado");
             menuProfile.getStyleClass().remove("selecionado");
 
             switch (nomePagina) {
                 case "Dashboard.fxml":
                     menuDashboard.getStyleClass().add("selecionado");
-
-                    Button buttonFilterDashboard = new Button("Filtrar");
-                    buttonFilterDashboard.setId("filterDashboard");
-                    buttonFilterDashboard.getStyleClass().add("filter-button");
-
-                    buildHeader("Dashboard", buttonFilterDashboard);
                     break;
                 case "Collaborators.fxml":
                     menuCollaborators.getStyleClass().add("selecionado");
-                    Button buttonAddCollaborator = new Button("Adicionar Colaborador");
-                    buttonAddCollaborator.setId("buttonAddCollaborator");
-
-                    Button buttonFilterCollaborators = new Button("Filtrar");
-                    buttonFilterCollaborators.getStyleClass().add("filter-button");
-                    buttonFilterCollaborators.setId("buttonFilterCollaborators");
-
-                    TextField searchBarCollaborators = new TextField();
-                    searchBarCollaborators.setId("searchBarCollaborators");
-
-                    buildHeader("Colaboradores", buttonAddCollaborator, buttonFilterCollaborators, searchBarCollaborators);
 
                     break;
-                case "Models.fxml":
-                    menuModels.getStyleClass().add("selecionado");
-                    buildHeader("Modelos");
+                case "GoalTemplates.fxml":
+                    menuGoalTemplates.getStyleClass().add("selecionado");
                     break;
                 case "Settings.fxml":
                     menuSettings.getStyleClass().add("selecionado");
-                    buildHeader("Gerenciamento");
                     break;
                 case "Profile.fxml":
                     menuProfile.getStyleClass().add("selecionado");
-                    buildHeader("Perfil");
                     break;
             }
 
@@ -205,6 +245,7 @@
             tmpCenter.setCenter(root);
         }
 
+
         public static void trocarDeTela(String nomePagina) {
             // Ele usa a instância que salvamos para chamar o método real de troca de página.
             if (instance != null) {
@@ -214,14 +255,26 @@
             }
         }
 
-        public void buildHeader(String label, Node... headerItems) {
+        public void buildHeader(boolean returnButton, String label, Node... headerItems) {
             headerLabel.setText(label);
 
             headerButtonsField.getChildren().clear();
+            headerReturnButtonField.getChildren().clear();
             headerSearchBarField.getChildren().clear();
             headerFilterButtonField.getChildren().clear();
 
             if (headerItems == null) return;
+            if (returnButton){
+                Image img = new Image(getClass().getResourceAsStream("/com/dottec/pdi/project/pdi/static/img/arrow-left.png"));
+                ImageView icon = new ImageView(img);
+                icon.setFitWidth(16);
+                icon.setFitHeight(16);
+                Button returnBtn = new Button();
+                returnBtn.setGraphic(icon);
+                returnBtn.getStyleClass().add("return-button");
+                headerReturnButtonField.getChildren().add(returnBtn);
+                returnBtn.setOnMouseClicked(this::goToLastPage);
+            }
 
             Arrays.stream(headerItems).forEach(item -> {
                 if (item instanceof Button btn) {
