@@ -45,6 +45,9 @@
         @FXML
         private AnchorPane menuProfile;
 
+        @FXML
+        private AnchorPane AnchorMainPane;
+
         //Label
         @FXML
         private Label labelArrow;
@@ -100,11 +103,13 @@
 
         //Define a página que inicializa com o projeto
 
+        private static TemplateController instance;
+
         String paginaPadrao = "Dashboard.fxml";
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
-            buildHeader("Dashboard");
+            instance = this;
             carregarPagina(paginaPadrao);
         }
 
@@ -140,7 +145,7 @@
         }
 
         //Méeodo carregarPagina (para carregar uma pagina)
-        private void carregarPagina(String nomePagina) {
+        public void carregarPagina(String nomePagina) {
 
             //Configuracao pro 'selecionado' do menu
             menuDashboard.getStyleClass().remove("selecionado");
@@ -176,12 +181,15 @@
                     break;
                 case "Models.fxml":
                     menuModels.getStyleClass().add("selecionado");
+                    buildHeader("Modelos");
                     break;
                 case "Settings.fxml":
                     menuSettings.getStyleClass().add("selecionado");
+                    buildHeader("Gerenciamento");
                     break;
                 case "Profile.fxml":
                     menuProfile.getStyleClass().add("selecionado");
+                    buildHeader("Perfil");
                     break;
             }
 
@@ -189,11 +197,21 @@
             Parent root = null;
             try{
                 String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/" + nomePagina;
-                root = FXMLLoader.load(getClass().getResource(caminhoCompleto));
+
+                 root = FXMLLoader.load(getClass().getResource(caminhoCompleto));
             } catch (IOException e) {
                 e.printStackTrace();
             }
             tmpCenter.setCenter(root);
+        }
+
+        public static void trocarDeTela(String nomePagina) {
+            // Ele usa a instância que salvamos para chamar o método real de troca de página.
+            if (instance != null) {
+                instance.carregarPagina(nomePagina);
+            } else {
+                System.err.println("A instância do TemplateController é nula. A tela principal já foi carregada?");
+            }
         }
 
         public void buildHeader(String label, Node... headerItems) {
