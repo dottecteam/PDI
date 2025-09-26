@@ -15,6 +15,7 @@ import java.io.IOException;
 public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
+
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/Template.fxml"));
         Parent root = fxmlLoader.load();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
