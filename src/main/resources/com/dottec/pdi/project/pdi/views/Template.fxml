@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
@@ -12,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="1440.0" stylesheets="@../static/style/style_template.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.TemplateController">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="1440.0" stylesheets="@../static/style/style_template.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.TemplateController">
     <left>
         <AnchorPane fx:id="leftMenu" prefHeight="200.0" prefWidth="70.0" BorderPane.alignment="CENTER">
             <children>
@@ -108,7 +116,7 @@
                               <Insets bottom="10.0" right="10.0" top="10.0" />
                            </padding>
                            <children>
-                              <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" text="Label" textAlignment="CENTER" textFill="#4b0081">
+                              <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" style="-fx-font-weight: bold;" text="Label" textAlignment="CENTER" textFill="#4b0081">
                                  <font>
                                     <Font size="32.0" />
                                  </font>
@@ -128,6 +136,8 @@
                      </children>
                   </HBox>
                </top>
+               <center>
+               </center>
             </BorderPane>
          </children></AnchorPane>
    </center>
