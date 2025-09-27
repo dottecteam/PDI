@@ -1,20 +1,30 @@
 package com.dottec.pdi.project.pdi.controller;
 
+import java.com.dottec.pdi.project.pdi.dao.GoalDAO;
+import java.com.dottec.pdi.project.pdi.model.Goal;
+import java.com.dottec.pdi.project.pdi.validator.GoalValidator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale.Category;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 
 import com.dottec.pdi.project.pdi.dao.*;
 import com.dottec.pdi.project.pdi.model.*;
 import com.dottec.pdi.project.pdi.validator.*;
 
 public class GoalController{
-	private GoalDAO goalDAO;
-	private GoalValidator validator;
+	private final GoalDAO goalDAO;
+	private final GoalValidator validator;
 	
     public GoalController(){
     	this.goalDAO = new GoalDAO();
     	this.validator = new GoalValidator();
     }
+
+
+    // -------------- Add goal to the Database ---------- //
     
     public boolean addGoal(String name , String description , String deadline , String category , int employeeId , String status) {
     	try {
@@ -28,6 +38,7 @@ public class GoalController{
     	}
     }
     
+    // ------------- Gathering the goals from the database ----------------- //
     public List<Goal> goalsList(){
     	try {    		
     		return goalDAO.readAll();	
@@ -37,6 +48,8 @@ public class GoalController{
     	}
     }
     
+    // -------------------- Update Goal --------------------------- //
+
     public boolean updateGoal(Goal goal) {
     	try {
     		if(validator.goalValidator(goal)) goalDAO.update(goal); 
@@ -48,6 +61,7 @@ public class GoalController{
     	}
     }
     
+    // -------------------- Remove goal -------------------------- //
     public boolean removeGoal(int id) {
     	try {
     		goalDAO.delete(id);
@@ -66,141 +80,52 @@ public class GoalController{
             return null;
     	}
     }
+
+    // ----------- Private update helper method ------------------
+
+    private boolean updateField( int id, Consumer<Goal> setter, Predicate<Goal> validatorCheck , String errorMessage){
+        try{
+            Goal goal = goalDAO.readById(id);
+            // Cheking to see if the goal exists or not in the database
+            if( goal == null){
+                System.err.println("Meta não encontrada");
+                return false;
+            }
+            if ( validatorCheck.test(goal)){
+                setter.accept(goal);
+                goalDAO.update(goal);
+                return true;
+            }else{
+                System.err.println(errorMessage);
+                return false;
+            } 
+        }catch ( Exception e){
+            System.err.println(e.getMessage());
+            return false;
+        }
+    }
     
+    // --------------- Update Fields ----------------- //
+
     public boolean updateGoalName(int id, String name) {
-        try {    		
-            Goal goal = goalDAO.readById(id);
-            if (goal == null) {
-                System.err.println("Goal não encontrado: ID " + id);
-                return false;
-            }
-            
-            if (validator.goalValidatorName(name)) {
-                goal.setName(name);
-                goalDAO.update(goal); // ← AGORA SALVA NO BANCO
-                return true;
-            } else { 
-                System.out.println("Nome inválido"); 
-                return false;
-            }
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
-    }
-    
-    public boolean updateGoalStatus(int id, String status) {
-        try {    		
-            Goal goal = goalDAO.readById(id);
-            if (goal == null) {
-                System.err.println("Goal não encontrado: ID " + id);
-                return false;
-            }
-            
-            if (validator.goalValidatorStatus(status)) {
-                goal.setStatus(status);
-                goalDAO.update(goal);
-                return true;
-            } else { 
-                System.out.println("Status invalido"); 
-                return false;
-            }
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
-    }
-    
-    public boolean updateGoalDescription(int id, String description) {
-        try {    		
-            Goal goal = goalDAO.readById(id);
-            if (goal == null) {
-                System.err.println("Goal não encontrado: ID " + id);
-                return false;
-            }
-            
-            if (validator.goalValidatorDescription(description)) {
-                goal.setDescription(description);
-                goalDAO.update(goal);
-                return true;
-            } else { 
-                System.out.println("Description invalido"); 
-                return false;
-            }
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
+        return updateField(id, g -> g.setName(name), g -> validator.goalValidatorName(name), "Nome inválido");
     }
 
-    public boolean updateGoalDeadline(int id, String date) {
-        try {    		
-            Goal goal = goalDAO.readById(id);
-            if (goal == null) {
-                System.err.println("Goal não encontrado: ID " + id);
-                return false;
-            }
-            
-            if (validator.goalValidatorDate(date)) {
-                goal.setDeadline(date);  
-                goalDAO.update(goal);
-                return true;
-            } else { 
-                System.err.println("Deadline invalido"); 
-                return false;
-            }
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
+    public boolean updateGoalStatus(int id, String status) {
+        return updateField(id, g -> g.setStatus(status), g -> validator.goalValidatorStatus(status), "Status inválido");
+    }
+
+    public boolean updateGoalDescription(int id, String description) {
+        return updateField(id, g -> g.setDescription(description), g -> validator.goalValidatorDescription(description), "Descrição inválida");
+    }
+
+    public boolean updateGoalDeadline(int id, String deadline) {
+        return updateField(id, g -> g.setDeadline(deadline), g -> validator.goalValidatorDate(deadline), "Deadline inválida");
     }
 
     public boolean updateGoalCategory(int id, Category category) {
-        try {    		
-            Goal goal = goalDAO.readById(id);
-            if (goal == null) {
-                System.err.println("Goal não encontrado: ID " + id);
-                return false;
-            }
-            
-            if (validator.goalValidatorDate(category)) {
-                goal.setCategory(category);  
-                goalDAO.update(goal);
-                return true;
-            } else { 
-                System.err.println("Category invalido"); 
-                return false;
-            }
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
+        return updateField(id, g -> g.setCategory(category), g -> validator.goalValidatorCategory(category), "Categoria inválida");
     }
-    
-//    public List<Goal> findGoalsByStatus(String status/*ou Status status se usar enum*/){
-//    	try {
-//            return goalDAO.findByStatus(status);
-//        } catch (Exception e) {
-//            System.err.println(e.getMessage());
-//            return new ArrayList<>();
-//        }
-//    }	
-    
-//    public List<Goal> findByStatus(String category/*ou Category category se usar enum*/) {
-//    	try{    		
-//    		return goalDAO.findByCategory(category);    		
-//    	}catch(Exception e) {
-//    		System.err.println(e.getMessage());
-//    		return new ArrayList<>();
-//    	}
-//    }
-    
-//    public List<Goal> findGoalsByEmployee(int employeeId) {
-//        try {
-//            return goalDAO.findByEmployeeId(employeeId);
-//        } catch (Exception e) {
-//            System.err.println(e.getMessage());
-//            return new ArrayList<>();
-//        }
-//    }
+
+
 }
