@@ -1,6 +1,6 @@
 package com.dottec.pdi.project.pdi.model;
 
-import com.dottec.pdi.project.pdi.model.enums.CategoryType;
+import com.dottec.pdi.project.pdi.enums.CategoryType;
 import java.util.Objects;
 
 public class Category {

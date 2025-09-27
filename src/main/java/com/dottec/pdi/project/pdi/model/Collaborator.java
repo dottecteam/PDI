@@ -1,6 +1,6 @@
 package com.dottec.pdi.project.pdi.model;
 
-import com.dottec.pdi.project.pdi.model.enums.Status;
+import com.dottec.pdi.project.pdi.enums.Status;
 import java.util.Objects;
 
 public class Collaborator {

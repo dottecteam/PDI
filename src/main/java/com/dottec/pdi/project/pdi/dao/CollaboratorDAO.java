@@ -2,7 +2,7 @@ package com.dottec.pdi.project.pdi.dao;
 
 import com.dottec.pdi.project.pdi.config.Database;
 import com.dottec.pdi.project.pdi.model.Collaborator;
-import com.dottec.pdi.project.pdi.model.enums.Status;
+import com.dottec.pdi.project.pdi.enums.Status;
 
 import java.sql.*;
 import java.util.ArrayList;

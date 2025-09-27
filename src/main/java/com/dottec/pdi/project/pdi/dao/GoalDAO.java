@@ -1,4 +1,4 @@
-package com.dottec.pdi.project.pdi.model.dao;
+package com.dottec.pdi.project.pdi.dao;
 
 import com.dottec.pdi.project.pdi.config.Database;
 import com.dottec.pdi.project.pdi.model.Goal;
@@ -15,8 +15,7 @@ public class GoalDAO
 {
     private final Database db;
     
-    public GoalDAO()
-    {
+    public GoalDAO() throws SQLException {
         this.db = new Database();
     }
 

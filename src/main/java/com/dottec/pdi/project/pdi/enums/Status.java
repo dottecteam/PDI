@@ -1,4 +1,4 @@
-package com.dottec.pdi.project.pdi.model.enums;
+package com.dottec.pdi.project.pdi.enums;
 
 public enum Status{
     active,

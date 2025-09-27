@@ -1,7 +1,7 @@
 package com.dottec.pdi.project.pdi;
 
 import com.dottec.pdi.project.pdi.model.Collaborator;
-import com.dottec.pdi.project.pdi.model.enums.Status;
+import com.dottec.pdi.project.pdi.enums.Status;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -19,12 +19,12 @@ public class CollaboratorsController {
     private ScrollPane mainScrollPane;
 
     private List<Collaborator> collaborators = Arrays.asList(
-            new Collaborator(1, "Marcelino", "marcelino@outlook.com", "12345678910", 2, "Sem experiência", "Sem observações", Status.active),
-            new Collaborator(2, "Fernanda", "fernanda.silva@gmail.com", "98765432100", 3, "3 anos em Marketing", "Boa comunicação", Status.active),
-            new Collaborator(3, "Rafael", "rafael.santos@yahoo.com", "45678912355", 1, "5 anos em Desenvolvimento", "Especialista em Java", Status.inactive),
-            new Collaborator(4, "Juliana", "juliana.mendes@empresa.com", "32165498777", 4, "1 ano em RH", "Organizada e dedicada", Status.active),
-            new Collaborator(5, "Carlos", "carlos.pereira@hotmail.com", "74185296311", 5, "10 anos em Gestão", "Ex-gerente de projetos", Status.inactive),
-            new Collaborator(6, "Amanda", "amanda.rocha@empresa.com", "85296374122", 2, "2 anos em Suporte Técnico", "Atendimento ao cliente", Status.active)
+            new Collaborator(1, "Marcelino", "marcelino@outlook.com", "12345678910", 2, 2, "Sem experiência", "Sem observações", Status.active),
+            new Collaborator(2, "Fernanda", "fernanda.silva@gmail.com", "98765432100", 3, 3, "3 anos em Marketing", "Boa comunicação", Status.active),
+            new Collaborator(3, "Rafael", "rafael.santos@yahoo.com", "45678912355", 1, 1, "5 anos em Desenvolvimento", "Especialista em Java", Status.inactive),
+            new Collaborator(4, "Juliana", "juliana.mendes@empresa.com", "32165498777", 4, 4, "1 ano em RH", "Organizada e dedicada", Status.active),
+            new Collaborator(5, "Carlos", "carlos.pereira@hotmail.com", "74185296311", 5, 5, "10 anos em Gestão", "Ex-gerente de projetos", Status.inactive),
+            new Collaborator(6, "Amanda", "amanda.rocha@empresa.com", "85296374122", 2, 2, "2 anos em Suporte Técnico", "Atendimento ao cliente", Status.active)
     );
 
     public void initialize() {

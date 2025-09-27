@@ -1,4 +1,4 @@
-package com.dottec.pdi.project.pdi.model.Controller;
+package com.dottec.pdi.project.pdi.controllers;
 
 public class GoalController{
 

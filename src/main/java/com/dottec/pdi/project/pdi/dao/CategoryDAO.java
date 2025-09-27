@@ -2,7 +2,7 @@ package com.dottec.pdi.project.pdi.dao;
 
 import com.dottec.pdi.project.pdi.config.Database;
 import com.dottec.pdi.project.pdi.model.Category;
-import com.dottec.pdi.project.pdi.model.enums.CategoryType;
+import com.dottec.pdi.project.pdi.enums.CategoryType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

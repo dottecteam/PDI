@@ -1,8 +1,7 @@
 package com.dottec.pdi.project.pdi.controllers;
 
-import com.dottec.pdi.project.pdi.Application;
 import com.dottec.pdi.project.pdi.model.Collaborator;
-import com.dottec.pdi.project.pdi.model.enums.Status;
+import com.dottec.pdi.project.pdi.enums.Status;
 import com.dottec.pdi.project.pdi.utils.FieldValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,11 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Region;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
-import java.io.IOException;
 
 public class RegisterCollaboratorController {
     //fields

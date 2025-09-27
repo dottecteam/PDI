@@ -1,10 +1,10 @@
-package com.dottec.pdi.project.pdi.model.Controller;
+package com.dottec.pdi.project.pdi.controllers;
 
 // ---------------- Creating the Category Controller CRUD to manage the categories while linked to the database -----------
 
 import com.dottec.pdi.project.pdi.dao.CategoryDAO;
 import com.dottec.pdi.project.pdi.model.Category;
-import com.dottec.pdi.project.pdi.model.enums.CategoryType;
+import com.dottec.pdi.project.pdi.enums.CategoryType;
 
 
 

@@ -1,8 +1,6 @@
 package com.dottec.pdi.project.pdi.model;
 
 
-import javax.swing.plaf.synth.SynthTableUI;
-import java.lang.invoke.StringConcatFactory;
 
 public class Activity{
 
