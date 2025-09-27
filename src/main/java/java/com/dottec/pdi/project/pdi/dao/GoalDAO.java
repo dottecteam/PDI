@@ -1,4 +1,4 @@
-package com.dottec.pdi.project.pdi.model.dao;
+package com.dottec.pdi.project.pdi.dao;
 
 import com.dottec.pdi.project.pdi.config.Database;
 import com.dottec.pdi.project.pdi.model.Goal;
