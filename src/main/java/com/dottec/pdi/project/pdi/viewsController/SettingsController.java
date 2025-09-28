@@ -1,4 +1,4 @@
-package com.dottec.pdi.project.pdi;
+package com.dottec.pdi.project.pdi.viewsController;
 
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;

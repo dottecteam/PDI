@@ -11,20 +11,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" nodeOrientation="LEFT_TO_RIGHT" pannable="true" stylesheets="/com/dottec/pdi/project/pdi/static/style/style_formRegisterCollaborator.css" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.controllers.RegisterCollaboratorController">
+<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" nodeOrientation="LEFT_TO_RIGHT" pannable="true" stylesheets="/com/dottec/pdi/project/pdi/static/style/style_formRegisterCollaborator.css" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewsController.RegisterCollaboratorController">
    <content>
       <VBox alignment="CENTER" fillWidth="false">
          <children>
             <VBox alignment="CENTER_RIGHT" spacing="20.0">
                <children>
-                  <VBox fx:id="formPane" maxWidth="735.0" prefWidth="735.0" spacing="20.0" style="-fx-background-color: f6f6f6; -fx-background-radius: 20; -fx-border-radius: 20;">
+                  <VBox fx:id="formPane" maxWidth="735.0" prefWidth="735.0" spacing="10.0" style="-fx-background-color: f6f6f6; -fx-background-radius: 20; -fx-border-radius: 20;">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" top="50.0" />
                      </VBox.margin>
                      <children>
                         <StackPane alignment="TOP_LEFT" maxHeight="90.0" nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <TextField fx:id="formAddCollaboratorName" maxHeight="90.0" maxWidth="1.7976931348623157E308" minHeight="65.0" styleClass="formInput">
+                              <TextField fx:id="formAddCollaboratorName" alignment="BOTTOM_LEFT" maxHeight="90.0" maxWidth="1.7976931348623157E308" minHeight="55.0" styleClass="formInput">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -34,14 +34,14 @@
                                     <Font size="16.0" />
                                  </font>
                                  <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                  </padding>
                               </Label>
                            </children>
                         </StackPane>
                         <StackPane alignment="TOP_LEFT" maxHeight="90.0" nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <TextField fx:id="formAddCollaboratorEmail" maxHeight="90.0" maxWidth="1.7976931348623157E308" minHeight="65.0" styleClass="formInput">
+                              <TextField fx:id="formAddCollaboratorEmail" alignment="BOTTOM_LEFT" maxHeight="90.0" maxWidth="1.7976931348623157E308" minHeight="55.0" styleClass="formInput">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -51,14 +51,14 @@
                                     <Font size="16.0" />
                                  </font>
                                  <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                  </padding>
                               </Label>
                            </children>
                         </StackPane>
                         <StackPane alignment="TOP_LEFT" maxHeight="90.0" nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <TextField fx:id="formAddCollaboratorCPF" maxHeight="90.0" minHeight="65.0" minWidth="200.0" prefWidth="1000.0" styleClass="formInput">
+                              <TextField fx:id="formAddCollaboratorCPF" alignment="BOTTOM_LEFT" maxHeight="90.0" minHeight="55.0" minWidth="200.0" prefWidth="1000.0" styleClass="formInput">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -68,40 +68,40 @@
                                     <Font size="16.0" />
                                  </font>
                                  <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                  </padding>
                               </Label>
                            </children>
                         </StackPane>
                         <StackPane alignment="TOP_LEFT" maxHeight="90.0" nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <ChoiceBox id="selectDepartment" fx:id="formAddCollaboratorDepartment" maxHeight="90.0" minHeight="65.0" minWidth="200.0" prefWidth="1500.0" styleClass="formInput" />
+                              <ChoiceBox id="selectDepartment" fx:id="formAddCollaboratorDepartment" maxHeight="90.0" minHeight="55.0" minWidth="200.0" prefWidth="1500.0" styleClass="formInput" />
                               <Label text="Setor*" textFill="#808080">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                                  <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                  </padding>
                               </Label>
                            </children>
                         </StackPane>
                         <StackPane alignment="TOP_LEFT" maxHeight="90.0" nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <ChoiceBox id="selectDepartment" fx:id="formAddCollaboratorRole" maxHeight="90.0" minHeight="65.0" minWidth="200.0" prefWidth="1500.0" styleClass="formInput" />
+                              <ChoiceBox id="selectDepartment" fx:id="formAddCollaboratorRole" maxHeight="90.0" minHeight="55.0" minWidth="200.0" prefWidth="1500.0" styleClass="formInput" />
                               <Label text="Cargo*" textFill="#808080">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                                  <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                  </padding>
                               </Label>
                            </children>
                         </StackPane>
                         <StackPane alignment="TOP_LEFT" maxHeight="90.0" nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <TextField fx:id="formAddCollaboratorExperience" maxHeight="90.0" maxWidth="1.7976931348623157E308" minHeight="65.0" styleClass="formInput">
+                              <TextField fx:id="formAddCollaboratorExperience" alignment="BOTTOM_LEFT" maxHeight="90.0" maxWidth="1.7976931348623157E308" minHeight="55.0" styleClass="formInput">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -111,14 +111,14 @@
                                     <Font size="16.0" />
                                  </font>
                                  <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                  </padding>
                               </Label>
                            </children>
                         </StackPane>
                         <StackPane alignment="TOP_LEFT" maxHeight="90.0" nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <TextField fx:id="formAddCollaboratorObservations" maxHeight="91.0" maxWidth="1.7976931348623157E308" minHeight="65.0" prefWidth="740.0" styleClass="formInput">
+                              <TextField fx:id="formAddCollaboratorObservations" alignment="BOTTOM_LEFT" maxHeight="91.0" maxWidth="1.7976931348623157E308" minHeight="55.0" prefWidth="740.0" styleClass="formInput">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -128,7 +128,7 @@
                                     <Font size="16.0" />
                                  </font>
                                  <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                  </padding>
                               </Label>
                            </children>
@@ -141,7 +141,7 @@
                         <DropShadow />
                      </effect>
                   </VBox>
-                  <Button fx:id="formAddCollaboratorConfirmButton" onAction="#saveCollaborator" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="basicButton" text="Confirmar" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                  <Button fx:id="formAddCollaboratorConfirmButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveCollaborator" styleClass="basicButton" text="Confirmar" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -153,7 +153,7 @@
             </VBox>
          </children>
          <padding>
-            <Insets left="40.0" right="40.0" top="40.0" />
+            <Insets bottom="40.0" left="40.0" right="40.0" top="10.0" />
          </padding>
       </VBox>
    </content>

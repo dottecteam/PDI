@@ -1,8 +1,8 @@
-package com.dottec.pdi.project.pdi.controllers;
+package com.dottec.pdi.project.pdi.viewsController;
 
-import com.dottec.pdi.project.pdi.Application;
+import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
 import com.dottec.pdi.project.pdi.model.Collaborator;
-import com.dottec.pdi.project.pdi.model.enums.Status;
+import com.dottec.pdi.project.pdi.enums.Status;
 import com.dottec.pdi.project.pdi.utils.FieldValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,11 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Region;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
-import java.io.IOException;
 
 public class RegisterCollaboratorController {
     //fields
@@ -43,9 +39,6 @@ public class RegisterCollaboratorController {
     private VBox formPane;
 
 
-    //buttons
-    @FXML
-    private Button formAddCollaboratorConfirmButton;
 
     private String[] departments= {"Desenvolvimento", "UX/UI Design", "Infraestrutura de TI", "Inteligência de Dados"};
     private String[] roles= {"Desenvolvedor Fullstack", "UX Designer", "Analista de Dados", "Desenvolvedor Backend"};
@@ -92,19 +85,19 @@ public class RegisterCollaboratorController {
         }
     }
 
-    private void updateLabel(TextField textField, Label label){
+    private void updateLabel(TextField textField, Label inputLabel){
         if (textField.isFocused() || !textField.getText().isEmpty()) {
-            label.setStyle("-fx-text-fill: #4B0081; -fx-padding: 1 20;");
+            inputLabel.setStyle("-fx-text-fill: #4B0081; -fx-padding: 1 15;");
         } else {
-            label.setStyle("-fx-text-fill: #808080; -fx-padding: 20;");
+            inputLabel.setStyle("-fx-text-fill: #808080; -fx-padding: 15;");
         }
     }
 
     private void updateChoiceBoxLabel(ChoiceBox choiceBox, Label label){
         if (choiceBox.isFocused() || choiceBox.getValue() != null) {
-            label.setStyle("-fx-text-fill: #4B0081; -fx-padding: 1 20;");
+            label.setStyle("-fx-text-fill: #4B0081; -fx-padding: 1 15;");
         } else {
-            label.setStyle("-fx-text-fill: #808080; -fx-padding: 20;");
+            label.setStyle("-fx-text-fill: #808080; -fx-padding: 15");
         }
     }
 
@@ -139,7 +132,7 @@ public class RegisterCollaboratorController {
         // Teste
         // Observando se os valores estão chegando
         System.out.println(collaborator.toString());
-//        collaboratorController.saveCollaborator(collaborator);
+        collaboratorController.saveCollaborator(collaborator);
     }
 
     private boolean valideFields(){

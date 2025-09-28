@@ -7,6 +7,12 @@ module com.dottec.pdi.project.pdi {
 
 
     opens com.dottec.pdi.project.pdi to javafx.fxml;
+    opens com.dottec.pdi.project.pdi.controllers;
+    opens com.dottec.pdi.project.pdi.viewsController;
 
     exports com.dottec.pdi.project.pdi;
+    exports com.dottec.pdi.project.pdi.controllers;
+    exports com.dottec.pdi.project.pdi.utils;
+    exports com.dottec.pdi.project.pdi.viewsController;
+    opens com.dottec.pdi.project.pdi.utils to javafx.fxml;
 }

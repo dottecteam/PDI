@@ -1,6 +1,6 @@
-    package com.dottec.pdi.project.pdi;
+package com.dottec.pdi.project.pdi.viewsController;
 
-    import javafx.fxml.FXML;
+import javafx.fxml.FXML;
     import javafx.fxml.FXMLLoader;
     import javafx.fxml.Initializable;
     import javafx.geometry.Pos;
@@ -22,8 +22,9 @@
     import java.net.URL;
     import java.util.Arrays;
     import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
-    public class TemplateController implements Initializable {
+public class TemplateController implements Initializable {
 
         //Declara os ID's criados
 
@@ -166,10 +167,10 @@
 
             Button buttonAddCollaborator = new Button("Adicionar Colaborador");
             buttonAddCollaborator.setId("buttonAddCollaborator");
+            buttonAddCollaborator.setOnMouseClicked(event2 -> trocarDeTela("RegisterCollaborator.fxml"));
 
             Button buttonFilterCollaborators = new Button("Filtrar");
             buttonFilterCollaborators.getStyleClass().add("filter-button");
-            buttonFilterCollaborators.setId("buttonFilterCollaborators");
 
             TextField searchBarCollaborators = new TextField();
             searchBarCollaborators.setId("searchBarCollaborators");
@@ -204,8 +205,12 @@
             buildHeader(false, "Perfil");
         }
 
+        public void carregarPagina(String nomePagina){
+            carregarPagina(nomePagina, controller -> {});
+        }
+
         //Método carregarPagina (para carregar uma pagina)
-        public void carregarPagina(String nomePagina) {
+        public void carregarPagina(String nomePagina,  Consumer<Object> configurator) {
 
             //Configuracao pro 'selecionado' do menu
             menuDashboard.getStyleClass().remove("selecionado");
@@ -238,7 +243,11 @@
             try{
                 String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/" + nomePagina;
 
-                 root = FXMLLoader.load(getClass().getResource(caminhoCompleto));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoCompleto));
+                root = loader.load();
+
+                Object controller = loader.getController();
+                configurator.accept(controller);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -247,9 +256,13 @@
 
 
         public static void trocarDeTela(String nomePagina) {
+            instance.carregarPagina(nomePagina,  controller -> {});
+        }
+
+        public static void trocarDeTela(String nomePagina, Consumer<Object> configurator) {
             // Ele usa a instância que salvamos para chamar o método real de troca de página.
             if (instance != null) {
-                instance.carregarPagina(nomePagina);
+                instance.carregarPagina(nomePagina, configurator);
             } else {
                 System.err.println("A instância do TemplateController é nula. A tela principal já foi carregada?");
             }
