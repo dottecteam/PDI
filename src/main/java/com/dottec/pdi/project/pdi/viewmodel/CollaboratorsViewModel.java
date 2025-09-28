@@ -1,21 +1,18 @@
-package com.dottec.pdi.project.pdi.viewsController;
+package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
-import com.dottec.pdi.project.pdi.viewsController.TemplateController;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.enums.Status;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class CollaboratorsController {
+public class CollaboratorsViewModel {
     @FXML
     private VBox mainVBox;
     @FXML
@@ -67,8 +64,8 @@ public class CollaboratorsController {
     }
 
     private void openCollaboratorPage(Collaborator collaborator){
-        TemplateController.trocarDeTela("Goals.fxml", controller -> {
-            if (controller instanceof CollaboratorGoalsController c) {
+        TemplateViewModel.trocarDeTela("Goals.fxml", controller -> {
+            if (controller instanceof CollaboratorGoalsViewModel c) {
                 c.setCollaborator(collaborator);
             }
         });

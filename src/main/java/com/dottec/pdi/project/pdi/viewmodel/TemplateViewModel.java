@@ -1,10 +1,9 @@
-package com.dottec.pdi.project.pdi.viewsController;
+package com.dottec.pdi.project.pdi.viewmodel;
 
 import javafx.fxml.FXML;
     import javafx.fxml.FXMLLoader;
     import javafx.fxml.Initializable;
-    import javafx.geometry.Pos;
-    import javafx.scene.Node;
+import javafx.scene.Node;
     import javafx.scene.control.Button;
     import javafx.scene.control.Label;
     import javafx.scene.control.TextField;
@@ -15,16 +14,14 @@ import javafx.fxml.FXML;
     import javafx.scene.input.MouseEvent;
     import javafx.scene.layout.BorderPane;
     import javafx.scene.layout.HBox;
-    import javafx.scene.layout.VBox;
-    import javafx.scene.shape.Line;
 
-    import java.io.IOException;
+import java.io.IOException;
     import java.net.URL;
     import java.util.Arrays;
     import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class TemplateController implements Initializable {
+public class TemplateViewModel implements Initializable {
 
         //Declara os ID's criados
 
@@ -110,7 +107,7 @@ public class TemplateController implements Initializable {
 
         String currentPage = "Dashboard.fxml";
         String lastPage = "";
-        private static TemplateController instance;
+        private static TemplateViewModel instance;
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {

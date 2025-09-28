@@ -1,22 +1,16 @@
-package com.dottec.pdi.project.pdi.viewsController;
+package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
-import com.dottec.pdi.project.pdi.enums.Status;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Popup;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 
 import java.util.Arrays;
 
-public class CollaboratorGoalsController {
+public class CollaboratorGoalsViewModel {
     private Collaborator collaborator;
     public Collaborator getCollaborator() {
         return collaborator;
@@ -57,7 +51,11 @@ public class CollaboratorGoalsController {
     }
 
     private void updateFields(){
-        if(collaborator == null) return;
+        if(collaborator == null) {
+            editButton.setDisable(true);
+            editButton.setVisible(false);
+            return;
+        };
         if (collaborator != null) {
         nameField.setText(collaborator.getName());
         emailField.setText(collaborator.getEmail());
@@ -66,8 +64,6 @@ public class CollaboratorGoalsController {
         roleField.setText("Desenvolvedor");
         experienceField.setText(collaborator.getExperience());
         observationsField.setText(collaborator.getObservations());
-        } else {
-            editButton.setDisable(true);
         }
     }
 

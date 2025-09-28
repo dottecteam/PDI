@@ -1,13 +1,13 @@
-package com.dottec.pdi.project.pdi.viewsController;
+package com.dottec.pdi.project.pdi.viewmodel;
 
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 
-public class SettingsController{
+public class SettingsViewModel {
 
     //'Puxa' o metodo do pai
     @FXML
     void goToTeste(MouseEvent event){
-        TemplateController.trocarDeTela("Dashboard.fxml");
+        TemplateViewModel.trocarDeTela("Dashboard.fxml");
     }
 }

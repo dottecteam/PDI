@@ -2,7 +2,6 @@ package com.dottec.pdi.project.pdi.controllers;
 
 import com.dottec.pdi.project.pdi.dao.CollaboratorDAO;
 import com.dottec.pdi.project.pdi.model.Collaborator;
-import com.dottec.pdi.project.pdi.viewsController.CollaboratorsController;
 
 import java.util.List;
 

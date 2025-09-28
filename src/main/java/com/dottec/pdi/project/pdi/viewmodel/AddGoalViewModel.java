@@ -39,7 +39,7 @@ class Goal {
     }
 }
 
-public class AddGoalController {
+public class AddGoalViewModel {
 
 
         @FXML
