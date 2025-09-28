@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Popup;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -52,6 +53,12 @@ public class CollaboratorGoalsController {
 
     @FXML
     private void initialize(){
+        updateFields();
+    }
+
+    private void updateFields(){
+        if(collaborator == null) return;
+        if (collaborator != null) {
         nameField.setText(collaborator.getName());
         emailField.setText(collaborator.getEmail());
         cpfField.setText(collaborator.getCpf());
@@ -59,6 +66,9 @@ public class CollaboratorGoalsController {
         roleField.setText("Desenvolvedor");
         experienceField.setText(collaborator.getExperience());
         observationsField.setText(collaborator.getObservations());
+        } else {
+            editButton.setDisable(true);
+        }
     }
 
 
@@ -103,7 +113,7 @@ public class CollaboratorGoalsController {
         confirmEditButton.setVisible(false);
     }
 
-    public void updateCollaborator(){
+    private void updateCollaborator(){
         collaborator.setName(nameField.getText());
         collaborator.setCpf(cpfField.getText());
         collaborator.setEmail(emailField.getText());

@@ -24,77 +24,110 @@
     <left>
         <AnchorPane fx:id="leftMenu" prefHeight="200.0" prefWidth="70.0" BorderPane.alignment="CENTER">
             <children>
-                <ImageView fx:id="menuLogo" fitHeight="41.0" fitWidth="54.0" layoutX="24.0" layoutY="14.0" onMouseClicked="#goToMain" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../static/img/logo.png" />
-                    </image>
-                    <effect><DropShadow blurType="ONE_PASS_BOX" /></effect>
-                    <cursor><Cursor fx:constant="HAND" /></cursor>
-                </ImageView>
+            <VBox alignment="CENTER_LEFT" layoutX="21.0" layoutY="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                      <ImageView fx:id="menuLogo" fitHeight="41.0" fitWidth="54.0" onMouseClicked="#goToMain" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                              <Image url="@../static/img/logo.png" />
+                          </image>
+                          <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" />
+                     </effect>
+                          <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                      </ImageView>
+               </children>
+               <padding>
+                  <Insets left="12.0" />
+               </padding>
+            </VBox>
 
                 <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="155.0">
                     <top>
-                        <VBox fillWidth="true" BorderPane.alignment="CENTER">
+                        <VBox fillWidth="true" spacing="10.0" BorderPane.alignment="CENTER">
                             <children>
-                                <AnchorPane fx:id="menuDashboard" onMouseClicked="#goToDashboard" prefHeight="69.0" styleClass="hBox">
+                                <AnchorPane fx:id="menuDashboard" onMouseClicked="#goToDashboard" styleClass="hBox">
                                     <children>
-                                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="27.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="27.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <image><Image url="@../static/img/arrow.png" /></image>
                                         </ImageView>
-                                        <Label fx:id="labelArrow" styleClass="menuLabel" text="Dashboard" textFill="WHITE" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="22.0">
+                                        <Label fx:id="labelArrow" layoutX="75.0" layoutY="22.0" styleClass="menuLabel" text="Dashboard" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
                                             <font><Font size="21.0" /></font>
                                         </Label>
                                     </children>
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
                                 </AnchorPane>
-                                <AnchorPane fx:id="menuCollaborators" onMouseClicked="#goToCollaborators" prefHeight="77.0" styleClass="hBox">
+                                <AnchorPane fx:id="menuCollaborators" onMouseClicked="#goToCollaborators" styleClass="hBox">
                                     <children>
-                                        <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="27.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-                                            <image><Image url="@../static/img/collaborator.png" /></image>
+                                        <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="27.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <image>
+                                    <Image url="@../static/img/collaborator.png" />
+                                 </image>
                                         </ImageView>
-                                        <Label fx:id="labelArrow1" styleClass="menuLabel" text="Colaboradores" textFill="WHITE" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="26.0">
-                                            <font><Font size="21.0" /></font>
+                                        <Label fx:id="labelArrow1" layoutX="75.0" layoutY="22.0" styleClass="menuLabel" text="Colaboradores" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
+                                            <font>
+                                    <Font size="21.0" />
+                                 </font>
                                         </Label>
                                     </children>
-                                    <VBox.margin><Insets top="20.0" /></VBox.margin>
+                                    <VBox.margin><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
                                 </AnchorPane>
-                                <AnchorPane fx:id="menuModels" onMouseClicked="#goToModels" prefHeight="79.0" styleClass="hBox">
+                                <AnchorPane fx:id="menuGoalTemplates" onMouseClicked="#goToGoalTemplates" styleClass="hBox">
                                     <children>
-                                        <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="26.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="32.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <image><Image url="@../static/img/sector.png" /></image>
                                         </ImageView>
-                                        <Label fx:id="labelArrow2" styleClass="menuLabel" text="Modelos" textFill="WHITE" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="27.0">
+                                        <Label fx:id="labelArrow2" layoutX="74.0" layoutY="5.0" styleClass="menuLabel" text="Modelos" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
                                             <font><Font size="21.0" /></font>
                                         </Label>
                                     </children>
-                                    <VBox.margin><Insets top="20.0" /></VBox.margin>
+                                    <VBox.margin><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
                                 </AnchorPane>
-                                <AnchorPane fx:id="menuSettings" onMouseClicked="#goToSettings" prefHeight="79.0" styleClass="hBox">
+                                <AnchorPane fx:id="menuSettings" onMouseClicked="#goToSettings" styleClass="hBox">
                                     <children>
-                                        <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="28.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="31.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <image><Image url="@../static/img/settings.png" /></image>
                                         </ImageView>
-                                        <Label fx:id="labelArrow3" styleClass="menuLabel" text="Gerenciamento" textFill="WHITE" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="27.0">
+                                        <Label fx:id="labelArrow3" layoutX="76.0" layoutY="23.0" styleClass="menuLabel" text="Gerenciamento" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
                                             <font><Font size="21.0" /></font>
                                         </Label>
                                     </children>
-                                    <VBox.margin><Insets top="20.0" /></VBox.margin>
+                                    <VBox.margin><Insets bottom="10.0" left="10.0" right="10.0" top="10.0" /></VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
                                 </AnchorPane>
                             </children>
                         </VBox>
                     </top>
                     <bottom>
-                        <AnchorPane fx:id="menuProfile" onMouseClicked="#goToProfile" prefHeight="100.0" styleClass="hBox" BorderPane.alignment="CENTER">
+                        <AnchorPane fx:id="menuProfile" onMouseClicked="#goToProfile" styleClass="hBox" BorderPane.alignment="CENTER_LEFT">
                             <children>
-                                <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="29.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="31.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <image><Image url="@../static/img/profile.png" /></image>
                                 </ImageView>
-                                <Label fx:id="labelArrow4" styleClass="menuLabel" text="Perfil" textFill="WHITE" AnchorPane.leftAnchor="95.0" AnchorPane.topAnchor="38.0">
+                                <Label fx:id="labelArrow4" layoutX="77.0" layoutY="21.0" styleClass="menuLabel" text="Perfil" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
                                     <font><Font size="21.0" /></font>
                                 </Label>
                             </children>
+                     <BorderPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </BorderPane.margin>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
                         </AnchorPane>
                     </bottom>
                 </BorderPane>
@@ -106,11 +139,12 @@
          <children>
             <BorderPane fx:id="tmpCenter" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <top>
-                  <HBox fx:id="header" BorderPane.alignment="CENTER">
+                  <HBox fx:id="header" alignment="BOTTOM_LEFT" BorderPane.alignment="BOTTOM_LEFT">
                      <BorderPane.margin>
                         <Insets left="40.0" right="40.0" />
                      </BorderPane.margin>
                      <children>
+                        <HBox fx:id="headerReturnButtonField" alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" />
                         <HBox fx:id="headerHBox" alignment="BOTTOM_LEFT" maxHeight="70.0" prefHeight="70.0" spacing="10.0" style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0;" HBox.hgrow="ALWAYS">
                            <padding>
                               <Insets bottom="10.0" right="10.0" top="10.0" />
@@ -127,7 +161,7 @@
                               <HBox fx:id="headerItemsField" alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <HBox fx:id="headerButtonsField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
-                                    <HBox fx:id="headerFilterButtonField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
+                                    <HBox fx:id="headerFilterButtonField" alignment="BOTTOM_CENTER" />
                                     <HBox fx:id="headerSearchBarField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
                                  </children>
                               </HBox>
