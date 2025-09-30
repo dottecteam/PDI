@@ -5,7 +5,6 @@ module com.dottec.pdi.project.pdi {
     requires javafx.graphics;
     requires javafx.controls;
 
-
     opens com.dottec.pdi.project.pdi to javafx.fxml;
     opens com.dottec.pdi.project.pdi.controllers;
     opens com.dottec.pdi.project.pdi.viewmodel;
