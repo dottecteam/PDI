@@ -18,6 +18,7 @@ public class CollaboratorGoalsViewModel {
 
     public void setCollaborator(Collaborator collaborator) {
         this.collaborator = collaborator;
+        updateFields();
     }
 
     private CollaboratorController collaboratorController = new CollaboratorController();

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox fx:id="header" alignment="BOTTOM_LEFT" stylesheets="@../static/style/style_template.css" BorderPane.alignment="BOTTOM_LEFT" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.HeaderViewModel">
+    <children>
+        <HBox fx:id="headerReturnButtonField" alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" />
+        <HBox fx:id="headerHBox" alignment="BOTTOM_LEFT" maxHeight="70.0" prefHeight="70.0" spacing="10.0" style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0;" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets bottom="10.0" right="10.0" top="10.0" />
+            </padding>
+            <children>
+                <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" style="-fx-font-weight: bold;" text="Label" textAlignment="CENTER" textFill="#4b0081">
+                    <font>
+                        <Font size="32.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="-10.0" top="-10.0" />
+                    </padding>
+                </Label>
+                <HBox fx:id="headerItemsField" alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <HBox fx:id="headerButtonsField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
+                        <HBox fx:id="headerFilterButtonField" alignment="BOTTOM_CENTER" />
+                        <HBox fx:id="headerSearchBarField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </children>
+   <padding>
+      <Insets bottom="20.0" left="40.0" right="40.0" />
+   </padding>
+</HBox>

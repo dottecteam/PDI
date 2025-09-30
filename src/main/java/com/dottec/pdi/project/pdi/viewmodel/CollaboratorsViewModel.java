@@ -67,6 +67,7 @@ public class CollaboratorsViewModel {
         TemplateViewModel.trocarDeTela("Goals.fxml", controller -> {
             if (controller instanceof CollaboratorGoalsViewModel c) {
                 c.setCollaborator(collaborator);
+                System.out.println(collaborator.getName());
             }
         });
     }

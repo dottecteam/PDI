@@ -32,7 +32,7 @@
 .choice-box .arrow {
     -fx-scale-shape: true;
     -fx-padding: 10;
-    -fx-margin
+    -fx-margin;
 }
 
 .choice-box .menu-item{
