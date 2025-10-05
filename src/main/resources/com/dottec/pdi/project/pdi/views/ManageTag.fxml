@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="14.0" layoutY="13.0" prefHeight="274.0" prefWidth="573.0" style="-fx-border-color: #581687; -fx-border-width: 3; -fx-border-radius: 30;">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <Label fx:id="mainLabel" layoutX="50.0" layoutY="81.0" text="Soft Skill" textFill="#581687">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <Line endX="100.0" layoutX="326.0" layoutY="102.0" startX="-100.0" stroke="#581687" strokeWidth="2.0" />
+            <Line endX="100.0" layoutX="438.0" layoutY="102.0" startX="-100.0" stroke="#581687" strokeWidth="2.0" />
+            <Line endX="100.0" layoutX="291.0" layoutY="102.0" startX="-100.0" stroke="#581687" strokeWidth="2.0" />
+            <Button layoutX="39.0" layoutY="24.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="148.0" style="-fx-background-color: #AF69CD; -fx-background-radius: 10;" text="Criar Categoria" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label fx:id="mainLabel1" layoutX="44.0" layoutY="165.0" text="Hard Skill" textFill="#581687">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <Line endX="100.0" layoutX="291.0" layoutY="186.0" startX="-100.0" stroke="#581687" strokeWidth="2.0" />
+            <Line endX="100.0" layoutX="438.0" layoutY="186.0" startX="-100.0" stroke="#581687" strokeWidth="2.0" />
+            <Line endX="100.0" layoutX="326.0" layoutY="186.0" startX="-100.0" stroke="#581687" strokeWidth="2.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

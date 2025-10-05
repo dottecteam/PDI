@@ -18,6 +18,12 @@
 }
 
 /*Choice Box Select Department*/
+
+.choice-box .label{
+    -fx-font-size: 16;
+    -fx-alignment: BOTTOM_LEFT;
+}
+
 .choice-box .context-menu {
     -fx-padding: 10;
     -fx-background-radius: 10;

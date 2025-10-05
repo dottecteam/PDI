@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
-// Arquivo .env deve estar na raiz do projeto com as variáveis DB_URL, DB_USER, DB_PASSWORD
+    // Arquivo .env deve estar na raiz do projeto com as variáveis DB_URL, DB_USER, DB_PASSWORD
     private static final Dotenv dotenv = Dotenv.load();
 
     private static final String URL = dotenv.get("DB_URL");

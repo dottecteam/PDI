@@ -1,6 +1,6 @@
 package com.dottec.pdi.project.pdi.model;
 
-import com.dottec.pdi.project.pdi.model.enums.Status;
+import com.dottec.pdi.project.pdi.enums.Status;
 import java.util.Objects;
 
 public class Collaborator {
@@ -9,7 +9,7 @@ public class Collaborator {
     private String email;
     private String cpf;
     private int department;
-    // private String role;
+    private int role;
     private String experience;
     private String observations;
     private Status status;
@@ -17,12 +17,13 @@ public class Collaborator {
     public Collaborator() {
     }
 
-    public Collaborator(int id, String name, String email, String cpf, int department, String experience, String observations, Status status) {
+    public Collaborator(int id, String name, String email, String cpf, int department, int role, String experience, String observations, Status status) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.cpf = cpf;
         this.department = department;
+        this.role = role;
         this.experience = experience;
         this.observations = observations;
         this.status = status;
@@ -66,6 +67,14 @@ public class Collaborator {
 
     public void setDepartment(int department) {
         this.department = department;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 
     public String getExperience() {
