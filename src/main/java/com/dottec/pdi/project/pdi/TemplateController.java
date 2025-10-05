@@ -32,6 +32,9 @@
         private AnchorPane leftMenu;
 
         @FXML
+        private AnchorPane tmpCenter;
+
+        @FXML
         private AnchorPane menuDashboard;
 
         @FXML
