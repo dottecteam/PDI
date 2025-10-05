@@ -1,0 +1,25 @@
+/* Estilo quando o mouse passar por cima*/
+.card-conteudo:filled:hover {
+    -fx-background-color: #E6CCEF;
+    -fx-background-radius: 15;
+}
+
+.label-not-editable {
+    -fx-background-color: transparent;
+    -fx-cursor: default;
+}
+
+.label-editable {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.label-editable:hover {
+    -fx-background-color: #d7d7d7;
+}
+
+.label-editable:focused {
+    -fx-border-color: #4B0081;
+    -fx-border-radius: 10;
+}

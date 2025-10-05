@@ -1,0 +1,40 @@
+*{
+    -fx-background-color: f6f6f6;
+}
+
+.stackpane-collaborator{
+    -fx-min-height: 75;
+    -fx-background-radius: 15;
+    -fx-min-width: 400;
+    -fx-padding: 6 20 15 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1)
+}
+
+.stackpane-collaborator:hover{
+    -fx-background-color: #E6CCEF;
+    -fx-border-color: #4B0081;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-cursor: hand;
+}
+
+.label{
+    -fx-background-color: transparent;
+}
+
+.label-collaborator-name {
+    -fx-font-size: 16;
+    -fx-text-fill: black;
+}
+
+.label-collaborator-department{
+    -fx-font-size: 24;
+    -fx-text-fill: #4B0081;
+}
+
+.label-collaborator-status {
+    -fx-background-radius: 10;
+    -fx-padding: 2 8;
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+}
