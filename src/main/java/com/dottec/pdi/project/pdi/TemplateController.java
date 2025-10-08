@@ -113,6 +113,7 @@
         String currentPage = "Dashboard.fxml";
         String lastPage = "";
         private static TemplateController instance;
+        String paginaPadrao = "AddGoal.fxml";
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {

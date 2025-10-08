@@ -20,6 +20,7 @@ public class Application extends javafx.application.Application {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
 
+        // Verificar se está correto o local de adição dessa linha de código
         scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_AddGoal.css").toExternalForm());
 
         stage.setTitle("PDI");
