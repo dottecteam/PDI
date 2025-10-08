@@ -20,7 +20,6 @@
             <artifactId>javafx-controls</artifactId>
             <version>17.0.6</version>
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
