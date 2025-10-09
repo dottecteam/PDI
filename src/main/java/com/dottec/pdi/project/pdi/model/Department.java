@@ -4,9 +4,9 @@ import com.dottec.pdi.project.pdi.enums.DepartmentStatus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Department {
-
     private int id;
     private String name;
     private DepartmentStatus status;
@@ -136,4 +136,25 @@ public class Department {
     // public void clearUsers() {
     //     users.clear();
     // }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Department that)) return false;
+        return id == that.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Department{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }
