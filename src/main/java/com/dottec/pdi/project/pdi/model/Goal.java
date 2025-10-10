@@ -5,9 +5,8 @@ import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects; // Import necessário para o Objects.hash
+import java.util.Objects;
 
 public class Goal {
     private int id;

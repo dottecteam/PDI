@@ -2,30 +2,30 @@ package com.dottec.pdi.project.pdi.controllers;
 
 // ---------------- Creating the Category Controller CRUD to manage the categories while linked to the database -----------
 
-import com.dottec.pdi.project.pdi.dao.CategoryDAO;
+import com.dottec.pdi.project.pdi.dao.TagDAO;
 import com.dottec.pdi.project.pdi.model.Tag;
-import com.dottec.pdi.project.pdi.enums.CategoryType;
+import com.dottec.pdi.project.pdi.enums.TagType;
 
 
 
 public class CategoryController {
 
-    private  final CategoryDAO  categoryDAO;
+    private  final TagDAO tagDAO;
 
-    public CategoryController(CategoryDAO dao) {
-        this.categoryDAO = dao;
+    public CategoryController(TagDAO dao) {
+        this.tagDAO = dao;
     }
 
     public void addCategory(Tag tag){
 
-        Tag existingTag = categoryDAO.findById(tag.getId());
+        Tag existingTag = tagDAO.findById(tag.getId());
 
         if( existingTag != null) {
             System.out.println(existingTag + " já existe no banco de dados.");
             return;
         }
         try{
-            this.categoryDAO.insert(tag);
+            this.tagDAO.insert(tag);
             System.out.println("Categoria adicionada com sucesso");
         } catch (Exception e) {
             System.out.println("Houve um erro ao adicionar sua categoria" + e.getMessage());
@@ -34,7 +34,7 @@ public class CategoryController {
 
     public void deleteCategory(int id) {
 
-        Tag existingTag = this.categoryDAO.findById(id);
+        Tag existingTag = this.tagDAO.findById(id);
 
         // Making verification to see if the category exists before deleting
 
@@ -44,7 +44,7 @@ public class CategoryController {
         }
 
         try {
-            this.categoryDAO.delete(id);// Calling the delete method from the CategoryDAo class
+            this.tagDAO.delete(id);// Calling the delete method from the CategoryDAo class
             System.out.println("Categoria deletada");
 
         } catch (Exception e) {
@@ -54,14 +54,14 @@ public class CategoryController {
     }
 
     public void findCategory(int id){
-        this.categoryDAO.findById(id); // Calling the findById method from the given CategoryDAO class
+        this.tagDAO.findById(id); // Calling the findById method from the given CategoryDAO class
 
     }
 
-    public void updateCategory( int id , String newName , CategoryType newType){
+    public void updateCategory( int id , String newName , TagType newType){
         // Fetching the category by its ID
 
-        Tag existingTag = this.categoryDAO.findById(id);
+        Tag existingTag = this.tagDAO.findById(id);
 
         // Making a verification to see if the category has an empty content or not
 
@@ -76,7 +76,7 @@ public class CategoryController {
             existingTag.setType(newType);
 
             // Persisting changes to the database
-            this.categoryDAO.update(existingTag);
+            this.tagDAO.update(existingTag);
             System.out.println("Categoria atualizada"); // Confirmation message
         } catch (Exception e ) {
             System.out.println("Erro ao atualizar categoria" + e.getMessage() );

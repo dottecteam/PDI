@@ -20,16 +20,18 @@ public class Collaborator {
     private Department department;
 
 
-    public Collaborator() {}
+    public Collaborator() {
+    }
+
     public Collaborator(int id, String name, String email, String cpf, Department department, CollaboratorStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.cpf = cpf;
 
-        this.createdAt=createdAt;
-        this.updatedAt=updatedAt;
-        this.deletedAt=deletedAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
 
         this.department = department;
         this.status = status;
@@ -76,6 +78,15 @@ public class Collaborator {
     public void setStatus(CollaboratorStatus status) {
         this.status = status;
     }
+
+    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
+    public LocalDateTime getCreatedAt() {return createdAt;}
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
+    public LocalDateTime getUpdatedAt() {return updatedAt;}
+
+    public void setDeletedAt(LocalDateTime deletedAt) {this.deletedAt = deletedAt;}
+    public LocalDateTime getDeletedAt() {return deletedAt;}
 
     @Override
     public int hashCode() {

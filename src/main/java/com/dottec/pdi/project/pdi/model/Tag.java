@@ -1,16 +1,16 @@
 package com.dottec.pdi.project.pdi.model;
 
-import com.dottec.pdi.project.pdi.enums.CategoryType;
+import com.dottec.pdi.project.pdi.enums.TagType;
 import java.util.Objects;
 
 public class Tag {
     private int id;
     private String name;
-    private CategoryType type;
+    private TagType type;
 
     public Tag() {}
 
-    public Tag(int id, String name, CategoryType type) {
+    public Tag(int id, String name, TagType type) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -30,10 +30,10 @@ public class Tag {
         this.name = name;
     }
 
-    public CategoryType getType() {
+    public TagType getType() {
         return type;
     }
-    public void setType(CategoryType type) {
+    public void setType(TagType type) {
         this.type = type;
     }
 

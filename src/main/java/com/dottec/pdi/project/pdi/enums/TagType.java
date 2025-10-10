@@ -1,6 +1,6 @@
 package com.dottec.pdi.project.pdi.enums;
 
-public enum CategoryType {
+public enum TagType {
     hard,
     soft
 }
