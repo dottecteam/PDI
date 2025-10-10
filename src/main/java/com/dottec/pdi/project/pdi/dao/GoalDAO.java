@@ -25,7 +25,7 @@ public class GoalDAO
     {
         String sql = """
         INSERT INTO goals (name, description, deadline,
-        category, employeeId, status) VALUES (?, ?, ?, ?, ?, ?)
+        tag, employeeId, collaboratorStatus) VALUES (?, ?, ?, ?, ?, ?)
         """;
        
         try (Connection connection = db.getConnection();
@@ -57,11 +57,11 @@ public class GoalDAO
         String name = rs.getString("name");
         String description = rs.getString("description");
         String deadline = rs.getString("deadline");
-        String category = rs.getString("category");
+        String tag = rs.getString("tag");
         int employeeId = rs.getInt("employeeId");
-        String status = rs.getString("status");
+        String collaboratorStatus = rs.getString("collaboratorStatus");
 
-        return new Goal(id, name, description, deadline, category, employeeId, status);
+        return new Goal(id, name, description, deadline, tag, employeeId, collaboratorStatus);
     }
 
 
@@ -126,7 +126,7 @@ public class GoalDAO
     {
         String sql = """
         UPDATE goals SET name = ?, description = ?, deadline = ?,
-        category = ?, employeeId = ?, status = ? WHERE id = ?
+        tag = ?, employeeId = ?, collaboratorStatus = ? WHERE id = ?
         """;
 
         try (Connection connection = db.getConnection();

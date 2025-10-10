@@ -1,4 +1,4 @@
-package validations;
+package com.dottec.pdi.project.pdi.utils;
 
 import java.util.regex.Pattern;
 

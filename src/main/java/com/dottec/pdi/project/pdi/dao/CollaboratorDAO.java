@@ -1,11 +1,11 @@
 package com.dottec.pdi.project.pdi.dao;
 
 import com.dottec.pdi.project.pdi.config.Database;
+import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import com.dottec.pdi.project.pdi.enums.Status;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public class CollaboratorDAO {
                 collaborator.setName(rs.getString("col_name"));
                 collaborator.setCpf(rs.getString("col_cpf"));
                 collaborator.setEmail(rs.getString("col_email"));
-                collaborator.setStatus(Status.valueOf(rs.getString("col_status")));
+                collaborator.setStatus(CollaboratorStatus.valueOf(rs.getString("col_status")));
 //                collaborator.setCreatedAt(rs.getTimestamp("col_created_at").toLocalDateTime());
                 collaborator.setDepartment(rs.getInt("department_id"));
             }
@@ -92,7 +92,7 @@ public class CollaboratorDAO {
                 collaborator.setName(rs.getString("col_name"));
                 collaborator.setCpf(rs.getString("col_cpf"));
                 collaborator.setEmail(rs.getString("col_email"));
-                collaborator.setStatus(Status.valueOf(rs.getString("col_status")));
+                collaborator.setStatus(CollaboratorStatus.valueOf(rs.getString("col_status")));
 //                collaborator.setCreatedAt(rs.getTimestamp("col_created_at").toLocalDateTime());
                 collaborator.setDepartment(rs.getInt("department_id"));
                 collaborators.add(collaborator);
@@ -122,7 +122,7 @@ public class CollaboratorDAO {
                 collaborator.setName(rs.getString("col_name"));
                 collaborator.setCpf(rs.getString("col_cpf"));
                 collaborator.setEmail(rs.getString("col_email"));
-                collaborator.setStatus(Status.valueOf(rs.getString("col_status")));
+                collaborator.setStatus(CollaboratorStatus.valueOf(rs.getString("col_status")));
 //                collaborator.setCreatedAt(rs.getTimestamp("col_created_at").toLocalDateTime());
                 collaborator.setDepartment(rs.getInt("department_id"));
                 collaborators.add(collaborator);

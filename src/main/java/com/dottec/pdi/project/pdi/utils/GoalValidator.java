@@ -1,4 +1,4 @@
-package validations;
+package com.dottec.pdi.project.pdi.utils;
 
 import com.dottec.pdi.project.pdi.model.Goal;
 

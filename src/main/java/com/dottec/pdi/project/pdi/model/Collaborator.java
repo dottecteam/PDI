@@ -1,6 +1,8 @@
 package com.dottec.pdi.project.pdi.model;
 
-import com.dottec.pdi.project.pdi.enums.Status;
+import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Collaborator {
@@ -8,31 +10,34 @@ public class Collaborator {
     private String name;
     private String email;
     private String cpf;
-    private int department;
-    private int role;
-    private String experience;
-    private String observations;
-    private Status status;
 
-    public Collaborator() {
-    }
+    private CollaboratorStatus status;
 
-    public Collaborator(int id, String name, String email, String cpf, int department, int role, String experience, String observations, Status status) {
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
+
+    private Department department;
+
+
+    public Collaborator() {}
+    public Collaborator(int id, String name, String email, String cpf, Department department, CollaboratorStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.cpf = cpf;
+
+        this.createdAt=createdAt;
+        this.updatedAt=updatedAt;
+        this.deletedAt=deletedAt;
+
         this.department = department;
-        this.role = role;
-        this.experience = experience;
-        this.observations = observations;
         this.status = status;
     }
 
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -40,7 +45,6 @@ public class Collaborator {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -48,7 +52,6 @@ public class Collaborator {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -56,75 +59,52 @@ public class Collaborator {
     public String getCpf() {
         return cpf;
     }
-
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    public int getDepartment() {
+    public Department getDepartment() {
         return department;
     }
-
-    public void setDepartment(int department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 
-    public int getRole() {
-        return role;
+    public CollaboratorStatus getStatus() {
+        return this.status;
     }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-
-    public String getExperience() {
-        return experience;
-    }
-
-    public void setExperience(String experience) {
-        this.experience = experience;
-    }
-
-    public String getObservations() {
-        return observations;
-    }
-
-    public void setObservations(String observations) {
-        this.observations = observations;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
+    public void setStatus(CollaboratorStatus status) {
         this.status = status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cpf);
+        // Gera um código hash baseado apenas no ID.
+        return Objects.hash(id);
     }
 
     @Override
     public boolean equals(Object obj) {
+        // Verifica se é a mesma instância de objeto.
         if (this == obj) return true;
+
+        // Verifica se o objeto é nulo ou de uma classe diferente.
         if (obj == null || getClass() != obj.getClass()) return false;
+
+        // Faz o cast e compara os IDs para determinar a igualdade.
         Collaborator other = (Collaborator) obj;
-        return id == other.id && Objects.equals(cpf, other.cpf);
+        return id == other.id;
     }
 
     @Override
     public String toString() {
+        // Cria uma representação em texto do objeto para facilitar a depuração.
         return "Collaborator{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", department=" + department +
-                ", experience='" + experience + '\'' +
-                ", observations='" + observations + '\'' +
                 ", status=" + status +
                 '}';
     }
+
 }

@@ -2,7 +2,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
 import com.dottec.pdi.project.pdi.model.Collaborator;
-import com.dottec.pdi.project.pdi.enums.Status;
+import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.utils.FieldValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,7 +32,7 @@ public class RegisterCollaboratorViewModel {
     @FXML
     private TextField formAddCollaboratorObservations;
 
-    private Status status = Status.active;
+    private CollaboratorStatus collaboratorStatus = CollaboratorStatus.active;
 
     @FXML
     private VBox formPane;
@@ -125,7 +125,7 @@ public class RegisterCollaboratorViewModel {
         String experience = formAddCollaboratorExperience.getText();
         String observations = formAddCollaboratorObservations.getText();
 
-        Collaborator collaborator = new Collaborator(0, name, email, cpf, department, role, experience, observations, status);
+        Collaborator collaborator = new Collaborator(0, name, email, cpf, department, role, experience, observations, collaboratorStatus);
 
 
         // Teste

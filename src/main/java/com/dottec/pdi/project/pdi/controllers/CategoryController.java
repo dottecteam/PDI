@@ -3,7 +3,7 @@ package com.dottec.pdi.project.pdi.controllers;
 // ---------------- Creating the Category Controller CRUD to manage the categories while linked to the database -----------
 
 import com.dottec.pdi.project.pdi.dao.CategoryDAO;
-import com.dottec.pdi.project.pdi.model.Category;
+import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.enums.CategoryType;
 
 
@@ -16,16 +16,16 @@ public class CategoryController {
         this.categoryDAO = dao;
     }
 
-    public void addCategory(Category category){
+    public void addCategory(Tag tag){
 
-        Category existingCategory  = categoryDAO.findById(category.getId());
+        Tag existingTag = categoryDAO.findById(tag.getId());
 
-        if( existingCategory != null) {
-            System.out.println(existingCategory + " já existe no banco de dados.");
+        if( existingTag != null) {
+            System.out.println(existingTag + " já existe no banco de dados.");
             return;
         }
         try{
-            this.categoryDAO.insert(category);
+            this.categoryDAO.insert(tag);
             System.out.println("Categoria adicionada com sucesso");
         } catch (Exception e) {
             System.out.println("Houve um erro ao adicionar sua categoria" + e.getMessage());
@@ -34,11 +34,11 @@ public class CategoryController {
 
     public void deleteCategory(int id) {
 
-        Category existingCategory = this.categoryDAO.findById(id);
+        Tag existingTag = this.categoryDAO.findById(id);
 
         // Making verification to see if the category exists before deleting
 
-        if (existingCategory == null) {
+        if (existingTag == null) {
             System.out.println("Categoria não encontrada");
             return;
         }
@@ -61,22 +61,22 @@ public class CategoryController {
     public void updateCategory( int id , String newName , CategoryType newType){
         // Fetching the category by its ID
 
-        Category existingCategory = this.categoryDAO.findById(id);
+        Tag existingTag = this.categoryDAO.findById(id);
 
         // Making a verification to see if the category has an empty content or not
 
         try {
-            if (existingCategory == null) {
+            if (existingTag == null) {
                 System.out.println("Categoria não encontrada");
                 return;
             }
 
             // Changing the attributes
-            existingCategory.setName(newName);
-            existingCategory.setType(newType);
+            existingTag.setName(newName);
+            existingTag.setType(newType);
 
             // Persisting changes to the database
-            this.categoryDAO.update(existingCategory);
+            this.categoryDAO.update(existingTag);
             System.out.println("Categoria atualizada"); // Confirmation message
         } catch (Exception e ) {
             System.out.println("Erro ao atualizar categoria" + e.getMessage() );

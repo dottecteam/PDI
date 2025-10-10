@@ -1,7 +1,7 @@
 package com.dottec.pdi.project.pdi.dao;
 
 import com.dottec.pdi.project.pdi.config.Database;
-import com.dottec.pdi.project.pdi.model.Category;
+import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.enums.CategoryType;
 
 import java.sql.Connection;
@@ -18,14 +18,14 @@ public class CategoryDAO {
     private static final String FIND_BY_ID_SQL = "SELECT tag_id, tag_name, tag_type FROM tags WHERE tag_id = ?";
 
 
-    public void insert(Category category) {
+    public void insert(Tag tag) {
         Database db = null;
         try {
             db = new Database();
             Connection conn = db.getConnection();
             PreparedStatement stmt = conn.prepareStatement(INSERT_SQL);
-            stmt.setString(1, category.getName());
-            stmt.setString(2, category.getType().name());
+            stmt.setString(1, tag.getName());
+            stmt.setString(2, tag.getType().name());
 
             int rows = stmt.executeUpdate();
             System.out.println("Categoria inserida! Linhas: " + rows);
@@ -57,16 +57,16 @@ public class CategoryDAO {
 
 
 
-    public void update(Category category) {
+    public void update(Tag tag) {
         Database db = null;
         try {
             db = new Database();
             Connection conn = db.getConnection();
             PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL);
 
-            stmt.setString(1, category.getName());
-            stmt.setString(2, category.getType().name());
-            stmt.setInt(3, category.getId());
+            stmt.setString(1, tag.getName());
+            stmt.setString(2, tag.getType().name());
+            stmt.setInt(3, tag.getId());
 
             int rows = stmt.executeUpdate();
             System.out.println("Categoria atualizada! Linhas afetadas: " + rows);
@@ -78,7 +78,7 @@ public class CategoryDAO {
 
 
 
-    public Category findById(int id) {
+    public Tag findById(int id) {
         Database db = null;
         try {
             db = new Database();
@@ -89,12 +89,12 @@ public class CategoryDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Category category = new Category();
-                    category.setId(rs.getInt("tag_id"));
-                    category.setName(rs.getString("tag_name"));
-                    category.setType(CategoryType.valueOf(rs.getString("tag_type")));
+                    Tag tag = new Tag();
+                    tag.setId(rs.getInt("tag_id"));
+                    tag.setName(rs.getString("tag_name"));
+                    tag.setType(CategoryType.valueOf(rs.getString("tag_type")));
 
-                    return category;
+                    return tag;
                 }
             }
         }

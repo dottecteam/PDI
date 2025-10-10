@@ -3,15 +3,14 @@ package com.dottec.pdi.project.pdi.model;
 import com.dottec.pdi.project.pdi.enums.CategoryType;
 import java.util.Objects;
 
-public class Category {
-
+public class Tag {
     private int id;
     private String name;
     private CategoryType type;
 
-    public Category() {}
+    public Tag() {}
 
-    public Category(int id, String name, CategoryType type) {
+    public Tag(int id, String name, CategoryType type) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -27,7 +26,6 @@ public class Category {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -35,9 +33,12 @@ public class Category {
     public CategoryType getType() {
         return type;
     }
-
     public void setType(CategoryType type) {
         this.type = type;
+    }
+
+    public String getTypeMessage(){
+        return this.type.name();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class Category {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Category other = (Category) obj;
+        Tag other = (Tag) obj;
         return id == other.id;
     }
 
