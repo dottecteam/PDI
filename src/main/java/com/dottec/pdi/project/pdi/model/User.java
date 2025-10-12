@@ -3,6 +3,7 @@ package com.dottec.pdi.project.pdi.model;
 import com.dottec.pdi.project.pdi.enums.Role;
 import com.dottec.pdi.project.pdi.enums.UserStatus;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class User {
@@ -11,17 +12,19 @@ public class User {
     private String name;
     private String email;
     private String passwordHash;
-    private int departmentId;
+    private Department department;
     private Role role;
     private UserStatus status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 
-
-    public User(int id, String name, String email, String passwordHash, int departmentId, Role role, UserStatus status) {
+    public User(int id, String name, String email, String passwordHash, Department department, Role role, UserStatus status, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.departmentId = departmentId;
+        this.department = department;
         this.role = role;
         this.status = status;
     }
@@ -33,7 +36,6 @@ public class User {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -41,7 +43,6 @@ public class User {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -49,7 +50,6 @@ public class User {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -57,23 +57,20 @@ public class User {
     public String getPasswordHash() {
         return passwordHash;
     }
-
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
 
-    public int getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
-
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public Role getRole() {
         return role;
     }
-
     public void setRole(Role role) {
         this.role = role;
     }
@@ -81,10 +78,18 @@ public class User {
     public UserStatus getStatus() {
         return status;
     }
-
     public void setStatus(UserStatus status) {
         this.status = status;
     }
+
+    public LocalDateTime getCreatedAt() {return createdAt;}
+    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
+
+    public LocalDateTime getDeletedAt() {return deletedAt;}
+    public void setDeletedAt(LocalDateTime deletedAt) {this.deletedAt = deletedAt;}
+
+    public LocalDateTime getUpdatedAt() {return updatedAt;}
+    public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
 
     @Override
     public boolean equals(Object o) {
@@ -104,7 +109,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", passwordHash=" + passwordHash +
-                ", department='" + departmentId + '\'' +
+                ", department='" + department.getName() + '\'' +
                 ", role='" + role + '\'' +
                 ", status=" + status +
                 '}';
