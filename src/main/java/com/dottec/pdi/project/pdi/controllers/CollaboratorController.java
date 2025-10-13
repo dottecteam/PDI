@@ -1,6 +1,7 @@
 package com.dottec.pdi.project.pdi.controllers;
 
 import com.dottec.pdi.project.pdi.dao.CollaboratorDAO;
+import com.dottec.pdi.project.pdi.dao.DepartmentDAO;
 import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department;
@@ -19,7 +20,7 @@ public class CollaboratorController {
         collaborator.setCpf(cpf);
         collaborator.setEmail(email);
         collaborator.setDepartment(department);
-        collaborator.setStatus(active); // Define o status padrão como ativo
+        collaborator.setStatus(active);
 
         CollaboratorDAO.insert(collaborator);
     }
@@ -34,6 +35,7 @@ public class CollaboratorController {
     }
 
     public static void deleteCollaboratorById(int id) {
-        CollaboratorDAO.deleteById(id);
+        Collaborator existingCollaborator = CollaboratorDAO.findById(id);
+        if (existingCollaborator == null) CollaboratorDAO.deleteById(id);
     }
 }
