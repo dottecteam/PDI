@@ -18,7 +18,7 @@ public class CollaboratorDAO {
     private static final String FIND_BY_ID_SQL = "SELECT * FROM collaborators WHERE col_id = ? AND col_deleted_at IS NULL";
     private static final String FIND_BY_DEPARTMENT_ID_SQL = "SELECT * FROM collaborators WHERE department_id = ? AND col_deleted_at IS NULL";
 
-    public void insert(Collaborator collaborator) {
+    public static void insert(Collaborator collaborator) {
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)){
             stmt.setString(1, collaborator.getName());
             stmt.setString(2, collaborator.getEmail());
@@ -34,11 +34,11 @@ public class CollaboratorDAO {
         }
     }
 
-    public void delete(Collaborator collaborator){
-        this.deleteById(collaborator.getId());
+    public static void delete(Collaborator collaborator){
+        CollaboratorDAO.deleteById(collaborator.getId());
     }
 
-    public void update(Collaborator collaborator) {
+    public static void update(Collaborator collaborator) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)){
             stmt.setString(1, collaborator.getName());
             stmt.setString(2, collaborator.getEmail());
@@ -55,7 +55,7 @@ public class CollaboratorDAO {
         }
     }
 
-    public Collaborator findById(int id) {
+    public static Collaborator findById(int id) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)){
             stmt.setInt(1, id);
 
@@ -71,7 +71,7 @@ public class CollaboratorDAO {
         return null;
     }
 
-    public List<Collaborator> readAll() {
+    public static List<Collaborator> readAll() {
         List<Collaborator> collaborators = new ArrayList<>();
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_ALL_SQL);
@@ -86,7 +86,7 @@ public class CollaboratorDAO {
         return collaborators;
     }
 
-    public void deleteById(int id){
+    public static void deleteById(int id){
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(SOFT_DELETE_SQL)){
             stmt.setInt(1, id);
 
@@ -98,7 +98,7 @@ public class CollaboratorDAO {
         }
     }
 
-    public List<Collaborator> findByDepartmentId(int departmentId) {
+    public static List<Collaborator> findByDepartmentId(int departmentId) {
         List<Collaborator> collaborators = new ArrayList<>();
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(FIND_BY_DEPARTMENT_ID_SQL)) {
@@ -115,7 +115,7 @@ public class CollaboratorDAO {
         return collaborators;
     }
 
-    private Collaborator mapResultSetToCollaborator(ResultSet rs) throws SQLException {
+    public static Collaborator mapResultSetToCollaborator(ResultSet rs) throws SQLException {
         Collaborator collaborator = new Collaborator();
         collaborator.setId(rs.getInt("col_id"));
         collaborator.setName(rs.getString("col_name"));

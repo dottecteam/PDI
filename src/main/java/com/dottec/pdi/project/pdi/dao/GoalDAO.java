@@ -17,7 +17,7 @@ public class GoalDAO {
     private static final String SELECT_ALL_SQL = "SELECT * FROM pdi_goals";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM pdi_goals WHERE goa_id = ?";
 
-    public void insert(Goal goal) {
+    public static void insert(Goal goal) {
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)){
             stmt.setString(1, goal.getName());
             stmt.setString(2, goal.getDescription());
@@ -33,11 +33,11 @@ public class GoalDAO {
         }
     }
 
-    public void delete(Goal goal){
+    public static void delete(Goal goal){
         this.deleteById(goal.getId());
     }
 
-    public void update(Goal goal) {
+    public static void update(Goal goal) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)){
             stmt.setString(1, goal.getName());
             stmt.setString(2, goal.getDescription());
@@ -54,7 +54,7 @@ public class GoalDAO {
         }
     }
 
-    public Goal findById(int id) {
+    public static Goal findById(int id) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)){
             stmt.setInt(1, id);
 
@@ -70,7 +70,7 @@ public class GoalDAO {
         return null;
     }
 
-    public List<Goal> readAll() {
+    public static List<Goal> readAll() {
         List<Goal> goals = new ArrayList<>();
 
         try (Connection conn = Database.getConnection();
@@ -87,7 +87,7 @@ public class GoalDAO {
         return goals;
     }
 
-    public void deleteById(int id){
+    public static void deleteById(int id){
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_SQL)){
             stmt.setInt(1, id);
 
@@ -100,7 +100,7 @@ public class GoalDAO {
     }
 
     // Método auxiliar para não repetir código de mapeamento
-    private Goal mapResultSetToGoal(ResultSet rs) throws SQLException {
+    public static Goal mapResultSetToGoal(ResultSet rs) throws SQLException {
         Goal goal = new Goal();
         goal.setId(rs.getInt("goa_id"));
         goal.setName(rs.getString("goa_name"));

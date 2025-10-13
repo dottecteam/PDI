@@ -123,7 +123,6 @@ public class Department {
         collaborators.clear();
     }
 
-    // --- Usuários (a implementar futuramente) ---
     // public void addUser(User user) {
     //     if (user != null && !users.contains(user)) {
     //         users.add(user);

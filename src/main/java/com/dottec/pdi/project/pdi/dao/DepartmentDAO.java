@@ -19,7 +19,7 @@ public class DepartmentDAO {
     private static final String SELECT_ALL_SQL = "SELECT * FROM departments WHERE dep_deleted_at IS NULL";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM departments WHERE dep_id = ? AND dep_deleted_at IS NULL";
 
-    public void insert(Department department) {
+    public static void insert(Department department) {
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)){
             stmt.setString(1, department.getName());
             stmt.setString(2, department.getStatus().name());
@@ -32,11 +32,11 @@ public class DepartmentDAO {
         }
     }
 
-    public void delete(Department department){
-        this.deleteById(department.getId());
+    public static void delete(Department department){
+        DepartmentDAO.deleteById(department.getId());
     }
 
-    public void update(Department department) {
+    public static void update(Department department) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)){
             stmt.setString(1, department.getName());
             stmt.setString(2, department.getStatus().name());
@@ -50,7 +50,7 @@ public class DepartmentDAO {
         }
     }
 
-    public Department findById(int id) {
+    public static Department findById(int id) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)){
             stmt.setInt(1, id);
 
@@ -66,7 +66,7 @@ public class DepartmentDAO {
         return null;
     }
 
-    public List<Department> readAll() {
+    public static List<Department> readAll() {
         List<Department> departments = new ArrayList<>();
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_ALL_SQL);
@@ -81,7 +81,7 @@ public class DepartmentDAO {
         return departments;
     }
 
-    public void deleteById(int id){
+    public static void deleteById(int id){
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(SOFT_DELETE_SQL)){
             stmt.setInt(1, id);
 
@@ -93,7 +93,7 @@ public class DepartmentDAO {
         }
     }
 
-    private Department mapResultSetToDepartment(ResultSet rs) throws SQLException {
+    public static Department mapResultSetToDepartment(ResultSet rs) throws SQLException {
         Department department = new Department();
         department.setId(rs.getInt("dep_id"));
         department.setName(rs.getString("dep_name"));

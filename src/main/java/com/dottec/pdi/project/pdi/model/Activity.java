@@ -19,7 +19,7 @@ public class Activity{
 
     private ActivityStatus status;
     private Goal goal;
-    private List<Tag> tags = new ArrayList<Tag>();
+    private List<Tag> tags = new ArrayList<>();
 
     public Activity(){}
     public Activity( int id , String name, String description, LocalDate deadline, LocalDateTime createdAt, LocalDateTime updateAt, ActivityStatus status, Goal goal, List<Tag> tags)

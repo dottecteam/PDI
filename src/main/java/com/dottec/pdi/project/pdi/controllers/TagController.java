@@ -1,23 +1,11 @@
 package com.dottec.pdi.project.pdi.controllers;
 
-// ---------------- Creating the Category Controller CRUD to manage the categories while linked to the database -----------
-
-import com.dottec.pdi.project.pdi.dao.TagDAO;
 import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.enums.TagType;
 
-
-
-public class CategoryController {
-
-    private  final TagDAO tagDAO;
-
-    public CategoryController(TagDAO dao) {
-        this.tagDAO = dao;
-    }
-
+public class TagController {
+    private TagController(){}
     public void addCategory(Tag tag){
-
         Tag existingTag = tagDAO.findById(tag.getId());
 
         if( existingTag != null) {

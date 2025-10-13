@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" nodeOrientation="LEFT_TO_RIGHT" pannable="true" stylesheets="/com/dottec/pdi/project/pdi/static/style/style_formRegisterCollaborator.css" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.controllers.RegisterCollaboratorController">
+<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" nodeOrientation="LEFT_TO_RIGHT" pannable="true" stylesheets="/com/dottec/pdi/project/pdi/static/style/style_formRegisterCollaborator.css" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.RegisterCollaboratorViewModel">
    <content>
       <VBox alignment="CENTER" fillWidth="false">
          <children>

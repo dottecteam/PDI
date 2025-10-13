@@ -22,9 +22,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 public class TemplateViewModel implements Initializable {
-
         //Declara os ID's criados
-
         //AnchorPane
         @FXML
         private AnchorPane leftMenu;
@@ -104,14 +102,13 @@ public class TemplateViewModel implements Initializable {
 
 
         //Define a página que inicializa com o projeto
-
         String currentPage = "Dashboard.fxml";
         String lastPage = "";
         private static TemplateViewModel instance;
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
-            carregarPagina(currentPage);
+            loadPage(currentPage);
 
             Button buttonFilterDashboard = new Button("Filtrar");
             buttonFilterDashboard.setId("filterDashboard");
@@ -127,14 +124,14 @@ public class TemplateViewModel implements Initializable {
             String tempPage = currentPage;
             currentPage = lastPage;
             lastPage = tempPage;
-            carregarPagina(currentPage);
+            loadPage(currentPage);
         }
 
         @FXML
         void goToMain(MouseEvent event){
             lastPage = currentPage;
             currentPage = "Dashboard.fxml";
-            carregarPagina(currentPage);
+            loadPage(currentPage);
 
             Button buttonFilterDashboard = new Button("Filtrar");
             buttonFilterDashboard.setId("filterDashboard");
@@ -147,7 +144,7 @@ public class TemplateViewModel implements Initializable {
         void goToDashboard(MouseEvent event) {
             lastPage = currentPage;
             currentPage = "Dashboard.fxml";
-            carregarPagina(currentPage);
+            loadPage(currentPage);
 
             Button buttonFilterDashboard = new Button("Filtrar");
             buttonFilterDashboard.setId("filterDashboard");
@@ -160,11 +157,11 @@ public class TemplateViewModel implements Initializable {
         void goToCollaborators(MouseEvent event) {
             lastPage = currentPage;
             currentPage = "Collaborators.fxml";
-            carregarPagina(currentPage);
+            loadPage(currentPage);
 
             Button buttonAddCollaborator = new Button("Adicionar Colaborador");
             buttonAddCollaborator.setId("buttonAddCollaborator");
-            buttonAddCollaborator.setOnMouseClicked(event2 -> trocarDeTela("RegisterCollaborator.fxml"));
+            buttonAddCollaborator.setOnMouseClicked(event2 -> switchScreen("RegisterCollaborator.fxml"));
 
             Button buttonFilterCollaborators = new Button("Filtrar");
             buttonFilterCollaborators.getStyleClass().add("filter-button");
@@ -179,7 +176,7 @@ public class TemplateViewModel implements Initializable {
         void goToGoalTemplates(MouseEvent event) {
             lastPage = currentPage;
             currentPage = "GoalTemplates.fxml";
-            carregarPagina(currentPage);
+            loadPage(currentPage);
 
             buildHeader(false, "Modelos");
         }
@@ -188,7 +185,7 @@ public class TemplateViewModel implements Initializable {
         void goToSettings(MouseEvent event) {
             lastPage = currentPage;
             currentPage = "Settings.fxml";
-            carregarPagina(currentPage);
+            loadPage(currentPage);
 
             buildHeader(false, "Gerenciamento");
         }
@@ -197,17 +194,17 @@ public class TemplateViewModel implements Initializable {
         void goToProfile(MouseEvent event) {
             lastPage = currentPage;
             currentPage = "Profile.fxml";
-            carregarPagina(currentPage);
+            loadPage(currentPage);
 
             buildHeader(false, "Perfil");
         }
 
-        public void carregarPagina(String nomePagina){
-            carregarPagina(nomePagina, controller -> {});
+        public void loadPage(String pageName){
+            loadPage(pageName, controller -> {});
         }
 
         //Método carregarPagina (para carregar uma pagina)
-        public void carregarPagina(String nomePagina,  Consumer<Object> configurator) {
+        public void loadPage(String pageName, Consumer<Object> configurator) {
 
             //Configuracao pro 'selecionado' do menu
             menuDashboard.getStyleClass().remove("selecionado");
@@ -216,7 +213,7 @@ public class TemplateViewModel implements Initializable {
             menuSettings.getStyleClass().remove("selecionado");
             menuProfile.getStyleClass().remove("selecionado");
 
-            switch (nomePagina) {
+            switch (pageName) {
                 case "Dashboard.fxml":
                     menuDashboard.getStyleClass().add("selecionado");
                     break;
@@ -238,9 +235,9 @@ public class TemplateViewModel implements Initializable {
             //'chama' a pagina
             Parent root = null;
             try{
-                String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/" + nomePagina;
+                String path = "/com/dottec/pdi/project/pdi/views/" + pageName;
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoCompleto));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
                 root = loader.load();
 
                 Object controller = loader.getController();
@@ -252,14 +249,14 @@ public class TemplateViewModel implements Initializable {
         }
 
 
-        public static void trocarDeTela(String nomePagina) {
-            instance.carregarPagina(nomePagina,  controller -> {});
+        public static void switchScreen(String pageName) {
+            instance.loadPage(pageName, controller -> {});
         }
 
-        public static void trocarDeTela(String nomePagina, Consumer<Object> configurator) {
+        public static void switchScreen(String pageName, Consumer<Object> configurator) {
             // Ele usa a instância que salvamos para chamar o método real de troca de página.
             if (instance != null) {
-                instance.carregarPagina(nomePagina, configurator);
+                instance.loadPage(pageName, configurator);
             } else {
                 System.err.println("A instância do TemplateController é nula. A tela principal já foi carregada?");
             }
@@ -305,6 +302,4 @@ public class TemplateViewModel implements Initializable {
                 }
             });
         }
-
-
     }

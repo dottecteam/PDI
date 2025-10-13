@@ -19,7 +19,7 @@ public class TagDAO {
     private static final String SELECT_ALL_SQL = "SELECT * FROM tags";
     private static final String FIND_BY_ID_SQL = "SELECT tag_id, tag_name, tag_type FROM tags WHERE tag_id = ?";
 
-    public void insert(Tag tag) {
+    public static void insert(Tag tag) {
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)){
             stmt.setString(1, tag.getName());
             stmt.setString(2, tag.getType().name());
@@ -32,7 +32,7 @@ public class TagDAO {
         }
     }
 
-    public void delete(Tag tag){
+    public static void delete(Tag tag){
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_SQL)){
             stmt.setInt(1, tag.getId());
 
@@ -44,7 +44,7 @@ public class TagDAO {
         }
     }
 
-    public void update(Tag tag) {
+    public static void update(Tag tag) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)){
             stmt.setString(1, tag.getName());
             stmt.setString(2, tag.getType().name());
@@ -58,7 +58,7 @@ public class TagDAO {
         }
     }
 
-    public Tag findById(int id) {
+    public static Tag findById(int id) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)){
             stmt.setInt(1, id);
 
@@ -75,7 +75,7 @@ public class TagDAO {
         return null;
     }
 
-    public List<Tag> readAll() {
+    public static List<Tag> readAll() {
         List<Tag> tags = new ArrayList<>();
 
         try (Connection conn = Database.getConnection();
@@ -97,7 +97,7 @@ public class TagDAO {
         return tags;
     }
 
-    public void deleteById(int id){
+    public static void deleteById(int id){
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_SQL)){
             stmt.setInt(1, id);
 

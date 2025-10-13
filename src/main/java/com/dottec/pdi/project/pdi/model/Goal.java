@@ -20,8 +20,8 @@ public class Goal {
     private LocalDateTime updatedAt;
 
     private Collaborator collaborator;
-    private List<Activity> activities = new ArrayList<Activity>();
-    private List<Tag> tags = new ArrayList<Tag>();
+    private List<Activity> activities = new ArrayList<>();
+    private List<Tag> tags = new ArrayList<>();
 
     public Goal() {
     }

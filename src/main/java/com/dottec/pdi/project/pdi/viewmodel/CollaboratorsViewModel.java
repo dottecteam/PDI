@@ -64,7 +64,7 @@ public class CollaboratorsViewModel {
     }
 
     private void openCollaboratorPage(Collaborator collaborator){
-        TemplateViewModel.trocarDeTela("Goals.fxml", controller -> {
+        TemplateViewModel.switchScreen("Goals.fxml", controller -> {
             if (controller instanceof CollaboratorGoalsViewModel c) {
                 c.setCollaborator(collaborator);
             }

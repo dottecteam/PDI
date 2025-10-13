@@ -37,10 +37,7 @@ public class RegisterCollaboratorViewModel {
     @FXML
     private VBox formPane;
 
-
-
     private String[] departments= {"Desenvolvimento", "UX/UI Design", "Infraestrutura de TI", "Inteligência de Dados"};
-    private String[] roles= {"Desenvolvedor Fullstack", "UX Designer", "Analista de Dados", "Desenvolvedor Backend"};
 
     CollaboratorController collaboratorController = new CollaboratorController();
 

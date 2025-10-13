@@ -8,6 +8,6 @@ public class SettingsViewModel {
     //'Puxa' o metodo do pai
     @FXML
     void goToTeste(MouseEvent event){
-        TemplateViewModel.trocarDeTela("Dashboard.fxml");
+        TemplateViewModel.switchScreen("Dashboard.fxml");
     }
 }
