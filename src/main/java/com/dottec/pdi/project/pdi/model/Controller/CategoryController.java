@@ -7,7 +7,6 @@ import com.dottec.pdi.project.pdi.model.Category;
 import com.dottec.pdi.project.pdi.model.enums.CategoryType;
 
 
-
 public class CategoryController {
 
     private  final CategoryDAO  categoryDAO;
@@ -73,7 +72,7 @@ public class CategoryController {
 
             // Changing the attributes
             existingCategory.setName(newName);
-            existingCategory.setType(newType);
+//            existingCategory.setType(newType);
 
             // Persisting changes to the database
             this.categoryDAO.update(existingCategory);

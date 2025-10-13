@@ -21,7 +21,6 @@ public class Application extends javafx.application.Application {
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
 
         scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_AddGoal.css").toExternalForm());
-
         stage.setTitle("PDI");
         stage.setScene(scene);
         stage.setMaximized(true);

@@ -18,6 +18,7 @@ public class CollaboratorGoalsViewModel {
 
     public void setCollaborator(Collaborator collaborator) {
         this.collaborator = collaborator;
+        updateFields();
     }
 
     private CollaboratorController collaboratorController = new CollaboratorController();
@@ -57,13 +58,13 @@ public class CollaboratorGoalsViewModel {
             return;
         };
         if (collaborator != null) {
-        nameField.setText(collaborator.getName());
-        emailField.setText(collaborator.getEmail());
-        cpfField.setText(collaborator.getCpf());
-        departmentField.setText("Desenvolvimento");
-        roleField.setText("Desenvolvedor");
-        experienceField.setText(collaborator.getExperience());
-        observationsField.setText(collaborator.getObservations());
+            nameField.setText(collaborator.getName());
+            emailField.setText(collaborator.getEmail());
+            cpfField.setText(collaborator.getCpf());
+            departmentField.setText("Desenvolvimento");
+            roleField.setText("Desenvolvedor");
+            experienceField.setText(collaborator.getExperience());
+            observationsField.setText(collaborator.getObservations());
         }
     }
 

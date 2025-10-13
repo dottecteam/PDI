@@ -20,7 +20,7 @@ public class Database {
         this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public Connection getConnection(){
+    public static Connection getConnection(){
         return connection;
     }
 

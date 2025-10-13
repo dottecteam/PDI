@@ -5,6 +5,7 @@
     import javafx.fxml.Initializable;
     import javafx.geometry.Pos;
     import javafx.scene.Node;
+    import javafx.scene.Scene;
     import javafx.scene.control.Button;
     import javafx.scene.control.Label;
     import javafx.scene.control.TextField;
@@ -23,7 +24,10 @@
     import java.util.Arrays;
     import java.util.ResourceBundle;
 
-    public class TemplateController implements Initializable {
+    import javafx.scene.Node;
+    import javafx.stage.Stage;
+
+    public class TemplateController implements Initializable{
 
         //Declara os ID's criados
 
@@ -31,8 +35,8 @@
         @FXML
         private AnchorPane leftMenu;
 
-        @FXML
-        private AnchorPane tmpCenter;
+//        @FXML
+//        private AnchorPane tmpCenter;
 
         @FXML
         private AnchorPane menuDashboard;
@@ -153,6 +157,8 @@
             lastPage = currentPage;
             currentPage = "Dashboard.fxml";
             carregarPagina(currentPage);
+
+
 
             Button buttonFilterDashboard = new Button("Filtrar");
             buttonFilterDashboard.setId("filterDashboard");
