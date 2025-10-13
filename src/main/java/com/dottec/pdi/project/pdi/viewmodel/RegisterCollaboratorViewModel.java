@@ -121,11 +121,10 @@ public class RegisterCollaboratorViewModel {
         Department selectedDepartment = formAddCollaboratorDepartment.getValue(); // Pega o objeto Department selecionado
 
         try {
-            // Usa o controller para salvar o colaborador
+
             CollaboratorController.saveCollaborator(name, cpf, email, selectedDepartment);
             showSuccessAlert("Sucesso!", "Colaborador cadastrado com sucesso.");
-            // Opcional: Limpar os campos após o sucesso
-            // clearFields();
+
         } catch (Exception e) {
             showErrorAlert("Erro no Cadastro", "Ocorreu um erro ao salvar o colaborador: " + e.getMessage());
         }
