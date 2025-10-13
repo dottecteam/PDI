@@ -73,11 +73,6 @@ public class DepartmentController {
     // ---------- Getting Department per Id -------//
 
     public Department findById(int id){
-        Department existingDepartment = departmentDAO.findById(id);
-        if( existingDepartment == null){
-            System.out.println("Department not found");
-        }
-        return existingDepartment;
-
+        return departmentDAO.findById(id);
     }
 }
