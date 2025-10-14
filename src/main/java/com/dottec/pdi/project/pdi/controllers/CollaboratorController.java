@@ -10,32 +10,28 @@ import java.util.List;
 import static com.dottec.pdi.project.pdi.enums.CollaboratorStatus.active;
 
 public class CollaboratorController {
-    public void saveCollaborator(String name, String cpf, String email, Department department){
 
+    public static void saveCollaborator(String name, String cpf, String email, Department department) {
         Collaborator collaborator = new Collaborator();
-        collaborator.setCpf(cpf);
         collaborator.setName(name);
+        collaborator.setCpf(cpf);
         collaborator.setEmail(email);
         collaborator.setDepartment(department);
-        collaborator.setStatus(active);
+        collaborator.setStatus(active); // Define o status padrão como ativo
 
         CollaboratorDAO.insert(collaborator);
     }
 
-    public List<Collaborator> findAllCollaborators() {
-        List<Collaborator> collaborators = CollaboratorDAO.readAll();
-        return collaborators;
+    public static List<Collaborator> findAllCollaborators() {
+        return CollaboratorDAO.readAll();
     }
 
-    public void updateCollaborator(String name, String cpf, String email, Department department, CollaboratorStatus status){
-
-        Collaborator collaborator = new Collaborator();
-        collaborator.setCpf(cpf);
-        collaborator.setName(name);
-        collaborator.setEmail(email);
-        collaborator.setDepartment(department);
-        collaborator.setStatus(status);
-
+    public static void updateCollaborator(Collaborator collaborator) {
+        // Este método recebe o objeto inteiro para ser mais flexível
         CollaboratorDAO.update(collaborator);
+    }
+
+    public static void deleteCollaboratorById(int id) {
+        CollaboratorDAO.deleteById(id);
     }
 }

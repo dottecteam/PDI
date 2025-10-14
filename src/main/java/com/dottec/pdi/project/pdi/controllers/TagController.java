@@ -1,75 +1,39 @@
 package com.dottec.pdi.project.pdi.controllers;
 
+import com.dottec.pdi.project.pdi.dao.TagDAO;
 import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.enums.TagType;
 
-public class TagController {
-    private TagController(){}
-    public void addCategory(Tag tag){
-        Tag existingTag = tagDAO.findById(tag.getId());
+import java.util.List;
 
-        if( existingTag != null) {
-            System.out.println(existingTag + " já existe no banco de dados.");
-            return;
-        }
-        try{
-            this.tagDAO.insert(tag);
-            System.out.println("Categoria adicionada com sucesso");
-        } catch (Exception e) {
-            System.out.println("Houve um erro ao adicionar sua categoria" + e.getMessage());
-        }
+public final class TagController {
+
+    private TagController() {}
+
+    public static void addTag(Tag tag) {
+        TagDAO.insert(tag);
     }
 
-    public void deleteCategory(int id) {
-
-        Tag existingTag = this.tagDAO.findById(id);
-
-        // Making verification to see if the category exists before deleting
-
-        if (existingTag == null) {
-            System.out.println("Categoria não encontrada");
-            return;
-        }
-
-        try {
-            this.tagDAO.delete(id);// Calling the delete method from the CategoryDAo class
-            System.out.println("Categoria deletada");
-
-        } catch (Exception e) {
-            System.out.println("Erro ao deletar categoria" + e.getMessage());
-        }
-
+    public static void deleteTag(int id) {
+        TagDAO.deleteById(id);
     }
 
-    public void findCategory(int id){
-        this.tagDAO.findById(id); // Calling the findById method from the given CategoryDAO class
-
+    public static Tag findTagById(int id) {
+        return TagDAO.findById(id);
     }
 
-    public void updateCategory( int id , String newName , TagType newType){
-        // Fetching the category by its ID
+    public static List<Tag> findAllTags() {
+        return TagDAO.readAll();
+    }
 
-        Tag existingTag = this.tagDAO.findById(id);
-
-        // Making a verification to see if the category has an empty content or not
-
-        try {
-            if (existingTag == null) {
-                System.out.println("Categoria não encontrada");
-                return;
-            }
-
-            // Changing the attributes
+    public static void updateTag(int id, String newName, TagType newType) {
+        Tag existingTag = TagDAO.findById(id);
+        if (existingTag != null) {
             existingTag.setName(newName);
             existingTag.setType(newType);
-
-            // Persisting changes to the database
-            this.tagDAO.update(existingTag);
-            System.out.println("Categoria atualizada"); // Confirmation message
-        } catch (Exception e ) {
-            System.out.println("Erro ao atualizar categoria" + e.getMessage() );
+            TagDAO.update(existingTag);
+        } else {
+            System.err.println("Erro: Tag com ID " + id + " não encontrada para atualização.");
         }
     }
-
-
 }

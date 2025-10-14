@@ -1,25 +1,34 @@
 package com.dottec.pdi.project.pdi.dao;
 
 import com.dottec.pdi.project.pdi.config.Database;
+import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department;
-import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CollaboratorDAO {
-    // Comandos SQL
+    // --- Comandos SQL ---
     private static final String INSERT_SQL = "INSERT INTO collaborators (col_name, col_email, col_cpf, col_status, department_id) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_SQL = "UPDATE collaborators SET col_name = ?, col_email = ?, col_cpf = ?, col_status = ?, department_id = ?, col_updated_at = CURRENT_TIMESTAMP WHERE col_id = ?";
-    private static final String SOFT_DELETE_SQL = "UPDATE collaborators SET col_status = 'ON_LEAVE', col_deleted_at = CURRENT_TIMESTAMP WHERE col_id = ?";
-    private static final String SELECT_ALL_SQL = "SELECT * FROM collaborators WHERE col_deleted_at IS NULL";
-    private static final String FIND_BY_ID_SQL = "SELECT * FROM collaborators WHERE col_id = ? AND col_deleted_at IS NULL";
-    private static final String FIND_BY_DEPARTMENT_ID_SQL = "SELECT * FROM collaborators WHERE department_id = ? AND col_deleted_at IS NULL";
+    private static final String SOFT_DELETE_SQL = "UPDATE collaborators SET col_status = 'INACTIVE', col_deleted_at = CURRENT_TIMESTAMP WHERE col_id = ?";
+
+    // --- Consultas Otimizadas com LEFT JOIN ---
+    // Usamos um alias (c para collaborators, d para departments) para simplificar
+    private static final String BASE_SELECT_SQL = """
+        SELECT c.*, d.dep_name
+        FROM collaborators c
+        LEFT JOIN departments d ON c.department_id = d.dep_id
+        """;
+    private static final String SELECT_ALL_SQL = BASE_SELECT_SQL + " WHERE c.col_deleted_at IS NULL";
+    private static final String FIND_BY_ID_SQL = BASE_SELECT_SQL + " WHERE c.col_id = ? AND c.col_deleted_at IS NULL";
+    private static final String FIND_BY_DEPARTMENT_ID_SQL = BASE_SELECT_SQL + " WHERE c.department_id = ? AND c.col_deleted_at IS NULL";
+
 
     public static void insert(Collaborator collaborator) {
-        try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)){
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)) {
             stmt.setString(1, collaborator.getName());
             stmt.setString(2, collaborator.getEmail());
             stmt.setString(3, collaborator.getCpf());
@@ -28,18 +37,13 @@ public class CollaboratorDAO {
 
             int rows = stmt.executeUpdate();
             System.out.println("Colaborador inserido! Linhas: " + rows);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir colaborador: " + e.getMessage(), e);
         }
     }
 
-    public static void delete(Collaborator collaborator){
-        CollaboratorDAO.deleteById(collaborator.getId());
-    }
-
     public static void update(Collaborator collaborator) {
-        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)){
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)) {
             stmt.setString(1, collaborator.getName());
             stmt.setString(2, collaborator.getEmail());
             stmt.setString(3, collaborator.getCpf());
@@ -49,24 +53,36 @@ public class CollaboratorDAO {
 
             int rows = stmt.executeUpdate();
             System.out.println("Colaborador atualizado! Linhas afetadas: " + rows);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar colaborador: " + e.getMessage(), e);
         }
     }
 
-    public static Collaborator findById(int id) {
-        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)){
+    public static void delete(Collaborator collaborator) {
+        CollaboratorDAO.deleteById(collaborator.getId());
+    }
+
+    public static void deleteById(int id) {
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(SOFT_DELETE_SQL)) {
             stmt.setInt(1, id);
 
+            int rows = stmt.executeUpdate();
+            System.out.println("Colaborador desativado (soft delete)! Linhas afetadas: " + rows);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao desativar colaborador: " + e.getMessage(), e);
+        }
+    }
+
+    public static Collaborator findById(int id) {
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)) {
+            stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return mapResultSetToCollaborator(rs);
                 }
             }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar colaborador: " + e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar colaborador por ID: " + e.getMessage(), e);
         }
         return null;
     }
@@ -76,7 +92,6 @@ public class CollaboratorDAO {
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_ALL_SQL);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 collaborators.add(mapResultSetToCollaborator(rs));
             }
@@ -86,23 +101,10 @@ public class CollaboratorDAO {
         return collaborators;
     }
 
-    public static void deleteById(int id){
-        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(SOFT_DELETE_SQL)){
-            stmt.setInt(1, id);
-
-            int rows = stmt.executeUpdate();
-            System.out.println("Colaborador desativado (soft delete)! Linhas afetadas: " + rows);
-        }
-        catch (SQLException e) {
-            throw new RuntimeException("Erro ao desativar colaborador: " + e.getMessage(), e);
-        }
-    }
-
     public static List<Collaborator> findByDepartmentId(int departmentId) {
         List<Collaborator> collaborators = new ArrayList<>();
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(FIND_BY_DEPARTMENT_ID_SQL)) {
-
             stmt.setInt(1, departmentId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -122,15 +124,21 @@ public class CollaboratorDAO {
         collaborator.setEmail(rs.getString("col_email"));
         collaborator.setCpf(rs.getString("col_cpf"));
         collaborator.setStatus(CollaboratorStatus.valueOf(rs.getString("col_status")));
-         collaborator.setCreatedAt(rs.getTimestamp("col_created_at").toLocalDateTime());
-         collaborator.setUpdatedAt(rs.getTimestamp("col_updated_at").toLocalDateTime());
-         Timestamp deletedAtTimestamp = rs.getTimestamp("col_deleted_at");
-         if (deletedAtTimestamp != null) {
-             collaborator.setDeletedAt(deletedAtTimestamp.toLocalDateTime());
-         }
+        collaborator.setCreatedAt(rs.getTimestamp("col_created_at").toLocalDateTime());
+
+        Timestamp updatedAtTimestamp = rs.getTimestamp("col_updated_at");
+        if (updatedAtTimestamp != null) {
+            collaborator.setUpdatedAt(updatedAtTimestamp.toLocalDateTime());
+        }
+
+        Timestamp deletedAtTimestamp = rs.getTimestamp("col_deleted_at");
+        if (deletedAtTimestamp != null) {
+            collaborator.setDeletedAt(deletedAtTimestamp.toLocalDateTime());
+        }
 
         Department department = new Department();
         department.setId(rs.getInt("department_id"));
+        department.setName(rs.getString("dep_name"));
         collaborator.setDepartment(department);
 
         return collaborator;

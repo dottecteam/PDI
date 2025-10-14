@@ -10,13 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GoalDAO {
-    // Comandos SQL
+    // Comandos SQL (existentes)
     private static final String INSERT_SQL = "INSERT INTO pdi_goals (goa_name, goa_description, goa_status, goa_deadline, collaborator_id) VALUES (?, ?, ?, ?, ?)";
     private static final String DELETE_SQL = "DELETE FROM pdi_goals WHERE goa_id = ?";
     private static final String UPDATE_SQL = "UPDATE pdi_goals SET goa_name = ?, goa_description = ?, goa_status = ?, goa_deadline = ?, collaborator_id = ?, goa_updated_at = CURRENT_TIMESTAMP WHERE goa_id = ?";
     private static final String SELECT_ALL_SQL = "SELECT * FROM pdi_goals";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM pdi_goals WHERE goa_id = ?";
 
+    // NOVO COMANDO SQL: Buscar metas por ID do colaborador
+    private static final String FIND_BY_COLLABORATOR_ID_SQL = "SELECT * FROM pdi_goals WHERE collaborator_id = ?";
+
+    // ... (os métodos insert, delete, update, findById, readAll, deleteById continuam os mesmos) ...
     public static void insert(Goal goal) {
         try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)){
             stmt.setString(1, goal.getName());
@@ -34,7 +38,7 @@ public class GoalDAO {
     }
 
     public static void delete(Goal goal){
-        this.deleteById(goal.getId());
+        GoalDAO.deleteById(goal.getId());
     }
 
     public static void update(Goal goal) {
@@ -99,6 +103,23 @@ public class GoalDAO {
         }
     }
 
+    // NOVO MÉTODO: Buscar metas por ID do colaborador
+    public static List<Goal> findByCollaboratorId(int collaboratorId) {
+        List<Goal> goals = new ArrayList<>();
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(FIND_BY_COLLABORATOR_ID_SQL)) {
+            stmt.setInt(1, collaboratorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    goals.add(mapResultSetToGoal(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar metas do colaborador: " + e.getMessage(), e);
+        }
+        return goals;
+    }
+
     // Método auxiliar para não repetir código de mapeamento
     public static Goal mapResultSetToGoal(ResultSet rs) throws SQLException {
         Goal goal = new Goal();
@@ -108,14 +129,15 @@ public class GoalDAO {
         goal.setStatus(GoalStatus.valueOf(rs.getString("goa_status")));
         goal.setDeadline(rs.getDate("goa_deadline").toLocalDate());
         goal.setCreatedAt(rs.getTimestamp("goa_created_at").toLocalDateTime());
-        goal.setUpdatedAt(rs.getTimestamp("goa_updated_at").toLocalDateTime());
 
-        // Cria um objeto Collaborator - apenas com o ID por enquanto
+        Timestamp updatedAtTimestamp = rs.getTimestamp("goa_updated_at");
+        if(updatedAtTimestamp != null){
+            goal.setUpdatedAt(updatedAtTimestamp.toLocalDateTime());
+        }
+
         Collaborator collaborator = new Collaborator();
         collaborator.setId(rs.getInt("collaborator_id"));
         goal.setCollaborator(collaborator);
-
-        // As listas de Activities e Tags não são preenchidas aqui
 
         return goal;
     }

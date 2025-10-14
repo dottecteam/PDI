@@ -1,15 +1,29 @@
 package com.dottec.pdi.project.pdi.utils;
 
 import com.dottec.pdi.project.pdi.model.Goal;
+import java.time.LocalDate;
 
-public class GoalValidator{
-	public boolean goalValidator(Goal goal) {
-		if(goal == null /*|| goal.getStatus == null*/ ) {							//Remover comentarios caso necessario verificar o status
-			return false;
-		}
-		return	StringValidator.dateValidate(goal.getDeadline()) &&					//Ja funciona corretamente
-				StringValidator.descriptionValidate(goal.getName()) &&				//usei o descriptionValidate por não ser um nome próprio
-				StringValidator.descriptionValidate(goal.getDescription()) &&		//Ja funciona corretamente(de acordo com o pattern)
-				StringValidator.categoryValidate(goal.getCategory());				//Ajustar a função categoryValidate depois 
-	}
+public final class GoalValidator {
+
+    private GoalValidator() {}
+
+    public static boolean isValid(Goal goal) {
+
+        if (goal == null || goal.getName() == null || goal.getDescription() == null || goal.getDeadline() == null) {
+            return false;
+        }
+
+        boolean isNameValid = StringValidator.descriptionValidate(goal.getName());
+        boolean isDescriptionValid = StringValidator.descriptionValidate(goal.getDescription());
+        boolean isDateValid = isFutureDate(goal.getDeadline());
+
+        boolean areTagsValid = TagValidator.isListValid(goal.getTags());
+
+        return isNameValid && isDescriptionValid && isDateValid && areTagsValid;
+    }
+
+    private static boolean isFutureDate(LocalDate deadline) {
+        if (deadline == null) return false;
+        return !deadline.isBefore(LocalDate.now());
+    }
 }

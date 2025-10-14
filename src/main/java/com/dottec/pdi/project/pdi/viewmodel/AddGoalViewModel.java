@@ -1,5 +1,8 @@
-package com.dottec.pdi.project.pdi;
+package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.controllers.GoalController;
+import com.dottec.pdi.project.pdi.model.Collaborator;
+import com.dottec.pdi.project.pdi.model.Goal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,120 +14,116 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.util.Callback;
 
-// Enum para representar os diferentes status possíveis
-enum GoalStatus {
-    EM_CURSO,
-    CONCLUIDO,
-    ADICIONAR
-}
-
-// Classe para modelar cada item da lista
-class Goal {
-    private String title;
-    private GoalStatus status;
-
-    public Goal(String title, GoalStatus status) {
-        this.title = title;
-        this.status = status;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public GoalStatus getStatus() {
-        return status;
-    }
-}
+import java.util.List;
 
 public class AddGoalViewModel {
 
+    @FXML
+    private ListView<Goal> goalsListView;
 
-        @FXML
-        private ListView<Goal> goalsListView;
+    private Collaborator currentCollaborator;
+    private List<Goal> collaboratorGoals;
 
-        @FXML
-        public void initialize() {
-            // 1. Crie a lista de dados (metas) : ESSA PARTE VAI MUDAR COM A CRIAÇÃO DO BANCO DE DADOS
-            ObservableList<Goal> goals = FXCollections.observableArrayList(
-                    new Goal("Onboarding para novos colaboradores", GoalStatus.EM_CURSO),
-                    new Goal("Comunicação e oratória", GoalStatus.EM_CURSO),
-                    new Goal("Gestão para resultados", GoalStatus.ADICIONAR),
-                    new Goal("Planejamento estratégico", GoalStatus.CONCLUIDO),
-                    new Goal("Gestão do tempo", GoalStatus.EM_CURSO),
-                    new Goal("Segurança do trabalho", GoalStatus.EM_CURSO),
-                    new Goal("Processo de gestão da qualidade", GoalStatus.ADICIONAR)
-            );
+    @FXML
+    public void initialize() {
+        goalsListView.setCellFactory(param -> new GoalCell());
+    }
 
-            // 2. Associe os dados à ListView
-            goalsListView.setItems(goals);
+    public void setCollaborator(Collaborator collaborator) {
+        this.currentCollaborator = collaborator;
+        loadData(); // Carrega os dados assim que o colaborador for definido
+    }
 
-            // 3. Crie a fábrica de células customizadas
-            goalsListView.setCellFactory(new Callback<ListView<Goal>, ListCell<Goal>>() {
-                @Override
-                public ListCell<Goal> call(ListView<Goal> listView) {
-                    return new GoalCell();
+    private void loadData() {
+        if (currentCollaborator == null) return;
+
+        List<Goal> allGoals = GoalController.findAllGoals();
+
+        collaboratorGoals = GoalController.findGoalsByCollaborator(currentCollaborator.getId());
+
+        ObservableList<Goal> observableGoals = FXCollections.observableArrayList(allGoals);
+        goalsListView.setItems(observableGoals);
+    }
+
+    private class GoalCell extends ListCell<Goal> {
+        private final HBox hbox = new HBox(10);
+        private final Label nameLabel = new Label();
+        private final Region spacer = new Region();
+        private final Button addButton = new Button("Adicionar");
+        private final Label statusLabel = new Label();
+
+        public GoalCell() {
+            super();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            addButton.getStyleClass().add("add-button");
+
+            addButton.setOnAction(event -> {
+                Goal goal = getItem();
+                if (goal != null && currentCollaborator != null) {
+                    GoalController.assignGoalToCollaborator(goal, currentCollaborator);
+                    addButton.setDisable(true);
+                    addButton.setText("Adicionado");
                 }
             });
         }
 
-        // Classe interna para representar a célula customizada
-        private static class GoalCell extends ListCell<Goal> {
-            private HBox hbox = new HBox();
-            private Label label = new Label();
-            private Region spacer = new Region(); // Espaçador flexível
-            private Button addButton = new Button("Adicionar");
-            private Label statusLabel = new Label();
+        @Override
+        protected void updateItem(Goal goal, boolean empty) {
+            super.updateItem(goal, empty);
+            if (empty || goal == null) {
+                setGraphic(null);
+            } else {
+                nameLabel.setText(goal.getName());
+                nameLabel.setStyle("-fx-font-size: 16px;");
 
-            public GoalCell() {
-                super();
-                HBox.setHgrow(spacer, Priority.ALWAYS); // Faz o espaçador crescer
-                addButton.getStyleClass().add("add-button"); // Classe CSS para o botão
+                hbox.getChildren().clear();
+                hbox.getChildren().addAll(nameLabel, spacer);
 
-                // Lógica do botão (exemplo)
-                addButton.setOnAction(event -> {
-                    System.out.println("Adicionando: " + getItem().getTitle());
-                    // Aqui você colocaria a lógica para adicionar a meta
-                });
-            }
+                Goal existingGoal = findGoalInCollaboratorList(goal.getId());
 
-            @Override
-            protected void updateItem(Goal goal, boolean empty) {
-                super.updateItem(goal, empty);
-                if (empty || goal == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    label.setText(goal.getTitle());
-                    label.setStyle("-fx-font-size: 16px;");
-
-                    // Limpa o HBox e o reconfigura para o item atual
-                    hbox.getChildren().clear();
-                    hbox.setAlignment(Pos.CENTER);
-
-                    hbox.getChildren().add(label);
-                    hbox.getChildren().add(spacer);
-
-                    // Decide qual componente de status mostrar
-                    switch (goal.getStatus()) {
-                        case ADICIONAR:
-                            hbox.getChildren().add(addButton);
+                if (existingGoal != null) {
+                    // **AJUSTE PRINCIPAL AQUI**
+                    // Se o colaborador já tem a meta, mostra seu status correto
+                    switch (existingGoal.getStatus()) {
+                        case in_progress:
+                            statusLabel.setText("📖 Em progresso");
+                            statusLabel.getStyleClass().setAll("status-label", "in-progress");
                             break;
-                        case EM_CURSO:
-                            statusLabel.setText("📖 Em curso");
-                            statusLabel.getStyleClass().setAll("status-label", "em-curso");
-                            hbox.getChildren().add(statusLabel);
-                            break;
-                        case CONCLUIDO:
+                        case completed:
                             statusLabel.setText("✔ Concluído");
-                            statusLabel.getStyleClass().setAll("status-label", "concluido");
-                            hbox.getChildren().add(statusLabel);
+                            statusLabel.getStyleClass().setAll("status-label", "completed");
+                            break;
+                        case pending:
+                            statusLabel.setText("⏳ Pendente");
+                            statusLabel.getStyleClass().setAll("status-label", "pending");
+                            break;
+                        case canceled:
+                            statusLabel.setText("❌ Cancelado");
+                            statusLabel.getStyleClass().setAll("status-label", "canceled");
                             break;
                     }
-                    setGraphic(hbox);
+                    hbox.getChildren().add(statusLabel);
+                } else {
+                    // Se o colaborador não tem a meta, mostra o botão "Adicionar"
+                    addButton.setDisable(false);
+                    addButton.setText("Adicionar");
+                    hbox.getChildren().add(addButton);
                 }
+
+                setGraphic(hbox);
             }
         }
+
+        private Goal findGoalInCollaboratorList(int goalId) {
+            if (collaboratorGoals == null) return null;
+            for (Goal g : collaboratorGoals) {
+                if (g.getId() == goalId) {
+                    return g;
+                }
+            }
+            return null;
+        }
+    }
 }
