@@ -20,21 +20,19 @@ import java.util.List;
 public class CollaboratorGoalsViewModel {
     private Collaborator collaborator;
 
-    // --- FXML Campos de Informação do Colaborador ---
     @FXML private TextField nameField;
     @FXML private TextField cpfField;
     @FXML private TextField emailField;
     @FXML private TextField departmentField;
 
-    // --- FXML Controles de Edição ---
+
     @FXML private ImageView editButton;
     @FXML private Button confirmEditButton;
     @FXML private Button cancelEditButton; // Botão de cancelar é uma boa prática
 
-    // --- FXML Container para Metas ---
-    @FXML private VBox goalsVBox; // Adicione este VBox no seu FXML para listar as metas
+    @FXML private VBox goalsVBox;
 
-    // Método chamado pelo JavaFX após o FXML ser carregado
+
     @FXML
     private void initialize() {
         // Inicia com os botões de ação escondidos
@@ -42,14 +40,12 @@ public class CollaboratorGoalsViewModel {
         cancelEditButton.setVisible(false);
     }
 
-    // Este é o método principal para carregar os dados na tela
     public void setCollaborator(Collaborator collaborator) {
         this.collaborator = collaborator;
         updateCollaboratorFields();
         loadAndDisplayGoals();
     }
 
-    // Atualiza os campos de texto com as informações do colaborador
     private void updateCollaboratorFields() {
         if (collaborator == null) return;
 
@@ -57,7 +53,6 @@ public class CollaboratorGoalsViewModel {
         emailField.setText(collaborator.getEmail());
         cpfField.setText(collaborator.getCpf());
 
-        // Exibe o nome do departamento, com verificação de nulo
         if (collaborator.getDepartment() != null && collaborator.getDepartment().getName() != null) {
             departmentField.setText(collaborator.getDepartment().getName());
         } else {
@@ -65,7 +60,6 @@ public class CollaboratorGoalsViewModel {
         }
     }
 
-    // Busca e exibe as metas do colaborador
     private void loadAndDisplayGoals() {
         if (collaborator == null || goalsVBox == null) return;
 
@@ -89,9 +83,9 @@ public class CollaboratorGoalsViewModel {
             Label goalDeadline = new Label("Prazo: " + goal.getDeadline().format(formatter));
             goalDeadline.getStyleClass().add("goal-deadline");
 
-            Label goalStatus = new Label(goal.getStatus().name()); // Simplesmente o nome do ENUM
+            Label goalStatus = new Label(goal.getStatus().name());
             goalStatus.getStyleClass().add("goal-status");
-            goalStatus.getStyleClass().add("status-" + goal.getStatus().name().toLowerCase()); // Ex: status-in_progress
+            goalStatus.getStyleClass().add("status-" + goal.getStatus().name().toLowerCase());
 
             goalCard.getChildren().addAll(goalName, goalDeadline, goalStatus);
             StackPane.setAlignment(goalName, Pos.CENTER_LEFT);
@@ -104,12 +98,11 @@ public class CollaboratorGoalsViewModel {
 
     @FXML
     private void handleEnableEditing() {
-        // Apenas o nome deve ser editável
+
         nameField.setEditable(true);
         nameField.getStyleClass().remove("label-not-editable");
         nameField.getStyleClass().add("label-editable");
 
-        // Troca a visibilidade dos botões
         editButton.setVisible(false);
         confirmEditButton.setVisible(true);
         cancelEditButton.setVisible(true);
@@ -117,7 +110,6 @@ public class CollaboratorGoalsViewModel {
 
     @FXML
     private void handleCancelEditing() {
-        // Restaura o valor original do campo
         updateCollaboratorFields();
         disableEditingState();
     }
@@ -129,13 +121,11 @@ public class CollaboratorGoalsViewModel {
             return;
         }
 
-        // Atualiza o objeto e chama o controller estático
         collaborator.setName(nameField.getText());
         CollaboratorController.updateCollaborator(collaborator);
 
         showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Colaborador atualizado com sucesso!");
 
-        // Retorna ao estado de visualização
         disableEditingState();
     }
 
@@ -144,7 +134,6 @@ public class CollaboratorGoalsViewModel {
         nameField.getStyleClass().add("label-not-editable");
         nameField.getStyleClass().remove("label-editable");
 
-        // Troca a visibilidade dos botões de volta
         editButton.setVisible(true);
         confirmEditButton.setVisible(false);
         cancelEditButton.setVisible(false);

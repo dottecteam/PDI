@@ -11,6 +11,8 @@ import static com.dottec.pdi.project.pdi.enums.CollaboratorStatus.active;
 
 public class CollaboratorController {
 
+    private CollaboratorController(){}
+
     public static void saveCollaborator(String name, String cpf, String email, Department department) {
         Collaborator collaborator = new Collaborator();
         collaborator.setName(name);

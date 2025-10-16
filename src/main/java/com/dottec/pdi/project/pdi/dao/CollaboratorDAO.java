@@ -10,18 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CollaboratorDAO {
-    // --- Comandos SQL ---
     private static final String INSERT_SQL = "INSERT INTO collaborators (col_name, col_email, col_cpf, col_status, department_id) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_SQL = "UPDATE collaborators SET col_name = ?, col_email = ?, col_cpf = ?, col_status = ?, department_id = ?, col_updated_at = CURRENT_TIMESTAMP WHERE col_id = ?";
     private static final String SOFT_DELETE_SQL = "UPDATE collaborators SET col_status = 'INACTIVE', col_deleted_at = CURRENT_TIMESTAMP WHERE col_id = ?";
 
-    // --- Consultas Otimizadas com LEFT JOIN ---
-    // Usamos um alias (c para collaborators, d para departments) para simplificar
     private static final String BASE_SELECT_SQL = """
         SELECT c.*, d.dep_name
         FROM collaborators c
         LEFT JOIN departments d ON c.department_id = d.dep_id
         """;
+
     private static final String SELECT_ALL_SQL = BASE_SELECT_SQL + " WHERE c.col_deleted_at IS NULL";
     private static final String FIND_BY_ID_SQL = BASE_SELECT_SQL + " WHERE c.col_id = ? AND c.col_deleted_at IS NULL";
     private static final String FIND_BY_DEPARTMENT_ID_SQL = BASE_SELECT_SQL + " WHERE c.department_id = ? AND c.col_deleted_at IS NULL";

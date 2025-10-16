@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 public class TemplateViewModel implements Initializable {
-        //Declara os ID's criados
-        //AnchorPane
         @FXML
         private AnchorPane leftMenu;
 
@@ -65,19 +63,15 @@ public class TemplateViewModel implements Initializable {
         private Label headerLabel;
 
 
-        //BorderPane
         @FXML
         private BorderPane mainPane;
 
         @FXML
         private BorderPane tmpCenter;
 
-        //ImageView
         @FXML
         private ImageView menuLogo;
 
-
-        //HBox
         @FXML
         private HBox header;
 

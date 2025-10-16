@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentDAO {
-    // Comandos SQL
     private static final String INSERT_SQL = "INSERT INTO departments (dep_name, dep_status) VALUES (?, ?)";
     private static final String UPDATE_SQL = "UPDATE departments SET dep_name = ?, dep_status = ?, dep_updated_at = CURRENT_TIMESTAMP WHERE dep_id = ?";
     private static final String SOFT_DELETE_SQL = "UPDATE departments SET dep_status = 'INACTIVE', dep_deleted_at = CURRENT_TIMESTAMP WHERE dep_id = ?";

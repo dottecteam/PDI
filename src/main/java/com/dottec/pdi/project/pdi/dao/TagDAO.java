@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagDAO {
-    // Comandos SQL
     private static final String INSERT_SQL = "INSERT INTO tags (tag_name, tag_type) VALUES (?, ?)";
     private static final String DELETE_SQL = "DELETE FROM tags WHERE tag_id = ?";
     private static final String UPDATE_SQL = "UPDATE tags SET tag_name = ?, tag_type = ? WHERE tag_id = ?";

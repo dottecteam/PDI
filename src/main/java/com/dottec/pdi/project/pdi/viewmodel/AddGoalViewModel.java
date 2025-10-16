@@ -84,8 +84,6 @@ public class AddGoalViewModel {
                 Goal existingGoal = findGoalInCollaboratorList(goal.getId());
 
                 if (existingGoal != null) {
-                    // **AJUSTE PRINCIPAL AQUI**
-                    // Se o colaborador já tem a meta, mostra seu status correto
                     switch (existingGoal.getStatus()) {
                         case in_progress:
                             statusLabel.setText("📖 Em progresso");
@@ -106,7 +104,6 @@ public class AddGoalViewModel {
                     }
                     hbox.getChildren().add(statusLabel);
                 } else {
-                    // Se o colaborador não tem a meta, mostra o botão "Adicionar"
                     addButton.setDisable(false);
                     addButton.setText("Adicionar");
                     hbox.getChildren().add(addButton);
