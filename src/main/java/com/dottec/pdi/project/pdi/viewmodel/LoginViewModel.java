@@ -47,6 +47,7 @@ public class LoginViewModel {
                 Stage stage = new Stage();
                 stage.setTitle("PDI");
                 stage.setScene(new Scene(root));
+                stage.setMaximized(true);
                 stage.show();
 
             } catch (Exception e) {
