@@ -11,14 +11,14 @@ import java.util.List;
 
 public class GoalDAO {
     // Comandos SQL (existentes)
-    private static final String INSERT_SQL = "INSERT INTO pdi_goals (goa_name, goa_description, goa_status, goa_deadline, collaborator_id) VALUES (?, ?, ?, ?, ?)";
-    private static final String DELETE_SQL = "DELETE FROM pdi_goals WHERE goa_id = ?";
-    private static final String UPDATE_SQL = "UPDATE pdi_goals SET goa_name = ?, goa_description = ?, goa_status = ?, goa_deadline = ?, collaborator_id = ?, goa_updated_at = CURRENT_TIMESTAMP WHERE goa_id = ?";
-    private static final String SELECT_ALL_SQL = "SELECT * FROM pdi_goals";
-    private static final String FIND_BY_ID_SQL = "SELECT * FROM pdi_goals WHERE goa_id = ?";
+    private static final String INSERT_SQL = "INSERT INTO goals (goa_name, goa_description, goa_status, goa_deadline, collaborator_id) VALUES (?, ?, ?, ?, ?)";
+    private static final String DELETE_SQL = "DELETE FROM goals WHERE goa_id = ?";
+    private static final String UPDATE_SQL = "UPDATE goals SET goa_name = ?, goa_description = ?, goa_status = ?, goa_deadline = ?, collaborator_id = ?, goa_updated_at = CURRENT_TIMESTAMP WHERE goa_id = ?";
+    private static final String SELECT_ALL_SQL = "SELECT * FROM goals";
+    private static final String FIND_BY_ID_SQL = "SELECT * FROM goals WHERE goa_id = ?";
 
     // NOVO COMANDO SQL: Buscar metas por ID do colaborador
-    private static final String FIND_BY_COLLABORATOR_ID_SQL = "SELECT * FROM pdi_goals WHERE collaborator_id = ?";
+    private static final String FIND_BY_COLLABORATOR_ID_SQL = "SELECT * FROM goals WHERE collaborator_id = ?";
 
     // ... (os métodos insert, delete, update, findById, readAll, deleteById continuam os mesmos) ...
     public static void insert(Goal goal) {
