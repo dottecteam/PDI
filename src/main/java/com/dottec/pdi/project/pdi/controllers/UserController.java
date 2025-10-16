@@ -1,81 +1,67 @@
-// ------------- Making the UserController class -------------//
 package com.dottec.pdi.project.pdi.controllers;
 
 import com.dottec.pdi.project.pdi.dao.UserDAO;
 import com.dottec.pdi.project.pdi.model.User;
 import java.util.List;
 
-
 public class UserController {
-    // ------------- User Controller class -------------//
-    private final UserDAO userDAO = new UserDAO();
+    private UserController() {}
 
-    // ------------- Creating the methods for the UserDao Controller class ------------//
-    // -------- Adding user ----------- //
-
-    public boolean addUser(User user) {
-        User existingUser = userDAO.findById(user.getId());
-
-        if (existingUser != null) {
-            System.out.println("User already exists");
+    public static boolean addUser(User user) {
+        if (UserDAO.findById(user.getId()) != null) {
+            System.out.println("User already exists with ID: " + user.getId());
             return false;
         }
-        // ---  If there is no such user ---- //
 
         try {
-            userDAO.insert(user);
+            UserDAO.insert(user);
             return true;
         } catch (Exception e) {
-            System.out.println("User insert failed. Error message: " + e.getMessage());
+            System.err.println("User insert failed. Error: " + e.getMessage());
             return false;
         }
-
     }
 
-    // -------- Remove user method ------ //
-    public boolean inactivateUser(int id) {
-        User existingUser = userDAO.findById(id);
-        if (existingUser == null) {
-            System.out.println("User not found");
+    public static boolean inactivateUser(int id) {
+        User user = UserDAO.findById(id);
+        if (user == null) {
+            System.out.println("User not found with ID: " + id);
             return false;
         }
+
         try {
-            userDAO.softDelete(id); // Soft Deleting in the Data-Base
+            UserDAO.softDelete(user);
             return true;
         } catch (Exception e) {
-            System.out.println("User delete failed. Error message: " + e.getMessage());
+            System.err.println("User soft delete failed for ID " + id + ". Error: " + e.getMessage());
             return false;
         }
     }
-    // -------- Update user --------- //
-    public boolean updateUser(User user) {
-        User existingUser = userDAO.findById(user.getId());
-        if (existingUser == null) {
-            System.out.println("User not found");
+
+    public static boolean updateUser(User user) {
+        if (UserDAO.findById(user.getId()) == null) {
+            System.out.println("User not found for update with ID: " + user.getId());
             return false;
         }
+
         try {
-            userDAO.update(user); // Updating in the Data-Base
+            UserDAO.update(user);
             return true;
         } catch (Exception e) {
-            System.out.println("User update failed. Error message: " + e.getMessage());
+            System.err.println("User update failed for ID " + user.getId() + ". Error: " + e.getMessage());
             return false;
         }
     }
 
-    // ---------- Getting User per Id -------//
-    public User findById(int id) {
-        return userDAO.findById(id);
+    public static User findById(int id) {
+        return UserDAO.findById(id);
     }
 
-    // --------- Getting User per Email -------//
-    public User findByEmail(String email) {
-        return userDAO.findByEmail(email);
+    public static User findByEmail(String email) {
+        return UserDAO.findByEmail(email);
     }
 
-    // ---------- Getting all Users -------//
-    public List<User> findAll() {
-        return userDAO.listAll();
+    public static List<User> findAll() {
+        return UserDAO.listAll();
     }
-
 }
