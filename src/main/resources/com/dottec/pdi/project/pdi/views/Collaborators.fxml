@@ -7,8 +7,8 @@
 
 <ScrollPane fx:id="mainScrollPane" fitToWidth="true" hbarPolicy="NEVER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.CollaboratorsViewModel">
     <stylesheets>
-        <String fx:value="@/com/dottec/pdi/project/pdi/static/style/style_collaborators.css" />
-        <String fx:value="@/com/dottec/pdi/project/pdi/static/style/style_template.css" />
+        <String fx:value="/com/dottec/pdi/project/pdi/static/style/style_collaborators.css" />
+        <String fx:value="/com/dottec/pdi/project/pdi/static/style/style_template.css" />
     </stylesheets>
     <content>
         <VBox fx:id="mainVBox" alignment="TOP_CENTER" spacing="15.0">
