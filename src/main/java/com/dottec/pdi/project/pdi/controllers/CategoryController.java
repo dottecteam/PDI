@@ -4,7 +4,7 @@ package com.dottec.pdi.project.pdi.controllers;
 
 import com.dottec.pdi.project.pdi.dao.CategoryDAO;
 import com.dottec.pdi.project.pdi.model.Category;
-import com.dottec.pdi.project.pdi.enums.CategoryType;
+import com.dottec.pdi.project.pdi.model.enums.CategoryType;
 
 
 

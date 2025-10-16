@@ -25,17 +25,23 @@ public class AuthController {
     public static boolean login(String email, String password) {
         String sql = "SELECT * FROM users WHERE use_email = ? AND use_password_hash = ?";
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        Database db = null;
+        try{
+            db = new Database();
+            Connection conn = db.getConnection();
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, email);
             stmt.setString(2, password);
+
+
 
             ResultSet login = stmt.executeQuery();
 
             if (login.next()) {
                 Status status = Status.valueOf(login.getString("use_status").toUpperCase());
-                Role role = Role.valueOf(login.getString("use_role"));
+                Role role = Role.valueOf(login.getString("use_role").toUpperCase());
 
                 loggedUser = new User(
                         login.getInt("use_id"),

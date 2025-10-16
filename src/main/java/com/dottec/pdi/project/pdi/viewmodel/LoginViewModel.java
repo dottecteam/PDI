@@ -1,16 +1,18 @@
-package com.dottec.pdi.project.pdi.controllers;
+package com.dottec.pdi.project.pdi.viewmodel;
 
-import javafx.event.ActionEvent;
+import com.dottec.pdi.project.pdi.controllers.AuthController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class LoginController {
+public class LoginViewModel {
 
     @FXML
     private TextField emailField;
@@ -18,9 +20,12 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
+    @FXML
+    private Button logar;
+
 
     @FXML
-    public void handleLogin(ActionEvent event) {
+    public void handleLogin(MouseEvent event) {
         String email = emailField.getText().trim();
         String password = passwordField.getText().trim();
 
@@ -33,12 +38,17 @@ public class LoginController {
 
         if (success) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/Dashboard.fxml"));
+                Stage currentStage = (Stage) emailField.getScene().getWindow();
+                currentStage.close();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Template.fxml"));
                 Parent root = loader.load();
 
-                Stage stage = (Stage) emailField.getScene().getWindow();
+                Stage stage = new Stage();
+                stage.setTitle("PDI");
                 stage.setScene(new Scene(root));
-                stage.centerOnScreen();
+                stage.show();
+
             } catch (Exception e) {
                 showAlert("Erro", "Falha ao carregar o painel: " + e.getMessage());
             }

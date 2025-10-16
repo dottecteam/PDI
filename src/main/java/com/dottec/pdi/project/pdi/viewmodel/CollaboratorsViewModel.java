@@ -2,7 +2,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
 import com.dottec.pdi.project.pdi.model.Collaborator;
-import com.dottec.pdi.project.pdi.enums.Status;
+import com.dottec.pdi.project.pdi.model.enums.Status;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -45,10 +45,10 @@ public class CollaboratorsViewModel {
             department.getStyleClass().add("label-collaborator-department");
 
             Label status = new Label();
-            if(collaborator.getStatus() == Status.active){
+            if(collaborator.getStatus() == Status.ACTIVE){
                 status.setText("Ativo");
                 status.setStyle("-fx-background-color: #AF69CD; -fx-padding: 2 12");
-            } else if(collaborator.getStatus() == Status.inactive) {
+            } else if(collaborator.getStatus() == Status.INACTIVE) {
                 status.setText("Inativo");
                 status.setStyle("-fx-background-color: #E6CCEF");
             }

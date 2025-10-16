@@ -33,7 +33,7 @@ public class CollaboratorDAO {
             stmt.setString(1, collaborator.getName());
             stmt.setString(2, collaborator.getCpf());
             stmt.setString(3, collaborator.getEmail());
-            stmt.setString(4, collaborator.getStatus().toString());
+            stmt.setString(4, collaborator.getStatus().toString().toUpperCase());
             stmt.setInt(5, collaborator.getDepartment());
 
             stmt.executeUpdate();
@@ -64,7 +64,7 @@ public class CollaboratorDAO {
                 collaborator.setName(rs.getString("col_name"));
                 collaborator.setCpf(rs.getString("col_cpf"));
                 collaborator.setEmail(rs.getString("col_email"));
-                collaborator.setStatus(Status.valueOf(rs.getString("col_status")));
+                collaborator.setStatus(Status.valueOf(rs.getString("col_status").toUpperCase()));
 //                collaborator.setCreatedAt(rs.getTimestamp("col_created_at").toLocalDateTime());
                 collaborator.setDepartment(rs.getInt("department_id"));
             }
@@ -92,7 +92,7 @@ public class CollaboratorDAO {
                 collaborator.setName(rs.getString("col_name"));
                 collaborator.setCpf(rs.getString("col_cpf"));
                 collaborator.setEmail(rs.getString("col_email"));
-                collaborator.setStatus(Status.valueOf(rs.getString("col_status")));
+                collaborator.setStatus(Status.valueOf(rs.getString("col_status").toUpperCase()));
 //                collaborator.setCreatedAt(rs.getTimestamp("col_created_at").toLocalDateTime());
                 collaborator.setDepartment(rs.getInt("department_id"));
                 collaborators.add(collaborator);
@@ -122,7 +122,7 @@ public class CollaboratorDAO {
                 collaborator.setName(rs.getString("col_name"));
                 collaborator.setCpf(rs.getString("col_cpf"));
                 collaborator.setEmail(rs.getString("col_email"));
-                collaborator.setStatus(Status.valueOf(rs.getString("col_status")));
+                collaborator.setStatus(Status.valueOf(rs.getString("col_status").toUpperCase()));
 //                collaborator.setCreatedAt(rs.getTimestamp("col_created_at").toLocalDateTime());
                 collaborator.setDepartment(rs.getInt("department_id"));
                 collaborators.add(collaborator);
@@ -153,7 +153,7 @@ public class CollaboratorDAO {
             stmt.setString(1, collaborator.getName());
             stmt.setString(2, collaborator.getCpf());
             stmt.setString(3, collaborator.getEmail());
-            stmt.setString(4, collaborator.getStatus().toString());
+            stmt.setString(4, collaborator.getStatus().toString().toUpperCase());
             stmt.setInt(5, collaborator.getDepartment());
             stmt.setInt(6, collaborator.getId());
 

@@ -32,7 +32,7 @@ public class RegisterCollaboratorController {
     private TextField formAddCollaboratorExperience;
     @FXML
     private TextField formAddCollaboratorObservations;
-    private Status status = Status.active;
+    private Status status = Status.ACTIVE;
 
     @FXML
     private VBox formPane;
