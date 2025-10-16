@@ -1,7 +1,7 @@
 package com.dottec.pdi.project.pdi.utils;
 
+import org.mindrot.jbcrypt.BCrypt;
 
-//adicionar o BCrypt no arquivo do maven
 public class PasswordHasher {
     private static final int COST = 16;
     
