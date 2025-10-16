@@ -28,21 +28,10 @@ public class RegisterCollaboratorViewModel {
     @FXML
     private TextField formAddCollaboratorCPF;
     @FXML
-    private ChoiceBox<Department> formAddCollaboratorDepartment; // Alterado para <Department>
-    // Os campos abaixo não existem no novo modelo de Colaborador que você enviou.
-    // A lógica para salvá-los foi removida, mas os @FXML foram mantidos para não quebrar seu FXML.
-    @FXML
-    private ChoiceBox<String> formAddCollaboratorRole;
-    @FXML
-    private TextField formAddCollaboratorExperience;
-    @FXML
-    private TextField formAddCollaboratorObservations;
+    private ChoiceBox<Department> formAddCollaboratorDepartment;
 
     @FXML
     private VBox formPane;
-
-    // Instância do controller para salvar os dados
-    private final CollaboratorController collaboratorController = new CollaboratorController();
 
     @FXML
     public void initialize() {
@@ -133,7 +122,7 @@ public class RegisterCollaboratorViewModel {
 
         try {
             // Usa o controller para salvar o colaborador
-            collaboratorController.saveCollaborator(name, cpf, email, selectedDepartment);
+            CollaboratorController.saveCollaborator(name, cpf, email, selectedDepartment);
             showSuccessAlert("Sucesso!", "Colaborador cadastrado com sucesso.");
             // Opcional: Limpar os campos após o sucesso
             // clearFields();
