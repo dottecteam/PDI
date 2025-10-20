@@ -4,6 +4,7 @@ module com.dottec.pdi.project.pdi {
     requires io.github.cdimascio.dotenv.java;
     requires javafx.graphics;
     requires javafx.controls;
+    requires javafx.base;
 
     opens com.dottec.pdi.project.pdi to javafx.fxml;
     opens com.dottec.pdi.project.pdi.controllers;

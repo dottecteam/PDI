@@ -88,7 +88,7 @@ public class HeaderViewModel {
                 buildHeaderStructure(true, "Adicionar Colaborador");
             }
             case "Goals.fxml" -> {
-                Button buttonAddGoal = new Button("Adicionar Atividade");
+                Button buttonAddGoal = new Button("Adicionar Objetivo");
                 buttonAddGoal.setOnMouseClicked(event2 -> TemplateViewModel.switchScreen("PersonalGoal.fxml"));
 
                 Button buttonFilterGoals = new Button("Filtrar");

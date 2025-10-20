@@ -27,7 +27,6 @@
     -fx-opacity: 0;
     -fx-pick-on-bounds: false;
     -fx-transition: -fx-opacity 0.2s ease-in-out;
-    -fx-font-weight: bold;
     -fx-font-size: 20px;
     -fx-max-width: 0;
 }
@@ -76,7 +75,22 @@
 
 .basic-button:hover{
     -fx-background-color: #9032BB;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 4, 0, 0, 4)
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 4)
+}
+
+.cancel-button{
+    -fx-background-color: #DDDDDD;
+    -fx-border-radius: 15;
+    -fx-background-radius: 10;
+    -fx-text-align: center;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-padding: 3;
+}
+
+.cancel-button:hover{
+    -fx-background-color: #d6d6d6;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 4)
 }
 
 .filter-button{
@@ -115,3 +129,37 @@
 .return-button:hover{
     -fx-cursor: hand;
 }
+
+/*Choice Box Select*/
+
+.choice-box .label{
+    -fx-font-size: 16;
+    -fx-alignment: BOTTOM_LEFT;
+}
+
+.choice-box .context-menu {
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+}
+
+.choice-box .arrow {
+    -fx-background-color: transparent;
+}
+
+.choice-box .menu-item{
+    -fx-background-radius: 10;
+    -fx-background-color: transparent;
+}
+
+.choice-box .menu-item * {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4B0081;
+    -fx-font-size: 20;
+}
+
+.choice-box .menu-item:hover {
+    -fx-background-color: #DDDDDD;
+    -fx-border-color: #4B0081;
+    -fx-border-radius: 15;
+}
+
