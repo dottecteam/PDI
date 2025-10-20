@@ -95,7 +95,7 @@
                                 <DropShadow />
                             </effect>
                         </VBox>
-                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveCollaborator" styleClass="basicButton" text="Confirmar" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveCollaborator" styleClass="basic-button" text="Confirmar" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                             <font>
                                 <Font size="24.0" />
                             </font>
