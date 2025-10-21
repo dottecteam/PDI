@@ -14,17 +14,10 @@ import javafx.scene.layout.VBox;
 import java.util.List;
 
 public class CollaboratorsViewModel {
-    @FXML
-    private VBox mainVBox;
-    @FXML
-    private ScrollPane mainScrollPane;
+    @FXML private VBox mainVBox;
 
     @FXML
     public void initialize() {
-        // Garantindo que a ScrollPane se ajuste ao tamanho
-        mainScrollPane.setFitToHeight(true);
-        mainScrollPane.setFitToWidth(true);
-
         loadAndDisplayCollaborators();
     }
 

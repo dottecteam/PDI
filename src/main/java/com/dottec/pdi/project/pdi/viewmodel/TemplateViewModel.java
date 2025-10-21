@@ -4,12 +4,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,80 +23,40 @@ public class TemplateViewModel implements Initializable {
     //Declara os ID's criados
 
     //AnchorPane
-    @FXML
-    private AnchorPane leftMenu;
-
-    @FXML
-    private AnchorPane menuDashboard;
-
-    @FXML
-    private AnchorPane menuCollaborators;
-
-    @FXML
-    private AnchorPane menuGoalTemplates;
-
-    @FXML
-    private AnchorPane menuSettings;
-
-    @FXML
-    private AnchorPane menuProfile;
-
-    @FXML
-    private AnchorPane AnchorMainPane;
+    @FXML private AnchorPane leftMenu;
+    @FXML private AnchorPane menuDashboard;
+    @FXML private AnchorPane menuCollaborators;
+    @FXML private AnchorPane menuGoalTemplates;
+    @FXML private AnchorPane menuSettings;
+    @FXML private AnchorPane menuProfile;
+    @FXML private AnchorPane AnchorMainPane;
 
     //Label
-    @FXML
-    private Label labelArrow;
+    @FXML private Label labelArrow;
+    @FXML private Label labelCollaborator;
+    @FXML private Label labelSector;
+    @FXML private Label labelSettings;
+    @FXML private Label labelProfile;
+    @FXML private Label headerLabel;
 
-    @FXML
-    private Label labelCollaborator;
-
-    @FXML
-    private Label labelSector;
-
-    @FXML
-    private Label labelSettings;
-
-    @FXML
-    private Label labelProfile;
-
-    @FXML
-    private Label headerLabel;
-
+    //StackPane
+    @FXML private StackPane mainStackPane;
 
     //BorderPane
-    @FXML
-    private BorderPane mainPane;
-
-    @FXML
-    private BorderPane tmpCenter;
+    @FXML private BorderPane mainPane;
+    @FXML private BorderPane tmpCenter;
 
     //ImageView
-    @FXML
-    private ImageView menuLogo;
-
+    @FXML private ImageView menuLogo;
 
     //HBox
-    @FXML
-    private HBox header;
-
-    @FXML
-    private HBox headerHBox;
-
-    @FXML
-    private HBox headerItemsField;
-
-    @FXML
-    private HBox headerButtonsField;
-
-    @FXML
-    private HBox headerSearchBarField;
-
-    @FXML
-    private HBox headerFilterButtonField;
-
-    @FXML
-    private HBox headerReturnButtonField;
+    @FXML private HBox header;
+    @FXML private HBox headerHBox;
+    @FXML private HBox headerItemsField;
+    @FXML private HBox headerButtonsField;
+    @FXML private HBox headerSearchBarField;
+    @FXML private HBox headerFilterButtonField;
+    @FXML private HBox headerReturnButtonField;
 
     private String mainPage = "Dashboard.fxml";
 
@@ -195,7 +157,10 @@ public class TemplateViewModel implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        tmpCenter.setCenter(root);
+        ScrollPane scrollPane = new ScrollPane(root);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        tmpCenter.setCenter(scrollPane);
     }
 
 
