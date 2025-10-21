@@ -3,7 +3,7 @@
     src: url('./fonts/Poppins-Regular.ttf');
 }
 
-.label {
+* {
     -fx-font-family: 'Poppins';
 }
 
@@ -163,3 +163,60 @@
     -fx-border-radius: 15;
 }
 
+.label-not-editable {
+    -fx-background-color: transparent;
+    -fx-cursor: default;
+    -fx-font-size: 16;
+}
+
+.label-editable {
+    -fx-background-color: #DDDDDD;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-font-size: 16;
+}
+
+.label-editable:hover {
+    -fx-background-color: #d7d7d7;
+}
+
+.label-editable:focused {
+    -fx-border-color: #4B0081;
+    -fx-border-radius: 10;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+
+.scroll-pane {
+    -fx-background-color: #F6F6F6;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-pref-height: 8px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #AF69CD;
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #4B0081;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+.formInput {
+    -fx-border-radius: 10px;
+    -fx-border-color: #4B0081;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px
+}

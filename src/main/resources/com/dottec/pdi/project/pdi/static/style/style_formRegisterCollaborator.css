@@ -6,9 +6,3 @@
     -fx-background-color: transparent;
 }
 
-.formInput {
-    -fx-border-radius: 10px;
-    -fx-border-color: #4B0081;
-    -fx-border-width: 2px;
-    -fx-background-radius: 10px
-}

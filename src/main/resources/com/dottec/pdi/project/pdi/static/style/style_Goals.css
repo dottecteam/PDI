@@ -4,24 +4,3 @@
     -fx-background-radius: 15;
 }
 
-.label-not-editable {
-    -fx-background-color: transparent;
-    -fx-cursor: default;
-    -fx-font-size: 16;
-}
-
-.label-editable {
-    -fx-background-color: #DDDDDD;
-    -fx-background-radius: 10;
-    -fx-cursor: hand;
-    -fx-font-size: 16;
-}
-
-.label-editable:hover {
-    -fx-background-color: #d7d7d7;
-}
-
-.label-editable:focused {
-    -fx-border-color: #4B0081;
-    -fx-border-radius: 10;
-}

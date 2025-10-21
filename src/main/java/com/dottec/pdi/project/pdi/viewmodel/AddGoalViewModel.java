@@ -19,14 +19,12 @@ import java.util.List;
 
 public class AddGoalViewModel {
 
-    @FXML
-    private ListView<Goal> goalsListView;
+    @FXML private ListView<Goal> goalsListView;
 
     private Collaborator currentCollaborator;
     private List<Goal> collaboratorGoals;
 
-    @FXML
-    public void initialize() {
+    @FXML public void initialize() {
         goalsListView.setCellFactory(param -> new GoalCell());
     }
 
