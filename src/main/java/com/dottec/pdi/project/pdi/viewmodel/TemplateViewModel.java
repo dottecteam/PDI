@@ -59,7 +59,7 @@ public class TemplateViewModel implements Initializable {
     @FXML private Label messageContentText;
     @FXML private Button messageCloseButton;
 
-    private String mainPage = "Dashboard.fxml";
+    private String mainPage = "DashboardTags.fxml";
 
     //Define a página que inicializa com o projeto
 
