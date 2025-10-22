@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public final class Database {
+public final class Database implements AutoCloseable{
     private static final Dotenv dotenv = Dotenv.load();
     private static final String URL = dotenv.get("DB_URL");
     private static final String USER = dotenv.get("DB_USER");
@@ -29,7 +29,7 @@ public final class Database {
     }
 
 
-    public static void close() {
+    public void close() {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();

@@ -96,7 +96,7 @@ public class TemplateViewModel implements Initializable {
     @FXML
     private HBox headerReturnButtonField;
 
-    private String mainPage = "Dashboard.fxml";
+    private String mainPage = "DashboardTags.fxml";
 
     //Define a página que inicializa com o projeto
 
