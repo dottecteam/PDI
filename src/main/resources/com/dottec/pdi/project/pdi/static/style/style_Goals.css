@@ -4,3 +4,8 @@
     -fx-background-radius: 15;
 }
 
+.chart-title{
+    -fx-font-weight: bold;
+    -fx-text-fill: #9032BB;
+}
+

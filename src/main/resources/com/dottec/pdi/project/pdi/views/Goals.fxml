@@ -118,7 +118,7 @@
                     </effect>
                <children>
                   <PieChart fx:id="statusPieChart" prefHeight="173.0" prefWidth="300.0" />
-                  <Label fx:id="percentageLabel" text="Carregando..." />
+                  <Label fx:id="percentageLabel" styleClass="chart-title" text="Carregando..." />
                </children>
                 </VBox>
             </children>
