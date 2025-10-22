@@ -1,24 +1,33 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
+import com.dottec.pdi.project.pdi.controllers.CollaboratorStatusData;
+import com.dottec.pdi.project.pdi.dao.CollaboratorDAO;
 import com.dottec.pdi.project.pdi.controllers.DepartmentController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
 import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department;
 import com.dottec.pdi.project.pdi.model.Goal;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
+import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class CollaboratorGoalsViewModel {
+public class CollaboratorGoalsViewModel implements Initializable {
     private Collaborator collaborator;
 
     @FXML private VBox collaboratorGoalsMainVBox;
@@ -37,12 +46,22 @@ public class CollaboratorGoalsViewModel {
     // --- FXML Container para Metas ---
     @FXML private VBox goalsVBox;
 
+    // --- FXML Para o gráfico individual ---
+    @FXML private PieChart statusPieChart;
+    @FXML private Label percentageLabel;
+    private final String STATUS_CONCLUIDO = "completed";
+
     // Método chamado pelo JavaFX após o FXML ser carregado
     @FXML
     private void initialize() {
         // Inicia com os botões de ação escondidos
         confirmEditButton.setVisible(false);
         cancelEditButton.setVisible(false);
+    }
+    //Override do gráfico
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        statusPieChart.setAnimated(false);
     }
 
     // Este é o método principal para carregar os dados na tela
@@ -52,6 +71,8 @@ public class CollaboratorGoalsViewModel {
             updateCollaboratorFields();
             loadAndDisplayGoals();
             populateDepartments();
+
+            loadData(collaborator.getId());
         } else {
             updateCollaboratorFields();
             collaboratorGoalsMainVBox.setDisable(true);
@@ -97,8 +118,13 @@ public class CollaboratorGoalsViewModel {
             Label goalName = new Label(goal.getName());
             goalName.getStyleClass().add("goal-name");
 
-            Label goalDeadline = new Label("Prazo: " + goal.getDeadline().format(formatter));
-            goalDeadline.getStyleClass().add("goal-deadline");
+            String deadlineText;
+            if (goal.getDeadline() != null) {
+                deadlineText = "Prazo: " + goal.getDeadline().format(formatter);
+            } else {
+                deadlineText = "Prazo: (Não definido)";
+            }
+            Label goalDeadline = new Label(deadlineText);
 
             Label goalStatus = new Label(goal.getStatus().name());
             goalStatus.getStyleClass().add("goal-status");
@@ -187,6 +213,56 @@ public class CollaboratorGoalsViewModel {
         confirmEditButton.setVisible(false);
         cancelEditButton.setVisible(false);
     }
+
+    public void loadData(int collaboratorId) {
+        percentageLabel.setText("Carregando dados...");
+
+        Task<List<CollaboratorStatusData>> loadDataTask = new Task<>() {
+            @Override
+            protected List<CollaboratorStatusData> call() throws Exception {
+                //A Task agora chama o NOVO método do DAO com o ID recebido
+                return CollaboratorDAO.getTaskStatusCountsForCollaborator(collaboratorId);
+            }
+        };
+
+        loadDataTask.setOnSucceeded(event -> {
+            List<CollaboratorStatusData> dataFromDB = loadDataTask.getValue();
+
+            ObservableList<PieChart.Data> pieChartData =
+                    FXCollections.observableArrayList();
+
+            int totalTasks = 0;
+            int completedTasks = 0;
+
+            for (CollaboratorStatusData data : dataFromDB) {
+                PieChart.Data pieData = new PieChart.Data(data.status(), data.cont());
+                pieChartData.add(pieData);
+
+                totalTasks += data.cont();
+                if (data.status().equalsIgnoreCase(STATUS_CONCLUIDO)) {
+                    completedTasks = data.cont();
+                }
+
+            }
+
+            statusPieChart.setData(pieChartData);
+
+            if (totalTasks > 0) {
+                double percentage = ((double) completedTasks / totalTasks) * 100.0;
+                percentageLabel.setText(String.format("Tarefas Concluídas: %.1f%%", percentage));
+            } else {
+                percentageLabel.setText("Nenhuma tarefa encontrada para este colaborador.");
+            }
+        });
+
+        loadDataTask.setOnFailed(event -> {
+            percentageLabel.setText("Erro ao carregar dados.");
+            loadDataTask.getException().printStackTrace();
+        });
+
+        new Thread(loadDataTask).start();
+    }
+
 
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);

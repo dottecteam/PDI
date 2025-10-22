@@ -1,6 +1,7 @@
 package com.dottec.pdi.project.pdi.dao;
 
 import com.dottec.pdi.project.pdi.config.Database;
+import com.dottec.pdi.project.pdi.controllers.CollaboratorStatusData;
 import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department;
@@ -113,6 +114,35 @@ public class CollaboratorDAO {
             throw new RuntimeException("Erro ao buscar colaboradores por departamento: " + e.getMessage(), e);
         }
         return collaborators;
+    }
+
+    public static List<CollaboratorStatusData> getTaskStatusCountsForCollaborator(int collaboratorId) {
+        //A Lista de dados que será retornada
+        List<CollaboratorStatusData> statusCounts = new ArrayList<>();
+
+
+        String sql = "select goa_status, COUNT(*) as quantidade from goals where collaborator_id = ? group by goa_status;";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            //Define o ID do colaborador no placeholder '?' da query
+            stmt.setInt(1, collaboratorId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String status = rs.getString("goa_status");
+                    int quantidade = rs.getInt("quantidade");
+
+
+                    statusCounts.add(new CollaboratorStatusData(status, quantidade));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar contagem de status de tarefas: " + e.getMessage(), e);
+        }
+
+        return statusCounts;
     }
 
     public static Collaborator mapResultSetToCollaborator(ResultSet rs) throws SQLException {

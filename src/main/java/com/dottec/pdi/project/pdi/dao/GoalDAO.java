@@ -127,7 +127,10 @@ public class GoalDAO {
         goal.setName(rs.getString("goa_name"));
         goal.setDescription(rs.getString("goa_description"));
         goal.setStatus(GoalStatus.valueOf(rs.getString("goa_status")));
-        goal.setDeadline(rs.getDate("goa_deadline").toLocalDate());
+        java.sql.Date deadlineSql = rs.getDate("goa_deadline");
+        if (deadlineSql != null) {
+            goal.setDeadline(deadlineSql.toLocalDate());
+        }
         goal.setCreatedAt(rs.getTimestamp("goa_created_at").toLocalDateTime());
 
         Timestamp updatedAtTimestamp = rs.getTimestamp("goa_updated_at");
