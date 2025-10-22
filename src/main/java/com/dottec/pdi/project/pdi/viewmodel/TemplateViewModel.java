@@ -1,17 +1,22 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.utils.FXUtils;
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -48,7 +53,11 @@ public class TemplateViewModel implements Initializable {
     //ImageView
     @FXML private ImageView menuLogo;
 
-    //HBox
+    //Message
+    @FXML private DialogPane message;
+    @FXML private Label messageHeaderText;
+    @FXML private Label messageContentText;
+    @FXML private Button messageCloseButton;
 
     private String mainPage = "DashboardTags.fxml";
 
@@ -63,6 +72,7 @@ public class TemplateViewModel implements Initializable {
         carregarHeader(mainPage);
         instance = this;
     }
+
 
     //Define os métodos que "chamam" as páginas para a tela
 
@@ -186,5 +196,26 @@ public class TemplateViewModel implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public static void showMessage(String headerMessage, String message){
+        FXUtils.buildMessageBox(instance.mainStackPane, message, headerMessage);
+    }
+
+    public static void showSuccessMessage(String message){
+        FXUtils.buildMessageBox(instance.mainStackPane, message, "Sucesso!");
+    }
+
+    public static void showSuccessMessage(String headerMessage, String message){
+        FXUtils.buildMessageBox(instance.mainStackPane, message, headerMessage);
+    }
+
+    public static void showErrorMessage(String message){
+        FXUtils.buildMessageBox(true, instance.mainStackPane, message, "Erro!");
+    }
+
+    public static void showErrorMessage(String headerMessage, String message){
+        FXUtils.buildMessageBox(true, instance.mainStackPane, message, headerMessage);
+    }
+
 
 }

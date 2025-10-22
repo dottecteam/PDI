@@ -19,6 +19,48 @@
     -fx-font-size: 20;
 }
 
+/*Messages*/
+.message {
+    -fx-text-fill: #4B0081;
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-max-width: 400;
+    -fx-max-height: 150;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 0);
+    -fx-alignment: center;
+}
+
+.message-header {
+    -fx-background-radius: 10 10 0 0;
+    -fx-padding: 10;
+}
+
+.message-header-success{
+    -fx-background-color: #AF69CD;
+}
+
+.message-header-error{
+    -fx-background-color: #E02F2F;
+}
+
+.message-header-label {
+    -fx-alignment: center-left;
+    -fx-font-size: 24;
+    -fx-text-fill: white;
+    -fx-pref-width: 1000;
+}
+
+.close-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 36;
+    -fx-scale-x: 1.3;
+    -fx-scale-y: 1;
+    -fx-padding: 4 10 4 10;
+    -fx-cursor: hand;
+}
+
+
 /*header*/
 .header-label{
     -fx-text-fill: #4B0081;
@@ -81,6 +123,7 @@
     -fx-text-align: center;
     -fx-text-fill: white;
     -fx-font-size: 20;
+    -fx-cursor: hand;
     -fx-padding: 3;
 }
 
