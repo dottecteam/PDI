@@ -158,7 +158,7 @@ public class CollaboratorGoalsViewModel {
     @FXML
     private void handleConfirmEdit() {
         if (nameField.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Erro", "O nome não pode estar vazio.");
+            TemplateViewModel.showErrorMessage("O nome não pode estar vazio.");
             return;
         }
 
@@ -167,7 +167,7 @@ public class CollaboratorGoalsViewModel {
         collaborator.setDepartment(departmentField.getValue());
         CollaboratorController.updateCollaborator(collaborator);
 
-        showAlert(Alert.AlertType.INFORMATION, "Sucesso", "Colaborador atualizado com sucesso!");
+        TemplateViewModel.showSuccessMessage("Colaborador atualizado com sucesso!");
 
         // Retorna ao estado de visualização
         disableEditingState();

@@ -2,16 +2,16 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.utils.FXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
-import java.util.Locale;
 
 public class AddActivityViewModel {
     @FXML private TextField formAddActivityName;
@@ -32,8 +32,6 @@ public class AddActivityViewModel {
 
                     input.focusedProperty().addListener((obs, oldVal, newVal) -> updateLabel(input, label));
                 });
-
-        Locale.setDefault(new Locale("pt", "BR"));
     }
 
     private void updateLabel(Node node, Label label){
@@ -44,5 +42,9 @@ public class AddActivityViewModel {
         }
     }
 
+    @FXML
+    void raiseMessage(ActionEvent actionEvent){
+        TemplateViewModel.showErrorMessage("Butão Cricad mensagem maior só pra testaro");
+    }
 
 }

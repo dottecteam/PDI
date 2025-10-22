@@ -81,7 +81,7 @@ public class RegisterCollaboratorViewModel {
     @FXML
     private void saveCollaborator(ActionEvent event){
         if (!validateFields()){
-            showErrorAlert("Erro de validação", "Por favor, preencha todos os campos obrigatórios corretamente.");
+            TemplateViewModel.showErrorMessage("Erro de validação", "Por favor, preencha todos os campos obrigatórios corretamente.");
             return;
         }
 
@@ -94,11 +94,11 @@ public class RegisterCollaboratorViewModel {
         try {
             // Usa o controller para salvar o colaborador
             CollaboratorController.saveCollaborator(name, cpf, email, selectedDepartment);
-            showSuccessAlert("Sucesso!", "Colaborador cadastrado com sucesso.");
+            TemplateViewModel.showSuccessMessage("Colaborador cadastrado com sucesso.");
             // Opcional: Limpar os campos após o sucesso
             // clearFields();
         } catch (Exception e) {
-            showErrorAlert("Erro no Cadastro", "Ocorreu um erro ao salvar o colaborador: " + e.getMessage());
+            TemplateViewModel.showErrorMessage("Erro no Cadastro", "Ocorreu um erro ao salvar o colaborador: " + e.getMessage());
         }
     }
 
@@ -123,21 +123,5 @@ public class RegisterCollaboratorViewModel {
         // As validações de 'Experience' e 'Observations' foram removidas pois não estão no novo model de Collaborator.
 
         return true;
-    }
-
-    private void showErrorAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showSuccessAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
