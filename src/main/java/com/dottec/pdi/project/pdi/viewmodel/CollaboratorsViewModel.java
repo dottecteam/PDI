@@ -47,7 +47,7 @@ public class CollaboratorsViewModel {
                 departmentName = collaborator.getDepartment().getName();
             }
             Label department = new Label(departmentName);
-            department.getStyleClass().add("label-collaborator-department");
+            department.getStyleClass().addAll("label-collaborator-department", "mid-label");
 
 // --- NOVO: VBox para alinhar nome e departamento verticalmente ---
             VBox textBox = new VBox(5); // ← o número é o "gap" (5px entre os labels)

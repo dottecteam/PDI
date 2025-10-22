@@ -4,6 +4,7 @@ import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
 import com.dottec.pdi.project.pdi.controllers.DepartmentController;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department; // Import do Model
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import com.dottec.pdi.project.pdi.utils.FieldValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,21 +22,15 @@ import java.util.List;
 
 public class RegisterCollaboratorViewModel {
     //fields
-    @FXML
-    private TextField formAddCollaboratorName;
-    @FXML
-    private TextField formAddCollaboratorEmail;
-    @FXML
-    private TextField formAddCollaboratorCPF;
-    @FXML
-    private ChoiceBox<Department> formAddCollaboratorDepartment;
+    @FXML private TextField formAddCollaboratorName;
+    @FXML private TextField formAddCollaboratorEmail;
+    @FXML private TextField formAddCollaboratorCPF;
+    @FXML private ChoiceBox<Department> formAddCollaboratorDepartment;
 
-    @FXML
-    private VBox formPane;
+    @FXML private VBox formPane;
 
     @FXML
     public void initialize() {
-        disableMouseOnLabels(formPane);
         populateDepartments(); // Método para popular o ChoiceBox
 
         //TextFields focused mode
@@ -43,15 +38,10 @@ public class RegisterCollaboratorViewModel {
                 .filter(node -> node instanceof StackPane)
                 .forEach(stack -> {
                     StackPane stackPane = (StackPane) stack;
-                    var input = stackPane.getChildren().get(0);
-                    Label label = (Label) stackPane.getChildren().get(1);
+                    var input = stackPane.getChildren().get(1);
+                    Label label = (Label) stackPane.getChildren().get(0);
 
-                    if(input instanceof TextField textField){
-                        textField.focusedProperty().addListener((obs, oldVal, newVal) -> updateLabel(textField, label));
-                        textField.textProperty().addListener((obs, oldVal, newVal) -> updateLabel(textField, label));
-                    } else if (input instanceof ChoiceBox choiceBox) {
-                        choiceBox.focusedProperty().addListener((obs, oldVal, newVal) -> updateChoiceBoxLabel(choiceBox, label));
-                    }
+                    input.focusedProperty().addListener((obs, oldVal, newVal) -> updateLabel(input, label));
                 });
     }
 
@@ -79,30 +69,11 @@ public class RegisterCollaboratorViewModel {
         });
     }
 
-    private void disableMouseOnLabels(Parent parent){
-        for (Node node : parent.getChildrenUnmodifiable()) {
-            if (node instanceof Label) {
-                node.setMouseTransparent(true);
-            }
-            if (node instanceof Parent) {
-                disableMouseOnLabels((Parent) node);
-            }
-        }
-    }
-
-    private void updateLabel(TextField textField, Label inputLabel){
-        if (textField.isFocused() || !textField.getText().isEmpty()) {
-            inputLabel.setStyle("-fx-text-fill: #4B0081; -fx-padding: 1 15;");
+    private void updateLabel(Node node, Label label){
+        if(node.isFocused() || FXUtils.isFilled(node)){
+            label.getStyleClass().add("formInput-label-focused");
         } else {
-            inputLabel.setStyle("-fx-text-fill: #808080; -fx-padding: 15;");
-        }
-    }
-
-    private void updateChoiceBoxLabel(ChoiceBox<?> choiceBox, Label label){
-        if (choiceBox.isFocused() || choiceBox.getValue() != null) {
-            label.setStyle("-fx-text-fill: #4B0081; -fx-padding: 1 15;");
-        } else {
-            label.setStyle("-fx-text-fill: #808080; -fx-padding: 15");
+            label.getStyleClass().remove("formInput-label-focused");
         }
     }
 

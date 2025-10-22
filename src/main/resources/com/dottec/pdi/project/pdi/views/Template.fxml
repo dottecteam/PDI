@@ -8,7 +8,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -155,42 +154,13 @@
               <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                   <children>
                       <BorderPane fx:id="tmpCenter" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <top>
-                              <HBox fx:id="header" alignment="BOTTOM_LEFT" BorderPane.alignment="BOTTOM_LEFT">
-                                  <BorderPane.margin>
-                                      <Insets left="40.0" right="40.0" />
-                                  </BorderPane.margin>
-                                  <children>
-                                      <HBox fx:id="headerReturnButtonField" alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" />
-                                      <HBox fx:id="headerHBox" alignment="BOTTOM_LEFT" maxHeight="70.0" prefHeight="70.0" spacing="10.0" style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0;" HBox.hgrow="ALWAYS">
-                                          <padding>
-                                              <Insets bottom="10.0" right="10.0" top="10.0" />
-                                          </padding>
-                                          <children>
-                                              <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" style="-fx-font-weight: bold;" text="PDIs" textAlignment="CENTER" textFill="#4b0081">
-                                                  <font>
-                                                      <Font size="32.0" />
-                                                  </font>
-                                                  <padding>
-                                                      <Insets bottom="-10.0" top="-10.0" />
-                                                  </padding>
-                                              </Label>
-                                              <HBox fx:id="headerItemsField" alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
-                                                  <children>
-                                                      <HBox fx:id="headerButtonsField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
-                                                      <HBox fx:id="headerFilterButtonField" alignment="BOTTOM_CENTER" />
-                                                      <HBox fx:id="headerSearchBarField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
-                                                  </children>
-                                              </HBox>
-                                          </children>
-                                      </HBox>
-                                  </children>
-                              </HBox>
-                          </top>
                           <center>
                     </center>
                       </BorderPane>
                   </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
             </AnchorPane>
           </center>
       </BorderPane>
