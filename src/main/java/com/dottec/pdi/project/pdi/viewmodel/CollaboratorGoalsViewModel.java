@@ -236,13 +236,37 @@ public class CollaboratorGoalsViewModel implements Initializable {
             int completedTasks = 0;
 
             for (CollaboratorStatusData data : dataFromDB) {
-                PieChart.Data pieData = new PieChart.Data(data.status(), data.cont());
+
+                //Traduz o status do banco
+                String statusDoBanco = data.status();
+                String traducao;
+
+                switch (statusDoBanco.toLowerCase()) {
+                    case "completed":
+                        traducao = "Completo";
+                        break;
+                    case "pending":
+                        traducao = "Pendente";
+                        break;
+                    case "canceled":
+                        traducao = "Cancelado";
+                        break;
+                    case "in_progress":
+                        traducao = "Em progresso";
+                        break;
+                    default:
+                        traducao = statusDoBanco; //Se não for traduzido, mostra o original
+                }
+
+                PieChart.Data pieData = new PieChart.Data(traducao, data.cont());
                 final String status = data.status();
 
                 pieData.nodeProperty().addListener((ov, oldNode, newNode) -> {
                     if (newNode != null) {
                         //Define a cor com base no status
                         String color = "#9032BB"; // Cor padrão
+
+
 
                         switch (status.toLowerCase()) {
                             case "completed":
@@ -274,7 +298,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
             if (totalTasks > 0) {
                 double percentage = ((double) completedTasks / totalTasks) * 100.0;
-                percentageLabel.setText(String.format("Tarefas Concluídas: %.1f%%", percentage));
+                percentageLabel.setText(String.format("Progresso: %.1f%%", percentage));
             } else {
                 percentageLabel.setText("Nenhuma tarefa encontrada para este colaborador.");
             }

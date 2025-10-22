@@ -117,6 +117,7 @@
                         <DropShadow color="#00000040" />
                     </effect>
                <children>
+                  <Label text="Dashboard pessoal" styleClass="chart-title"/>
                   <PieChart fx:id="statusPieChart" prefHeight="173.0" prefWidth="300.0" />
                   <Label fx:id="percentageLabel" styleClass="chart-title" text="Carregando..." />
                </children>
