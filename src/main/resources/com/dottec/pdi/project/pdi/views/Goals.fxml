@@ -53,25 +53,25 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label style="-fx-text-fill: #4B0081;" text="Nome">
+                                <Label style="-fx-text-fill: #4B0081;" styleClass="mid-label" text="Nome">
                                     <font>
                                         <Font size="20.0" />
                                     </font>
                                 </Label>
                                 <TextField fx:id="nameField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="1" />
-                                <Label style="-fx-text-fill: #4B0081;" text="Email" GridPane.rowIndex="2">
+                                <Label style="-fx-text-fill: #4B0081;" styleClass="mid-label" text="Email" GridPane.rowIndex="2">
                                     <font>
                                         <Font size="20.0" />
                                     </font>
                                 </Label>
                                 <TextField fx:id="emailField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="3" />
-                                <Label style="-fx-text-fill: #4B0081;" text="CPF" GridPane.columnIndex="1">
+                                <Label style="-fx-text-fill: #4B0081;" styleClass="mid-label" text="CPF" GridPane.columnIndex="1">
                                     <font>
                                         <Font size="20.0" />
                                     </font>
                                 </Label>
                                 <TextField fx:id="cpfField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                <Label style="-fx-text-fill: #4B0081;" text="Setor" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label style="-fx-text-fill: #4B0081;" styleClass="mid-label" text="Setor" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <font>
                                         <Font size="20.0" />
                                     </font>
@@ -121,7 +121,7 @@
                 <Insets left="20.0" right="20.0" />
             </padding>
             <children>
-                <Label style="-fx-text-fill: #4B0081;" text="Metas do Colaborador">
+                <Label style="-fx-text-fill: #4B0081;" styleClass="big-label" text="Metas do Colaborador">
                     <font>
                         <Font size="32.0" />
                     </font>

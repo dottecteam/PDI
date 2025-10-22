@@ -37,7 +37,6 @@ public class TemplateViewModel implements Initializable {
     @FXML private Label labelSector;
     @FXML private Label labelSettings;
     @FXML private Label labelProfile;
-    @FXML private Label headerLabel;
 
     //StackPane
     @FXML private StackPane mainStackPane;
@@ -50,13 +49,6 @@ public class TemplateViewModel implements Initializable {
     @FXML private ImageView menuLogo;
 
     //HBox
-    @FXML private HBox header;
-    @FXML private HBox headerHBox;
-    @FXML private HBox headerItemsField;
-    @FXML private HBox headerButtonsField;
-    @FXML private HBox headerSearchBarField;
-    @FXML private HBox headerFilterButtonField;
-    @FXML private HBox headerReturnButtonField;
 
     private String mainPage = "Dashboard.fxml";
 

@@ -7,6 +7,18 @@
     -fx-font-family: 'Poppins';
 }
 
+.label {
+    -fx-font-size: 16;
+}
+
+.big-label {
+    -fx-font-size: 24;
+}
+
+.mid-label {
+    -fx-font-size: 20;
+}
+
 /*header*/
 .header-label{
     -fx-text-fill: #4B0081;
@@ -41,7 +53,6 @@
     -fx-cursor: hand;
     -fx-pref-width: 325;
 }
-
 
 #leftMenu:hover .menuLabel{
     -fx-opacity: 1;
@@ -218,5 +229,81 @@
     -fx-border-radius: 10px;
     -fx-border-color: #4B0081;
     -fx-border-width: 2px;
-    -fx-background-radius: 10px
+    -fx-background-color: transparent;
+    -fx-font-size: 16;
+}
+
+.formInput-label-focused {
+    -fx-text-fill: #4B0081;
+    -fx-padding: 1 15;
+}
+
+.date-picker {
+    -fx-background-color: transparent;
+    -fx-padding: 0 10 4 0;
+}
+
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-alignment: bottom-left;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 20;
+    -fx-padding: 6;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #4B0081;
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
+
+.date-picker-popup {
+    -fx-background-color: #F6F6F6;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #4B0081;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0, 0, 2);
+}
+
+.date-picker-popup * {
+    -fx-text-fill: #4B0081;
+}
+
+.date-picker-popup .calendar-grid,
+.date-picker-popup .month-year-pane,
+.date-picker-popup .spinner .button,
+.date-picker-popup .spinner {
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup .day-cell {
+    -fx-background-color: #4B0081, #F6F6F6;
+    -fx-background-insets: 0, 1;
+    -fx-border-width: 0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-scale-x: 0.9;
+    -fx-scale-y: 0.9;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-border-color: #4B0081;
+    -fx-background-color: #4B0081, #DDDDDD;
+    -fx-background-insets: 0, 1;
+}
+
+.date-picker-popup .day-cell .previous-month,
+.date-picker-popup .day-cell .next-month {
+    -fx-background-color: #4B0081;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup .calendar-grid {
+    -fx-scale-x: 0.9;
+    -fx-scale-y: 0.9;
+    -fx-padding: 2;
 }

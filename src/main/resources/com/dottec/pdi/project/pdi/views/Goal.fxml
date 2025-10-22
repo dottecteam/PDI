@@ -4,7 +4,6 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -18,88 +17,81 @@
 <?import javafx.scene.text.Font?>
 
 
-<ScrollPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="$CONTROLLER_NAME$">
-   <content>
-      <VBox>
+<VBox stylesheets="@../static/style/style_template.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="$CONTROLLER_NAME$">
+   <children>
+      <StackPane alignment="TOP_RIGHT">
          <children>
-            <StackPane alignment="TOP_RIGHT">
-               <children>
-                  <GridPane minWidth="500.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 20;" vgap="5.0">
-                     <effect>
-                        <DropShadow color="#00000040" />
-                     </effect>
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <Label style="-fx-text-fill: #4B0081;" text="Nome">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="nameField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="1" />
-                        <Label style="-fx-text-fill: #4B0081;" text="Descrição" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="descriptionField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="3" />
-                     </children>
-                     <StackPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </StackPane.margin>
-                  </GridPane>
-                  <HBox maxHeight="30.0" maxWidth="200.0" spacing="10.0">
-                     <children>
-                        <Button fx:id="confirmEditButton" mnemonicParsing="false" onAction="#handleConfirmEdit" styleClass="basic-button" text="Confirmar" visible="false" />
-                        <Button fx:id="cancelEditButton" mnemonicParsing="false" onAction="#handleCancelEditing" styleClass="cancel-button" text="Cancelar" visible="false" />
-                     </children>
-                     <StackPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </StackPane.margin>
-                  </HBox>
-                  <ImageView fx:id="editButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#handleEnableEditing" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../static/img/edit.png" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <StackPane.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </StackPane.margin>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <VBox prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label style="-fx-text-fill: #4B0081;" text="Metas do Colaborador">
-                     <font>
-                        <Font size="32.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <VBox fx:id="activitiesField" prefHeight="200.0" prefWidth="100.0" />
-               </children>
+            <GridPane minWidth="500.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 20;" vgap="5.0">
+               <effect>
+                  <DropShadow color="#00000040" />
+               </effect>
                <padding>
-                  <Insets left="20.0" right="20.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
-            </VBox>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label style="-fx-text-fill: #4B0081;" styleClass="mid-label" text="Nome">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="nameField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="1" />
+                  <Label style="-fx-text-fill: #4B0081;" styleClass="mid-label" text="Descrição" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="descriptionField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="3" />
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </StackPane.margin>
+            </GridPane>
+            <HBox maxHeight="30.0" maxWidth="200.0" spacing="10.0">
+               <children>
+                  <Button fx:id="confirmEditButton" mnemonicParsing="false" onAction="#handleConfirmEdit" styleClass="basic-button" text="Confirmar" visible="false" />
+                  <Button fx:id="cancelEditButton" mnemonicParsing="false" onAction="#handleCancelEditing" styleClass="cancel-button" text="Cancelar" visible="false" />
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </StackPane.margin>
+            </HBox>
+            <ImageView fx:id="editButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#handleEnableEditing" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../static/img/edit.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <StackPane.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </StackPane.margin>
+            </ImageView>
          </children>
+      </StackPane>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Label style="-fx-text-fill: #4B0081;" styleClass="big-label" text="Atividades">
+               <font>
+                  <Font size="32.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+            <VBox fx:id="activitiesField" prefHeight="200.0" prefWidth="100.0" />
+         </children>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </VBox>
-   </content>
-   <padding>
-      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-   </padding>
-</ScrollPane>
+   </children>
+</VBox>
