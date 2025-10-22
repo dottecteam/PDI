@@ -19,7 +19,7 @@ public class UserDAO {
     private static final String DELETE_SQL = "DELETE FROM users WHERE use_id = ?";
     private static final String SOFT_DELETE_SQL = "UPDATE users SET use_deleted_at = NOW(), use_status = 'inactive' WHERE use_id = ?";
     private static final String UPDATE_PASSWORD_SQL = "UPDATE users SET use_password_hash = ?, use_updated_at = NOW() WHERE use_id = ?";
-
+    private static final String LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_password_hash = ? AND use_status = 'active' AND use_deleted_at IS NULL";
 
     public static void insert(User user) {
         try (Connection connection = Database.getConnection();
@@ -145,6 +145,29 @@ public class UserDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar senha do usuário: " + e.getMessage(), e);
         }
+    }
+
+
+    public static User login(String email, String password) {
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(LOGIN_SQL)) {
+
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                // Se encontrou um usuário, reutiliza o método mapUser para criar o objeto
+                if (rs.next()) {
+                    return mapUser(rs);
+                }
+            }
+        } catch (SQLException e) {
+            // Mantém o padrão de tratamento de erro da classe DAO
+            throw new RuntimeException("Erro ao autenticar usuário: " + e.getMessage(), e);
+        }
+
+        // Retorna null se o login falhar (credenciais incorretas ou usuário inativo)
+        return null;
     }
 
 

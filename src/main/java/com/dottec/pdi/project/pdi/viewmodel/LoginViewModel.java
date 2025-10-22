@@ -1,6 +1,8 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.AuthController;
+import com.dottec.pdi.project.pdi.dao.UserDAO;
+import com.dottec.pdi.project.pdi.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,16 +29,18 @@ public class LoginViewModel {
     @FXML
     public void handleLogin(MouseEvent event) {
         String email = emailField.getText().trim();
-        String password = passwordField.getText().trim();
+        String password = passwordField.getText().trim(); // Lembre-se que isso deveria ser um hash!
 
         if (email.isEmpty() || password.isEmpty()) {
             showAlert("Campos obrigatórios", "Por favor, preencha todos os campos.");
             return;
         }
 
-        boolean success = AuthController.login(email, password);
+        User user = UserDAO.login(email, password);
 
-        if (success) {
+        if (user != null) {
+            AuthController.getInstance().login(user);
+
             try {
                 Stage currentStage = (Stage) emailField.getScene().getWindow();
                 currentStage.close();
@@ -50,9 +54,11 @@ public class LoginViewModel {
                 stage.show();
 
             } catch (Exception e) {
+                e.printStackTrace();
                 showAlert("Erro", "Falha ao carregar o painel: " + e.getMessage());
             }
         } else {
+            // Se user for null, o login falhou
             showAlert("Login inválido", "Email ou senha incorretos.");
         }
     }
