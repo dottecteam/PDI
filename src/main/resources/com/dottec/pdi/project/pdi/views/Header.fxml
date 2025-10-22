@@ -11,10 +11,10 @@
         <HBox fx:id="headerReturnButtonField" alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" />
         <HBox fx:id="headerHBox" alignment="BOTTOM_LEFT" maxHeight="70.0" prefHeight="70.0" spacing="10.0" style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0;" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets bottom="10.0" right="10.0" top="10.0" />
+                <Insets bottom="5.0" right="10.0" top="5.0" />
             </padding>
             <children>
-                <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" style="-fx-font-weight: bold;" text="Label" textAlignment="CENTER" textFill="#4b0081">
+                <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" styleClass="header-label" text="Label" textAlignment="CENTER" textFill="#4b0081">
                     <font>
                         <Font size="32.0" />
                     </font>

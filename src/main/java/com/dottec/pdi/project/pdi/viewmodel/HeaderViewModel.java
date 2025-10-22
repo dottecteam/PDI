@@ -89,7 +89,7 @@ public class HeaderViewModel {
             }
             case "Goals.fxml" -> {
                 Button buttonAddGoal = new Button("Adicionar Objetivo");
-                buttonAddGoal.setOnMouseClicked(event2 -> TemplateViewModel.switchScreen("PersonalGoal.fxml"));
+                buttonAddGoal.setOnMouseClicked(event2 -> TemplateViewModel.switchScreen("AddActivity.fxml"));
 
                 Button buttonFilterGoals = new Button("Filtrar");
                 buttonFilterGoals.getStyleClass().add("filter-button");

@@ -10,10 +10,14 @@ import javafx.stage.StageStyle;
 
 
 import java.io.IOException;
+import java.util.Locale;
+
+import static java.util.Locale.*;
 
 public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
+        setDefault(new Locale("pt", "BR"));
 
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/Template.fxml"));
         Parent root = fxmlLoader.load();
