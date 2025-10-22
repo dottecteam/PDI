@@ -214,6 +214,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
         cancelEditButton.setVisible(false);
     }
 
+    //Carrega dados para o gráfico
     public void loadData(int collaboratorId) {
         percentageLabel.setText("Carregando dados...");
 
@@ -236,8 +237,32 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
             for (CollaboratorStatusData data : dataFromDB) {
                 PieChart.Data pieData = new PieChart.Data(data.status(), data.cont());
-                pieChartData.add(pieData);
+                final String status = data.status();
 
+                pieData.nodeProperty().addListener((ov, oldNode, newNode) -> {
+                    if (newNode != null) {
+                        //Define a cor com base no status
+                        String color = "#9032BB"; // Cor padrão
+
+                        switch (status.toLowerCase()) {
+                            case "completed":
+                                color = "#598649";
+                                break;
+                            case "pending":
+                                color = "#FFCF5E";
+                                break;
+                            case "canceled":
+                                color = "#E54B2E";
+                                break;
+                            case "in_progress":
+                                color = "#F5883F";
+                                break;
+                        }
+                        newNode.setStyle("-fx-background-color: " + color + ";");
+                    }
+                });
+
+                pieChartData.add(pieData);
                 totalTasks += data.cont();
                 if (data.status().equalsIgnoreCase(STATUS_CONCLUIDO)) {
                     completedTasks = data.cont();
