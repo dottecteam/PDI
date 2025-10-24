@@ -15,7 +15,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/testeLogind.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/Login.fxml"));
         Parent root = fxmlLoader.load();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
