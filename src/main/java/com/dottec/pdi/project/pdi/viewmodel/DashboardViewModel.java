@@ -1,7 +1,10 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.dao.DashboardDAO;
 import com.dottec.pdi.project.pdi.controllers.DashboardTagFrequencyController;
+import com.dottec.pdi.project.pdi.enums.Role;
+import com.dottec.pdi.project.pdi.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -10,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -19,6 +23,7 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
 
 
 public class DashboardViewModel implements Initializable {
@@ -36,23 +41,65 @@ public class DashboardViewModel implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tagBarChart.setAnimated(false); //Deixar em 'false' para arrumar o nome das tags no grafico
-        loadChartData();
+
+        //Pega a ID do usuário logado
+        User loggedUser = AuthController.getInstance().getLoggedUser();
+
+        if (loggedUser == null) {
+            showAlert("Usuário não encontrado","Erro: Nenhum usuário está logado.");
+            return;
+        }
+
+
+        Callable<List<DashboardTagFrequencyController>> dataFetchingTask;
+
+        if (loggedUser.getRole() == Role.department_manager) {
+
+            if (loggedUser.getDepartment() == null) {
+                showAlert("Departamento não encontrado", "Erro: O usuário é um gerente, mas não possui um departamento.");
+                return;
+            }
+            //Pega o ID depois de verificar que não é nulo
+            int departmentId = loggedUser.getDepartment().getId();
+
+            tagBarChart.setTitle("Tags Mais Usadas no Setor " + loggedUser.getDepartment().getName());
+            //Executa o sql do gerente de departamento
+            dataFetchingTask = () -> DashboardDAO.getTopTagsDepartment(departmentId);
+
+        } else if (loggedUser.getRole() == Role.hr_manager) {
+
+            tagBarChart.setTitle("Tags Mais Usadas");
+            //Executa o sql de gerente geral
+            dataFetchingTask = () -> DashboardDAO.getTopTags();
+
+        } else {
+            showAlert("Permissão necessária", "Você não tem permissão para visualizar este gráfico.");
+            return;
+        }
+
+
+        loadChartData(dataFetchingTask);
     }
 
 
-    private void loadChartData() {
+    private void loadChartData(Callable<List<DashboardTagFrequencyController>> dataFetchingTask) {
 
         //A Task retorna a List<TagFrequency> que o DAO buscou
         Task<List<DashboardTagFrequencyController>> loadDataTask = new Task<>() {
             @Override
             protected List<DashboardTagFrequencyController> call() throws Exception {
-                return tagDAO.getTopTags();
+                return dataFetchingTask.call();
             }
         };
 
 
         loadDataTask.setOnSucceeded(event -> {
             List<DashboardTagFrequencyController> dataFromDB = loadDataTask.getValue(); //Pega o resultado
+
+            if (dataFromDB == null || dataFromDB.isEmpty()) {
+                showAlert("Sem Dados", "Nenhuma tag encontrada para esta visualização.");
+                return;
+            }
 
             ObservableList<XYChart.Data<String, Number>> chartData =
                     FXCollections.observableArrayList();
@@ -114,6 +161,14 @@ public class DashboardViewModel implements Initializable {
         });
 
         new Thread(loadDataTask).start();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 
