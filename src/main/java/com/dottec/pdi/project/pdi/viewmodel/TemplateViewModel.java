@@ -1,13 +1,10 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.utils.FXUtils;
-import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
@@ -16,11 +13,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Stack;
 import java.util.function.Consumer;
 
 public class TemplateViewModel implements Initializable {
@@ -53,23 +50,21 @@ public class TemplateViewModel implements Initializable {
     //ImageView
     @FXML private ImageView menuLogo;
 
-    //Message
-    @FXML private DialogPane message;
-    @FXML private Label messageHeaderText;
-    @FXML private Label messageContentText;
-    @FXML private Button messageCloseButton;
-
-    private String mainPage = "Dashboard.fxml";
+    private final String mainPage = "Dashboard.fxml";
 
     //Define a página que inicializa com o projeto
 
-    String previousPage;
+    private final Stack<Node> pageStack = new Stack<>();
+    private final Stack<String> pageNameStack = new Stack<>();
+    private String currentPage = mainPage;
+    public static String getCurrentPage(){return instance.currentPage;}
+    public static void setCurrentPage(String pageName){instance.currentPage = pageName;}
     private static TemplateViewModel instance;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         carregarPagina(mainPage);
-        carregarHeader(mainPage);
+        loadHeader(mainPage);
         instance = this;
     }
 
@@ -112,13 +107,7 @@ public class TemplateViewModel implements Initializable {
         carregarPagina("Profile.fxml");
     }
 
-    public void carregarPagina(String nomePagina){
-        carregarPagina(nomePagina, controller -> {});
-    }
-
-    //Método carregarPagina (para carregar uma pagina)
-    public void carregarPagina(String nomePagina,  Consumer<Object> configurator) {
-
+    private void updateSideBar(String pageName){
         //Configuracao pro 'selecionado' do menu
         menuDashboard.getStyleClass().remove("selecionado");
         menuCollaborators.getStyleClass().remove("selecionado");
@@ -126,13 +115,12 @@ public class TemplateViewModel implements Initializable {
         menuSettings.getStyleClass().remove("selecionado");
         menuProfile.getStyleClass().remove("selecionado");
 
-        switch (nomePagina) {
+        switch (pageName) {
             case "Dashboard.fxml":
                 menuDashboard.getStyleClass().add("selecionado");
                 break;
             case "Collaborators.fxml":
                 menuCollaborators.getStyleClass().add("selecionado");
-
                 break;
             case "GoalTemplates.fxml":
                 menuGoalTemplates.getStyleClass().add("selecionado");
@@ -144,27 +132,39 @@ public class TemplateViewModel implements Initializable {
                 menuProfile.getStyleClass().add("selecionado");
                 break;
         }
+    }
 
+    public void carregarPagina(String pageName){
+        carregarPagina(pageName, controller -> {});
+    }
+
+    //Método carregarPagina (para carregar uma pagina)
+    public void carregarPagina(String pageName,  Consumer<Object> configurator) {
+        updateSideBar(pageName);
         //'chama' a pagina
-        Parent root = null;
         try{
-            String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/" + nomePagina;
-
+            String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/" + pageName;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoCompleto));
-            root = loader.load();
-
+            Parent root = loader.load();
             Object controller = loader.getController();
             configurator.accept(controller);
+
+            ScrollPane scrollPane = new ScrollPane(root);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(true);
+
+            pageNameStack.push(currentPage);
+            currentPage = pageName;
+            if (tmpCenter.getCenter() != null) {
+                pageStack.push(tmpCenter.getCenter());
+            }
+
+            tmpCenter.setCenter(scrollPane);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ScrollPane scrollPane = new ScrollPane(root);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        tmpCenter.setCenter(scrollPane);
     }
-
 
     public static void switchScreen(String nomePagina) {
         instance.carregarPagina(nomePagina,  controller -> {});
@@ -180,16 +180,25 @@ public class TemplateViewModel implements Initializable {
         }
     }
 
-    private void carregarHeader(String nomePagina){
-        Parent root = null;
-        try{
-            String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/Header.fxml";
+    public static void goBack(){
+        if(!instance.pageStack.isEmpty()){
+            Node previousPage = instance.pageStack.pop();
+            String pageName = instance.pageNameStack.pop();
+            setCurrentPage(pageName);
+            instance.loadHeader(pageName);
+            instance.tmpCenter.setCenter(previousPage);
+        }
+    }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoCompleto));
-            root = loader.load();
+    private void loadHeader(String pageName){
+        try{
+            String fxmlPath = "/com/dottec/pdi/project/pdi/views/Header.fxml";
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
 
             HeaderViewModel headerViewModel = loader.getController();
-            HeaderViewModel.updateHeader(nomePagina);
+            HeaderViewModel.updateHeader(pageName);
 
             tmpCenter.setTop(root);
         } catch (IOException e) {

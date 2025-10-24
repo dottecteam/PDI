@@ -16,8 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox stylesheets="@../static/style/style_template.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="$CONTROLLER_NAME$">
+<VBox stylesheets="@../static/style/style_template.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.GoalViewModel">
    <children>
       <StackPane alignment="TOP_RIGHT">
          <children>
@@ -43,13 +42,13 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="nameField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="1" />
+                  <TextField editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="1" />
                   <Label style="-fx-text-fill: #4B0081;" styleClass="mid-label" text="Descrição" GridPane.rowIndex="2">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="descriptionField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="3" />
+                  <TextField editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="3" />
                </children>
                <StackPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -57,14 +56,14 @@
             </GridPane>
             <HBox maxHeight="30.0" maxWidth="200.0" spacing="10.0">
                <children>
-                  <Button fx:id="confirmEditButton" mnemonicParsing="false" onAction="#handleConfirmEdit" styleClass="basic-button" text="Confirmar" visible="false" />
-                  <Button fx:id="cancelEditButton" mnemonicParsing="false" onAction="#handleCancelEditing" styleClass="cancel-button" text="Cancelar" visible="false" />
+                  <Button fx:id="confirmEditButton" mnemonicParsing="false" styleClass="basic-button" text="Confirmar" visible="false" />
+                  <Button fx:id="cancelEditButton" mnemonicParsing="false" styleClass="cancel-button" text="Cancelar" visible="false" />
                </children>
                <StackPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </StackPane.margin>
             </HBox>
-            <ImageView fx:id="editButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#handleEnableEditing" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../static/img/edit.png" />
                </image>
@@ -87,7 +86,7 @@
                   <Insets />
                </VBox.margin>
             </Label>
-            <VBox fx:id="activitiesField" prefHeight="200.0" prefWidth="100.0" />
+            <VBox prefHeight="200.0" prefWidth="100.0" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />

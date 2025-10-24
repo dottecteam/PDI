@@ -113,12 +113,14 @@
 }
 
 .button {
-    -fx-font-size: 24;
+    -fx-font-size: 20;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
 }
 
 .basic-button {
     -fx-background-color: #AF69CD;
-    -fx-border-radius: 15;
+    -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-text-align: center;
     -fx-text-fill: white;
@@ -134,7 +136,7 @@
 
 .cancel-button{
     -fx-background-color: #DDDDDD;
-    -fx-border-radius: 15;
+    -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-text-align: center;
     -fx-text-fill: white;
@@ -161,7 +163,7 @@
 
 .search-bar{
     -fx-background-color: #DDDDDD;
-    -fx-background-radius: 15;
+    -fx-background-radius: 20;
     -fx-pref-width: 250;
     -fx-pref-height: 30;
     -fx-font-size: 16;
@@ -174,11 +176,17 @@
 .search-bar:focused{
     -fx-background-color: #d6d6d6;
     -fx-border-color: #4B0081;
-    -fx-border-radius: 15;
+    -fx-border-radius: 20;
 }
 
 .return-button{
+    -fx-background-image: url("../img/arrow-left.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 20 20;
     -fx-background-color: transparent;
+    -fx-padding: 8 25;
+    -fx-cursor: hand;
 }
 .return-button:hover{
     -fx-cursor: hand;
