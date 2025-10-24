@@ -19,7 +19,7 @@ public class Application extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         setDefault(new Locale("pt", "BR"));
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/testeLogind.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/Login.fxml"));
         Parent root = fxmlLoader.load();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
