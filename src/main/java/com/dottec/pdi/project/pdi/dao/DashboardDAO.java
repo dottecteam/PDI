@@ -167,7 +167,7 @@ public class DashboardDAO {
 				ResultSet rs = stmt.executeQuery()) {
 
 			if (rs.next()) {
-				return rs.getDouble("avarage_progress");
+				return rs.getDouble("average_pdi_progress");
 			}
 			return 0.0;
 		}
