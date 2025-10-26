@@ -32,12 +32,12 @@
          <left>
             <VBox prefHeight="35.0" prefWidth="736.0" BorderPane.alignment="CENTER">
                <children>
-                  <LineChart fx:id="monthsLineChart" prefHeight="377.0" prefWidth="736.0">
+                  <LineChart fx:id="monthsLineChart" prefHeight="377.0" prefWidth="736.0" title="." styleClass="ChartTags-Title">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <CategoryAxis label="Mês" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis side="LEFT" />
+                      <NumberAxis label="Metas Criadas" />
                     </yAxis>
                   </LineChart>
                   <StackedAreaChart>

@@ -4,6 +4,9 @@ import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.dao.DashboardDAO;
 import com.dottec.pdi.project.pdi.controllers.DashboardTagFrequencyController;
 import com.dottec.pdi.project.pdi.controllers.DashboardStatusData;
+import com.dottec.pdi.project.pdi.controllers.DashboardMonthlyData;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import com.dottec.pdi.project.pdi.enums.Role;
 import com.dottec.pdi.project.pdi.model.User;
 import javafx.collections.FXCollections;
@@ -53,6 +56,7 @@ public class DashboardViewModel implements Initializable {
         tagBarChart.setAnimated(false); //Deixar em 'false' para arrumar o nome das tags no grafico
         taskPieChart.setAnimated(false);
         taskPieChart.setLegendVisible(false); //Não exibe a legenda
+        monthsLineChart.setAnimated(false);
 
         //Pega a ID do usuário logado
         User loggedUser = AuthController.getInstance().getLoggedUser();
@@ -79,7 +83,9 @@ public class DashboardViewModel implements Initializable {
             dataFetchingTask = () -> DashboardDAO.getTopTagsDepartment(departmentId);
 
             taskPieChart.setTitle("Relação de conclusão de tarefas no Setor " + loggedUser.getDepartment().getName());
+            monthsLineChart.setTitle("Progresso médio mensal de tarefas no Setor " + loggedUser.getDepartment().getName());
             loadPieChartData(departmentId);
+            loadLineChartData(departmentId);
 
         } else if (loggedUser.getRole() == Role.hr_manager) {
 
@@ -239,6 +245,57 @@ public class DashboardViewModel implements Initializable {
 
         loadDataTask.setOnFailed(event -> {
             percentage.setText("Erro ao carregar status.");
+            loadDataTask.getException().printStackTrace();
+        });
+
+        new Thread(loadDataTask).start();
+    }
+
+    private void loadLineChartData(int departmentId) {
+
+        Task<List<DashboardMonthlyData>> loadDataTask = new Task<>() {
+            @Override
+            protected List<DashboardMonthlyData> call() throws Exception {
+                return DashboardDAO.getMonthlyActivityCounts(departmentId);
+            }
+        };
+
+        loadDataTask.setOnSucceeded(event -> {
+            List<DashboardMonthlyData> dataFromDB = loadDataTask.getValue();
+
+            if (dataFromDB == null || dataFromDB.isEmpty()) {
+                monthsLineChart.setTitle("Sem dados de atividades para este setor.");
+                return;
+            }
+
+            ObservableList<XYChart.Data<String, Number>> chartData =
+                    FXCollections.observableArrayList();
+
+            // Formatação para "mes/ano"
+            DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("MMM/yy");
+
+            for (DashboardMonthlyData data : dataFromDB) {
+                String monthYear = data.mesAno();
+
+                //Adiciona "-01" para o parse entender que é um dia
+                LocalDate date = LocalDate.parse(monthYear + "-01", dbFormatter);
+                String formattedLabel = date.format(displayFormatter);
+
+                chartData.add(new XYChart.Data<>(formattedLabel, data.cont()));
+            }
+
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            series.setName("Metas");
+            series.setData(chartData);
+
+
+            monthsLineChart.getData().clear();
+            monthsLineChart.getData().add(series);
+        });
+
+        loadDataTask.setOnFailed(event -> {
+            monthsLineChart.setTitle("Erro ao carregar dados.");
             loadDataTask.getException().printStackTrace();
         });
 

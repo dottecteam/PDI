@@ -2,6 +2,14 @@
     -fx-background-color: #9032BB;
 }
 
+.default-color0.chart-series-line {
+    -fx-stroke: #9032BB;
+}
+
+.default-color0.chart-line-symbol {
+    -fx-background-color: #9032BB;
+}
+
 .ChartTags-Title{
     -fx-font-weight: bold;
 }

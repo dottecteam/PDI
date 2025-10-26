@@ -120,9 +120,9 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
             String deadlineText;
             if (goal.getDeadline() != null) {
-                deadlineText = "Prazo: " + goal.getDeadline().format(formatter);
+                deadlineText = "Prazo: " + goal.getDeadline().format(formatter) + "                                  ";
             } else {
-                deadlineText = "Prazo: (Não definido)";
+                deadlineText = "Prazo: (Não definido)                                  ";
             }
             Label goalDeadline = new Label(deadlineText);
 
