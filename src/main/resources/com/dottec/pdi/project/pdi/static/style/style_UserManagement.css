@@ -1,0 +1,99 @@
+*{
+    -fx-background-color: fdfdfd;
+}
+
+.stackpane-collaborator{
+    -fx-min-height: 75;
+    -fx-background-radius: 15;
+    -fx-min-width: 400;
+    -fx-padding: 6 20 15 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 3)
+}
+
+.stackpane-collaborator:hover{
+    -fx-border-color: #4B0081;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+}
+
+.label{
+    -fx-background-color: transparent;
+    -fx-text-fill: #48047c;
+}
+
+.label-collaborator-name {
+    -fx-font-size: 16;
+    -fx-text-fill: black;
+}
+
+.label-collaborator-department{
+    -fx-font-size: 24;
+    -fx-text-fill: #4B0081;
+}
+
+.label-collaborator-status {
+    -fx-background-radius: 10;
+    -fx-padding: 2 8;
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+}
+
+.button {
+}
+
+.button:hover {
+    -fx-cursor: hand;
+
+}
+
+.search-bar{
+    -fx-background-color:  rgba(0, 0, 0, 0.10);
+    -fx-background-radius: 15;
+    -fx-pref-width: 250;
+    -fx-pref-height: 30;
+    -fx-font-size: 16;
+    -fx-border-radius: 15;
+}
+
+.search-bar:hover{
+    -fx-background-color: #d6d6d6;
+}
+
+.search-bar:focused{
+    -fx-background-color: #d6d6d6;
+    -fx-border-color: #4B0081;
+    -fx-border-radius: 15;
+}
+
+.return-button{
+    -fx-background-color: transparent;
+}
+.return-button:hover{
+    -fx-cursor: hand;
+}
+
+.filter-button{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #4B0081;
+    -fx-padding:0;
+}
+
+.filter-button:hover{
+    -fx-text-fill: #9032BB;
+    -fx-cursor: hand;
+}
+
+.add-user-button{
+    -fx-background-color: #AF69CD;
+    -fx-border-color: transparent;
+    -fx-border-radius: 30
+    -fx-text-fill: #f6f6f6;
+    -fx-padding:0;
+}
+
+.add-user-button:hover{
+    -fx-text-fill: #f6f6f6;
+    -fx-background-color: #7900AC;
+    -fx-cursor: hand;
+}
