@@ -1,14 +1,6 @@
 # <img height="55" width="55" alt="PDI logo" src="src/main/resources/com/dottec/pdi/project/pdi/static/img/logo.png"> PDI
 Projeto acadêmico com <a href="https://youtan.com.br" target="_blank"> Youtan</a>.
 
-
-
-
-<br>
-<br>
-
-<img alt="In progress" src="https://img.shields.io/badge/IN_PROGRESS-yellow">
-
 <br>
 <br>
 
