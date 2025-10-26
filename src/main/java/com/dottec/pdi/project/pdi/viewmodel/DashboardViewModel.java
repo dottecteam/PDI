@@ -1,10 +1,8 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
-import com.dottec.pdi.project.pdi.controllers.AuthController;
+import com.dottec.pdi.project.pdi.controllers.*;
 import com.dottec.pdi.project.pdi.dao.DashboardDAO;
-import com.dottec.pdi.project.pdi.controllers.DashboardTagFrequencyController;
-import com.dottec.pdi.project.pdi.controllers.DashboardStatusData;
-import com.dottec.pdi.project.pdi.controllers.DashboardMonthlyData;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.dottec.pdi.project.pdi.enums.Role;
@@ -42,6 +40,9 @@ public class DashboardViewModel implements Initializable {
     @FXML
     private LineChart monthsLineChart;
 
+    @FXML
+    private BarChart<Number, String> progressBarChart;
+
     private final String STATUS_CONCLUIDO = "completed";
 
     private DashboardDAO tagDAO; //O objeto que acessa o banco
@@ -57,6 +58,8 @@ public class DashboardViewModel implements Initializable {
         taskPieChart.setAnimated(false);
         taskPieChart.setLegendVisible(false); //Não exibe a legenda
         monthsLineChart.setAnimated(false);
+        progressBarChart.setAnimated(false);
+        progressBarChart.setLegendVisible(false);
 
         //Pega a ID do usuário logado
         User loggedUser = AuthController.getInstance().getLoggedUser();
@@ -78,14 +81,16 @@ public class DashboardViewModel implements Initializable {
             //Pega o ID depois de verificar que não é nulo
             int departmentId = loggedUser.getDepartment().getId();
 
-            tagBarChart.setTitle("Tags Mais Usadas no Setor " + loggedUser.getDepartment().getName());
+            tagBarChart.setTitle("Tags Mais Usadas");
             //Executa o sql do gerente de departamento
             dataFetchingTask = () -> DashboardDAO.getTopTagsDepartment(departmentId);
 
-            taskPieChart.setTitle("Relação de conclusão de tarefas no Setor " + loggedUser.getDepartment().getName());
-            monthsLineChart.setTitle("Progresso médio mensal de tarefas no Setor " + loggedUser.getDepartment().getName());
+            taskPieChart.setTitle("Relação de conclusão de tarefas");
+            monthsLineChart.setTitle("Progresso médio mensal de tarefas");
+            progressBarChart.setTitle("Objetivos com menor progresso");
             loadPieChartData(departmentId);
             loadLineChartData(departmentId);
+            loadProgressChartData(departmentId);
 
         } else if (loggedUser.getRole() == Role.hr_manager) {
 
@@ -136,9 +141,9 @@ public class DashboardViewModel implements Initializable {
                 dataPoint.nodeProperty().addListener((ov, oldNode, newNode) -> {
                     if (newNode != null) {
                         if (indice % 2 == 0) {
-                            newNode.setStyle("-fx-bar-fill: #9032BB;");
+                            newNode.setStyle("-fx-bar-fill: #374649;");
                         } else {
-                            newNode.setStyle("-fx-bar-fill: #AF69CD;");
+                            newNode.setStyle("-fx-bar-fill: #708F95;");
                         }
 
 
@@ -302,6 +307,52 @@ public class DashboardViewModel implements Initializable {
         new Thread(loadDataTask).start();
     }
 
+
+    private void loadProgressChartData(int departmentId) {
+
+        Task<List<DashboardProgressData>> loadDataTask = new Task<>() {
+            @Override
+            protected List<DashboardProgressData> call() throws Exception {
+                // Chama o método DAO correto
+                return DashboardDAO.getBottomCollaboratorProgress(departmentId);
+            }
+        };
+
+        loadDataTask.setOnSucceeded(event -> {
+            List<DashboardProgressData> dataFromDB = loadDataTask.getValue();
+
+            if (dataFromDB == null || dataFromDB.isEmpty()) {
+                progressBarChart.setTitle("Nenhum dado de progresso encontrado.");
+                return;
+            }
+
+            // Tipos corretos: Número no X, String no Y
+            ObservableList<XYChart.Data<Number, String>> chartData =
+                    FXCollections.observableArrayList();
+
+            for (DashboardProgressData data : dataFromDB) {
+                // (Valor X = Porcentagem, Valor Y = Nome)
+                chartData.add(new XYChart.Data<>(data.porcentagem(), data.nome()));
+            }
+
+            // Tipos corretos: Número no X, String no Y
+            XYChart.Series<Number, String> series = new XYChart.Series<>();
+            series.setName("Progresso de Metas Concluídas (%)");
+            series.setData(chartData);
+
+            // Adiciona ao gráfico correto
+            progressBarChart.getData().clear();
+            progressBarChart.getData().add(series);
+        });
+
+        loadDataTask.setOnFailed(event -> {
+            progressBarChart.setTitle("Erro ao carregar progresso.");
+            loadDataTask.getException().printStackTrace();
+        });
+
+        new Thread(loadDataTask).start();
+    }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
@@ -315,8 +366,8 @@ public class DashboardViewModel implements Initializable {
             if (newNode != null) {
                 String color = "#808080";
                 switch (statusOriginal.toLowerCase()) {
-                    case "completed": color = "#598649"; break;
-                    case "in_progress":   color = "#F5883F"; break;
+                    case "completed": color = "#01B8AA"; break;
+                    case "in_progress":   color = "#FD625E"; break;
                 }
 
                 newNode.setStyle("-fx-background-color: " + color + ";");

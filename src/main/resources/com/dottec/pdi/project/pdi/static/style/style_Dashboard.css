@@ -3,11 +3,11 @@
 }
 
 .default-color0.chart-series-line {
-    -fx-stroke: #9032BB;
+    -fx-stroke: #01B8AA;
 }
 
 .default-color0.chart-line-symbol {
-    -fx-background-color: #9032BB;
+    -fx-background-color: #01B8AA;
 }
 
 .ChartTags-Title{
@@ -16,5 +16,10 @@
 
 .Special-Text{
     -fx-text-fill: #9032BB;
+    -fx-font-weight: bold;
+}
+
+#progressBarChart .default-color0.chart-bar {
+    -fx-bar-fill: #F2C80F;
 }
 

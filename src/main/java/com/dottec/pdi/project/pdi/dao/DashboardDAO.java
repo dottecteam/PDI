@@ -6,6 +6,7 @@ import com.dottec.pdi.project.pdi.enums.CategoryType;
 import com.dottec.pdi.project.pdi.controllers.DashboardTagFrequencyController;
 import com.dottec.pdi.project.pdi.controllers.DashboardStatusData;
 import com.dottec.pdi.project.pdi.controllers.DashboardMonthlyData;
+import com.dottec.pdi.project.pdi.controllers.DashboardProgressData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -148,5 +149,36 @@ public class DashboardDAO {
         }
 
         return monthlyData;
+    }
+
+    public static List<DashboardProgressData> getBottomCollaboratorProgress(int departmentId) {
+
+        List<DashboardProgressData> progressList = new ArrayList<>();
+
+        // Este SQL usa uma sub-query para calcular o percentual
+        String sql = "SELECT T.col_name, (CASE WHEN T.total_metas = 0 THEN 0 ELSE (T.metas_completas * 100.0 / T.total_metas) END) " +
+                "AS percentual_concluido FROM ( SELECT c.col_name, COUNT(g.goa_id) AS total_metas, SUM(CASE WHEN g.goa_status = 'completed' " +
+                "THEN 1 ELSE 0 END) AS metas_completas FROM collaborators AS c LEFT JOIN goals AS g ON c.col_id = g.collaborator_id WHERE " +
+                "c.col_deleted_at IS NULL AND c.department_id = ? GROUP BY c.col_id, c.col_name ) AS T ORDER BY percentual_concluido ASC LIMIT 10;";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Define o departmentId no placeholder '?'
+            stmt.setInt(1, departmentId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String name = rs.getString("col_name");
+                    double percentage = rs.getDouble("percentual_concluido");
+
+                    progressList.add(new DashboardProgressData(name, percentage));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar progresso de colaboradores por setor: " + e.getMessage(), e);
+        }
+
+        return progressList;
     }
 }

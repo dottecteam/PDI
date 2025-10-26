@@ -20,7 +20,7 @@
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <bottom>
       
-                      <BarChart fx:id="tagBarChart" prefHeight="201.0" prefWidth="321.0" styleClass="ChartTags-Title" title="." BorderPane.alignment="CENTER">
+                            <BarChart fx:id="tagBarChart" prefHeight="201.0" prefWidth="321.0" styleClass="ChartTags-Title" title="." BorderPane.alignment="CENTER">
                     <xAxis>
                         <CategoryAxis label="Tag" />
                     </xAxis>
@@ -32,7 +32,7 @@
          <left>
             <VBox prefHeight="35.0" prefWidth="736.0" BorderPane.alignment="CENTER">
                <children>
-                  <LineChart fx:id="monthsLineChart" prefHeight="377.0" prefWidth="736.0" title="." styleClass="ChartTags-Title">
+                  <LineChart fx:id="monthsLineChart" prefHeight="377.0" prefWidth="736.0" styleClass="ChartTags-Title" title=".">
                     <xAxis>
                       <CategoryAxis label="Mês" />
                     </xAxis>
@@ -40,22 +40,22 @@
                       <NumberAxis label="Metas Criadas" />
                     </yAxis>
                   </LineChart>
-                  <StackedAreaChart>
+                  <BarChart fx:id="progressBarChart" styleClass="ChartTags-Title" title=".">
                     <xAxis>
-                      <NumberAxis side="BOTTOM" />
+                      <NumberAxis label="Progresso (%)" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis side="LEFT" />
+                      <CategoryAxis label="Colaborador" side="LEFT" />
                     </yAxis>
-                  </StackedAreaChart>
+                  </BarChart>
                </children>
             </VBox>
          </left>
          <right>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <PieChart fx:id="taskPieChart" title="." styleClass="ChartTags-Title"/>
-                  <Label fx:id="percentage" layoutX="233.0" layoutY="365.0" text="Label" styleClass="Special-Text"/>
+                  <PieChart fx:id="taskPieChart" styleClass="ChartTags-Title" title="." />
+                  <Label fx:id="percentage" layoutX="233.0" layoutY="365.0" styleClass="Special-Text" text="Label" />
                </children>
             </AnchorPane>
          </right>

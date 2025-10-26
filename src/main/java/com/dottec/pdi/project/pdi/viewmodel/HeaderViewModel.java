@@ -1,5 +1,6 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.enums.Role;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -12,7 +13,10 @@ import javafx.scene.layout.HBox;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class HeaderViewModel {
+import com.dottec.pdi.project.pdi.controllers.AuthController;
+import com.dottec.pdi.project.pdi.model.User;
+
+public class HeaderViewModel{
     @FXML
     private HBox header;
 
@@ -67,7 +71,18 @@ public class HeaderViewModel {
                 buttonFilterDashboard.setId("filterDashboard");
                 buttonFilterDashboard.getStyleClass().add("filter-button");
 
-                buildHeaderStructure(false,"Dashboard", buttonFilterDashboard);
+                AuthController auth = AuthController.getInstance();
+                User currentUser = auth.getLoggedUser();
+
+                if (currentUser != null){
+                    if (currentUser.getRole() == Role.department_manager) {
+                        buildHeaderStructure(false, "Dashboard - Setor " + currentUser.getDepartment().getName(), buttonFilterDashboard);
+                    }
+                    else{
+                        buildHeaderStructure(false, "Dashboard", buttonFilterDashboard);
+                    }
+                }
+
             }
             case "Collaborators.fxml" -> {
                 Button buttonAddCollaborator = new Button("Adicionar Colaborador");
