@@ -4,6 +4,7 @@ import com.dottec.pdi.project.pdi.config.Database;
 import com.dottec.pdi.project.pdi.model.Category;
 import com.dottec.pdi.project.pdi.enums.CategoryType;
 import com.dottec.pdi.project.pdi.controllers.DashboardTagFrequencyController;
+import com.dottec.pdi.project.pdi.controllers.DashboardStatusData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +26,6 @@ public class DashboardDAO {
         //Select na tabela de goal_tags para ver quais tags são mais utilizadas
         String sql = "SELECT T.tag_name, COUNT(GT.tag_id) AS frequencia FROM goal_tags AS GT JOIN tags AS T ON GT.tag_id = T.tag_id GROUP BY\n" +
                 "T.tag_id, T.tag_name ORDER BY frequencia DESC LIMIT 15;";
-
 
         try (
              Connection conn = Database.getConnection();
@@ -83,5 +83,34 @@ public class DashboardDAO {
             e.printStackTrace();
         }
         return frequencies;
+    }
+
+    public static List<DashboardStatusData> getGoalStatusCountsForDepartment(int departmentId) {
+
+        List<DashboardStatusData> statusCounts = new ArrayList<>();
+
+        String sql = "SELECT G.goa_status, COUNT(G.goa_id) AS quantidade\n" +
+                "FROM goals AS G JOIN collaborators AS C ON \n" +
+                "G.collaborator_id = C.col_id WHERE C.department_id = ?\n" +
+                "AND G.goa_status IN ('completed', 'in_progress') GROUP BY G.goa_status;";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, departmentId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String status = rs.getString("goa_status");
+                    int quantidade = rs.getInt("quantidade");
+
+                    statusCounts.add(new DashboardStatusData(status, quantidade));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar contagem de status de metas por setor: " + e.getMessage(), e);
+        }
+
+        return statusCounts;
     }
 }
