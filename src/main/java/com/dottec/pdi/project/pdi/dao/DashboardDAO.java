@@ -5,6 +5,7 @@ import com.dottec.pdi.project.pdi.model.Category;
 import com.dottec.pdi.project.pdi.enums.CategoryType;
 import com.dottec.pdi.project.pdi.controllers.DashboardTagFrequencyController;
 import com.dottec.pdi.project.pdi.controllers.DashboardStatusData;
+import com.dottec.pdi.project.pdi.controllers.DashboardMonthlyData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,6 +51,8 @@ public class DashboardDAO {
 
 
     //INTERAÇÕES NO BANCO PARA *GERENTE DE SETOR*
+
+    //Get de tags mais usadas
     public static List<DashboardTagFrequencyController> getTopTagsDepartment(int id) {
         //Lista de dados
         List<DashboardTagFrequencyController> frequencies = new ArrayList<>();
@@ -85,6 +88,7 @@ public class DashboardDAO {
         return frequencies;
     }
 
+    //Get de atividades concluidas em relação as iniciadas/ em progresso (total)
     public static List<DashboardStatusData> getGoalStatusCountsForDepartment(int departmentId) {
 
         List<DashboardStatusData> statusCounts = new ArrayList<>();
@@ -112,5 +116,37 @@ public class DashboardDAO {
         }
 
         return statusCounts;
+    }
+
+
+    //Get de progresso médio (mensal)
+    public static List<DashboardMonthlyData> getMonthlyActivityCounts(int departmentId) {
+
+        List<DashboardMonthlyData> monthlyData = new ArrayList<>();
+
+        String sql = "SELECT DATE_FORMAT(G.goa_created_at, '%Y-%m') AS mes_ano,\n" +
+                "COUNT(G.goa_id) AS quantidade FROM goals AS G JOIN\n" +
+                "collaborators AS C ON G.collaborator_id = C.col_id\n" +
+                "WHERE C.department_id = ? GROUP BY mes_ano ORDER BY\n" +
+                "mes_ano ASC;";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, departmentId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String mesAno = rs.getString("mes_ano");
+                    int quantidade = rs.getInt("quantidade");
+
+                    monthlyData.add(new DashboardMonthlyData(mesAno, quantidade));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar contagem de metas por mês: ", e);
+        }
+
+        return monthlyData;
     }
 }
