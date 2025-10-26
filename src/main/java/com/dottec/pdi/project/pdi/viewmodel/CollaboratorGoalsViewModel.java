@@ -270,16 +270,16 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
                         switch (status.toLowerCase()) {
                             case "completed":
-                                color = "#598649";
+                                color = "#01B8AA";
                                 break;
                             case "pending":
-                                color = "#FFCF5E";
+                                color = "#708F95";
                                 break;
                             case "canceled":
-                                color = "#E54B2E";
+                                color = "#FD625E";
                                 break;
                             case "in_progress":
-                                color = "#F5883F";
+                                color = "#F2C80F";
                                 break;
                         }
                         newNode.setStyle("-fx-background-color: " + color + ";");
