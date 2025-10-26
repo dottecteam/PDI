@@ -61,7 +61,7 @@
             </children>
         </GridPane>
 
-        <ImageView fx:id="imageView" fitHeight="1000.0" pickOnBounds="true" preserveRatio="true"
+        <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true"
                    StackPane.alignment="BOTTOM_RIGHT">
             <image>
                 <Image url="@../static/img/login.png"/>

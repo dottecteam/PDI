@@ -52,11 +52,17 @@ public class LoginViewModel implements Initializable {
     @FXML
     private ImageView imageView;
 
+    private static final double MIN_IMAGE_HEIGHT = 1000.0;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+
+            double height = newVal.doubleValue();
+
             updatePolygonPoints();
-            updateImageMargin(newVal.doubleValue());
+            updateImageMargin(height);
+            updateImageSize(height);
         });
 
         rootPane.widthProperty().addListener((obs, oldWidth, newWidth) -> {
@@ -116,8 +122,18 @@ public class LoginViewModel implements Initializable {
     private void updateImageMargin(double height) {
         if (imageView == null) return;
 
-        double offset = -height * 0.5; // 25% da altura da janela
+        double offset = -height * 0.25;
         StackPane.setMargin(imageView, new Insets(0, 0, offset, 0));
+    }
+
+    private void updateImageSize(double height) {
+        if (imageView == null || height == 0) return;
+        double proportionalHeight = height * 1.1;
+        if (proportionalHeight < MIN_IMAGE_HEIGHT) {
+            imageView.setFitHeight(MIN_IMAGE_HEIGHT);
+        } else {
+            imageView.setFitHeight(proportionalHeight);
+        }
     }
 
     @FXML
