@@ -1,5 +1,6 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.enums.Role;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -9,7 +10,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import java.util.Arrays;
 
-public class HeaderViewModel {
+import com.dottec.pdi.project.pdi.controllers.AuthController;
+import com.dottec.pdi.project.pdi.model.User;
+
+public class HeaderViewModel{
     @FXML private HBox header;
     @FXML private HBox headerHBox;
     @FXML private HBox headerButtonsField;
@@ -41,7 +45,17 @@ public class HeaderViewModel {
     private void buildHeader(String page){
         switch(page) {
             case "Dashboard.fxml" -> {
-                buildHeaderStructure("Dashboard", false, true, true);
+                AuthController auth = AuthController.getInstance();
+                User currentUser = auth.getLoggedUser();
+
+                if (currentUser != null){
+                    if (currentUser.getRole() == Role.department_manager) {
+                        buildHeaderStructure("Dashboard - Setor " + currentUser.getDepartment().getName(), false, false, true);
+                    }
+                    else{
+                        buildHeaderStructure("Dashboard", false, false, true);
+                    }
+                }
             }
             case "Collaborators.fxml" -> {
                 Button buttonAddCollaborator = new Button("Adicionar Colaborador");

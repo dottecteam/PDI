@@ -25,7 +25,7 @@ public final class Database implements AutoCloseable{
                 throw e;
             }
         }
-        return connection;
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
 

@@ -2,7 +2,24 @@
     -fx-background-color: #9032BB;
 }
 
+.default-color0.chart-series-line {
+    -fx-stroke: #01B8AA;
+}
+
+.default-color0.chart-line-symbol {
+    -fx-background-color: #01B8AA;
+}
+
 .ChartTags-Title{
     -fx-font-weight: bold;
+}
+
+.Special-Text{
+    -fx-text-fill: #9032BB;
+    -fx-font-weight: bold;
+}
+
+#progressBarChart .default-color0.chart-bar {
+    -fx-bar-fill: #F2C80F;
 }
 

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane prefHeight="85.0" prefWidth="200.0">
+         <left>
+            <StackPane prefWidth="75.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../static/img/hexagon.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets left="10.0" />
+                     </StackPane.margin>
+                  </ImageView>
+               </children>
+            </StackPane>
+         </left>
+         <right>
+            <StackPane prefWidth="125.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox spacing="25.0">
+                     <children>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../static/img/edit.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../static/img/trash.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <StackPane.margin>
+                        <Insets left="20.0" />
+                     </StackPane.margin>
+                     <padding>
+                        <Insets top="25.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </StackPane>
+         </right>
+         <center>
+            <StackPane BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="sector name" StackPane.alignment="CENTER_LEFT">
+                     <StackPane.margin>
+                        <Insets left="10.0" />
+                     </StackPane.margin>
+                  </Label>
+               </children>
+            </StackPane>
+         </center>
+      </BorderPane>
+   </children>
+</VBox>

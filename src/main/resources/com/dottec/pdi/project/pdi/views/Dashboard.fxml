@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
@@ -16,19 +17,10 @@
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
     <children>
-        <GridPane prefHeight="515.0" prefWidth="600.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-
-                <BarChart fx:id="tagBarChart" prefHeight="201.0" prefWidth="321.0" styleClass="ChartTags-Title" title=".">
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <bottom>
+      
+                            <BarChart fx:id="tagBarChart" prefHeight="201.0" prefWidth="321.0" styleClass="ChartTags-Title" title="." BorderPane.alignment="CENTER">
                     <xAxis>
                         <CategoryAxis label="Tag" />
                     </xAxis>
@@ -36,8 +28,38 @@
                         <NumberAxis label="Frequência" />
                     </yAxis>
                 </BarChart>
-            </children>
-        </GridPane>
+         </bottom>
+         <left>
+            <VBox prefHeight="35.0" prefWidth="736.0" BorderPane.alignment="CENTER">
+               <children>
+                  <LineChart fx:id="monthsLineChart" prefHeight="377.0" prefWidth="736.0" styleClass="ChartTags-Title" title=".">
+                    <xAxis>
+                      <CategoryAxis label="Mês" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis label="Metas Criadas" />
+                    </yAxis>
+                  </LineChart>
+                  <BarChart fx:id="progressBarChart" styleClass="ChartTags-Title" title=".">
+                    <xAxis>
+                      <NumberAxis label="Progresso (%)" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <CategoryAxis label="Colaborador" side="LEFT" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </VBox>
+         </left>
+         <right>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <PieChart fx:id="taskPieChart" styleClass="ChartTags-Title" title="." />
+                  <Label fx:id="percentage" layoutX="233.0" layoutY="365.0" styleClass="Special-Text" text="Label" />
+               </children>
+            </AnchorPane>
+         </right>
+      </BorderPane>
     </children>
 
 </VBox>
