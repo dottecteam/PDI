@@ -18,6 +18,10 @@ public final class GoalController {
         return GoalDAO.readAll();
     }
 
+    public static void updateGoal(Goal goal){
+        GoalDAO.update(goal);
+    }
+
     public static void assignGoalToCollaborator(Goal goal, Collaborator collaborator) {
         System.out.println("Associando meta '" + goal.getName() + "' ao colaborador '" + collaborator.getName() + "'");
         // Exemplo:

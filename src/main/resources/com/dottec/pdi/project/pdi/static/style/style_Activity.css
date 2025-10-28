@@ -1,0 +1,31 @@
+.activity-pane {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-border-color: #F6F6F6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0, 0, 2);
+}
+
+.activity-pane:expanded {
+    -fx-border-color: #4B0081;
+    -fx-border-width: 2;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.activity-pane .title{
+    -fx-padding: 10;
+}
+
+.activity-pane .title,
+.activity-pane .content,
+.activity-pane .title .arrow-button,
+.activity-pane .title .arrow-button .arrow{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+#activity-date-picker .text-field {
+    -fx-padding: 7 10 0 5;
+    -fx-pref-width: 105;
+}

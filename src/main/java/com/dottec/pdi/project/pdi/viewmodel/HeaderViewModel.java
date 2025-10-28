@@ -14,7 +14,7 @@ public class HeaderViewModel {
     @FXML private HBox headerHBox;
     @FXML private HBox headerButtonsField;
 
-    //Headeer items
+    //Header items
     @FXML private Label headerLabel;
     @FXML private Button returnButton;
     @FXML private Button filterButton;
@@ -35,11 +35,7 @@ public class HeaderViewModel {
     @FXML
     private void initialize(){
         instance = this;
-    }
-
-    @FXML
-    private void pageReturn(MouseEvent event){
-        TemplateViewModel.goBack();
+        returnButton.setOnMouseClicked(e -> TemplateViewModel.goBack());
     }
 
     private void buildHeader(String page){
@@ -59,7 +55,7 @@ public class HeaderViewModel {
             case "RegisterCollaborator.fxml" -> {
                 buildHeaderStructure("Adicionar Colaborador", true, false, false);
             }
-            case "Goals.fxml" -> {
+            case "CollaboratorGoals.fxml" -> {
                 Button buttonAddGoal = new Button("Adicionar Meta");
                 MenuItem goalFromTemplateButton = new MenuItem("Templates");
                 MenuItem emptyGoalButton = new MenuItem("Nova Meta");
@@ -72,7 +68,11 @@ public class HeaderViewModel {
                 });
 
                 emptyGoalButton.setOnAction(ft -> {
-                    TemplateViewModel.switchScreen("Goal.fxml");
+                    TemplateViewModel.switchScreen("Goal.fxml", controller -> {
+                        if(controller instanceof GoalViewModel goalViewModel){
+                            goalViewModel.setGoalViewModel(goalViewModel);
+                        }
+                    });
                     updateHeader("Goal.fxml");
                 });
 
@@ -136,6 +136,13 @@ public class HeaderViewModel {
     }
     public static void clearButtons(){
         instance.headerButtonsField.getChildren().clear();
+    }
+
+    public static void clear(){
+        clearButtons();
+        setLabel("Plano de Desenvolvimento Individual");
+        setReturnButtonVisible(false);
+        setSearchBarVisible(false);
     }
 
     private void saveCurrentState(){

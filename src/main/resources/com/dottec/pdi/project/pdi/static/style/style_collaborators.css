@@ -35,10 +35,3 @@
     -fx-font-size: 24;
     -fx-text-fill: #4B0081;
 }
-
-.label-collaborator-status {
-    -fx-background-radius: 10;
-    -fx-padding: 2 8;
-    -fx-text-fill: white;
-    -fx-font-size: 14;
-}

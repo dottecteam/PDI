@@ -73,8 +73,6 @@ public class FXUtils {
         vbox.getChildren().addAll(header, label);
         stackPane.getChildren().add(vbox);
 
-        System.out.println(message);
-
         mainStackPane.getChildren().addLast(stackPane);
 
         PauseTransition delay = new PauseTransition(Duration.seconds(4));

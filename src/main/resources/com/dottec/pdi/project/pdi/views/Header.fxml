@@ -3,6 +3,7 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -14,10 +15,7 @@
 
 <HBox fx:id="header" alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="737.0" BorderPane.alignment="BOTTOM_LEFT" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.HeaderViewModel">
     <children>
-        <HBox alignment="BOTTOM_LEFT" nodeOrientation="LEFT_TO_RIGHT">
-         <children>
-            <Button fx:id="returnButton" mnemonicParsing="false" onMouseClicked="#pageReturn" styleClass="return-button" />
-         </children></HBox>
+      <Button fx:id="returnButton" mnemonicParsing="false" styleClass="return-button" />
         <HBox fx:id="headerHBox" alignment="BOTTOM_LEFT" maxHeight="70.0" prefHeight="70.0" spacing="10.0" style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0;" HBox.hgrow="ALWAYS">
             <padding>
                 <Insets bottom="5.0" right="10.0" top="5.0" />
@@ -31,16 +29,12 @@
                         <Insets bottom="-10.0" top="-10.0" />
                     </padding>
                 </Label>
-                <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
                     <children>
                         <HBox fx:id="headerButtonsField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
-                        <HBox alignment="BOTTOM_CENTER">
-                     <children>
-                        <Button fx:id="filterButton" mnemonicParsing="false" styleClass="filter-button" text="Filtrar" />
-                     </children></HBox>
-                        <HBox alignment="BOTTOM_CENTER">
-                     <children>
-                        <StackPane fx:id="searchBarStackPane" alignment="BOTTOM_CENTER" prefHeight="30.0">
+                  <ButtonBar buttonMinWidth="0.0" maxHeight="33.0" nodeOrientation="LEFT_TO_RIGHT">
+                     <buttons>
+                        <StackPane fx:id="searchBarStackPane" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0">
                            <children>
                               <TextField fx:id="searchBar" minHeight="33.0" nodeOrientation="LEFT_TO_RIGHT" styleClass="search-bar">
                                  <font>
@@ -60,7 +54,9 @@
                               </ImageView>
                            </children>
                         </StackPane>
-                     </children></HBox>
+                        <Button fx:id="filterButton" maxWidth="70.0" mnemonicParsing="false" prefHeight="33.0" styleClass="filter-button" text="Filtrar" />
+                     </buttons>
+                  </ButtonBar>
                     </children>
                 </HBox>
             </children>

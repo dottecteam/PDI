@@ -55,16 +55,13 @@ public class TemplateViewModel implements Initializable {
     //Define a página que inicializa com o projeto
 
     private final Stack<Node> pageStack = new Stack<>();
-    private final Stack<String> pageNameStack = new Stack<>();
-    private String currentPage = mainPage;
-    public static String getCurrentPage(){return instance.currentPage;}
-    public static void setCurrentPage(String pageName){instance.currentPage = pageName;}
+    private final Stack<Node> headerStack = new Stack<>();
     private static TemplateViewModel instance;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        carregarPagina(mainPage);
         loadHeader(mainPage);
+        carregarPagina(mainPage);
         instance = this;
     }
 
@@ -153,12 +150,12 @@ public class TemplateViewModel implements Initializable {
             scrollPane.setFitToWidth(true);
             scrollPane.setFitToHeight(true);
 
-            pageNameStack.push(currentPage);
-            currentPage = pageName;
-            if (tmpCenter.getCenter() != null) {
+            if (tmpCenter.getCenter() != null && tmpCenter.getTop() != null) {
                 pageStack.push(tmpCenter.getCenter());
+                headerStack.push(tmpCenter.getTop());
             }
 
+            HeaderViewModel.updateHeader(pageName);
             tmpCenter.setCenter(scrollPane);
 
         } catch (IOException e) {
@@ -166,15 +163,14 @@ public class TemplateViewModel implements Initializable {
         }
     }
 
-    public static void switchScreen(String nomePagina) {
-        instance.carregarPagina(nomePagina,  controller -> {});
+    public static void switchScreen(String pageName) {
+        instance.carregarPagina(pageName,  controller -> {});
     }
 
-    public static void switchScreen(String nomePagina, Consumer<Object> configurator) {
+    public static void switchScreen(String pageName, Consumer<Object> configurator) {
         // Ele usa a instância que salvamos para chamar o método real de troca de página.
         if (instance != null) {
-            instance.carregarPagina(nomePagina, configurator);
-            HeaderViewModel.updateHeader(nomePagina);
+            instance.carregarPagina(pageName, configurator);
         } else {
             System.err.println("A instância do TemplateController é nula. A tela principal já foi carregada?");
         }
@@ -183,21 +179,17 @@ public class TemplateViewModel implements Initializable {
     public static void goBack(){
         if(!instance.pageStack.isEmpty()){
             Node previousPage = instance.pageStack.pop();
-            String pageName = instance.pageNameStack.pop();
-            setCurrentPage(pageName);
-            instance.loadHeader(pageName);
+            Node previousHeader = instance.headerStack.pop();
             instance.tmpCenter.setCenter(previousPage);
+            instance.tmpCenter.setTop(previousHeader);
         }
     }
 
     private void loadHeader(String pageName){
         try{
-            String fxmlPath = "/com/dottec/pdi/project/pdi/views/Header.fxml";
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Header.fxml"));
             Parent root = loader.load();
 
-            HeaderViewModel headerViewModel = loader.getController();
             HeaderViewModel.updateHeader(pageName);
 
             tmpCenter.setTop(root);

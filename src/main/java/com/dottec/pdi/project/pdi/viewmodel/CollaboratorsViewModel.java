@@ -64,24 +64,24 @@ public class CollaboratorsViewModel {
 
 // --- 3. Label Status ---
             Label status = new Label();
-            status.getStyleClass().add("label-collaborator-status");
+            status.getStyleClass().add("label-status");
 
             switch (collaborator.getStatus()) {
                 case active -> {
                     status.setText("Ativo");
-                    status.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white; -fx-padding: 2 12;");
+                    status.setStyle("-fx-background-color: #6D00A1; -fx-text-fill: white");
                 }
                 case inactive -> {
                     status.setText("Inativo");
-                    status.setStyle("-fx-background-color: #E6CCEF; -fx-text-fill: #5c5c5c; -fx-padding: 2 12;");
+                    status.setStyle("-fx-background-color: #E6CCEF; -fx-text-fill: #5c5c5c");
                 }
                 case on_leave -> {
                     status.setText("Afastado");
-                    status.setStyle("-fx-background-color: #FFD700; -fx-text-fill: #5c5c5c; -fx-padding: 2 12;");
+                    status.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;");
                 }
                 default -> {
                     status.setText("Desconhecido");
-                    status.setStyle("-fx-background-color: grey; -fx-text-fill: white; -fx-padding: 2 12;");
+                    status.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
                 }
             }
 
@@ -100,7 +100,7 @@ public class CollaboratorsViewModel {
 
     private void openCollaboratorPage(Collaborator collaborator) {
 
-        TemplateViewModel.switchScreen("Goals.fxml", controller -> {
+        TemplateViewModel.switchScreen("CollaboratorGoals.fxml", controller -> {
             if (controller instanceof CollaboratorGoalsViewModel c) {
                 c.setCollaborator(collaborator);
             }
