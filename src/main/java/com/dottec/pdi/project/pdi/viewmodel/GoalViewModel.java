@@ -1,12 +1,11 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
-import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
+import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Goal;
-import com.dottec.pdi.project.pdi.utils.GoalValidator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,7 +41,7 @@ public class GoalViewModel {
     private Collaborator collaborator;
     public void setCollaborator(Collaborator collaborator){this.collaborator = collaborator;}
 
-    private boolean createGoalMode = false;
+    private boolean creatingGoalMode = false;
 
     @FXML
     private void initialize(){
@@ -100,7 +99,7 @@ public class GoalViewModel {
     }
 
     private void enableCreationMode(){  //Set the name, descripton and add actvities, then update the database
-        createGoalMode = true;
+        creatingGoalMode = true;
         createGoal(); //Create a new goal
         Platform.runLater(this::configHeader);
 
@@ -136,7 +135,7 @@ public class GoalViewModel {
 
 
         disableCreationMode();
-        createGoalMode = false;
+        creatingGoalMode = false;
         TemplateViewModel.showSuccessMessage("Meta criada com sucesso!");
     }
 
@@ -155,24 +154,33 @@ public class GoalViewModel {
         HeaderViewModel.removeLastButton();
     }
 
+    public void addActivity(Activity activity){
+        try {   //Load the activity template for each activity
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Activity.fxml"));
+            Parent activityPane = loader.load();
+            activityPane.maxWidth(activitiesField.getWidth());
+
+            ActivityViewModel controller = loader.getController();
+            controller.setActivity(activity);
+            controller.updateFields();
+            controller.setCreatingGoalMode(creatingGoalMode);
+            controller.setGoalViewModel(goalViewModel);
+
+            activitiesField.getChildren().add(activityPane);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeActivity(Activity activity){
+        goal.getActivities().remove(activity);
+        populateActivities();
+    }
+
     public void populateActivities() {
+        activitiesField.getChildren().clear();
         if(goal != null && goal.numberActivities() != 0) {
-            activitiesField.getChildren().clear();
-            goal.getActivities().forEach(activity -> {
-                try {   //Load the activity template for each activity
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Activity.fxml"));
-                    Parent activityPane = loader.load();
-                    activityPane.maxWidth(activitiesField.getWidth());
-
-                    ActivityViewModel controller = loader.getController();
-                    controller.setActivity(activity);
-                    controller.updateFields();
-
-                    activitiesField.getChildren().add(activityPane);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            goal.getActivities().forEach(this::addActivity);
         } else if(goal == null) {
             System.out.println("Goal is null");
         } else {

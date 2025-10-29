@@ -73,7 +73,7 @@ public class AddActivityViewModel {
             updateActivity();
             activity.getGoal().addActivity(activity);  //Add the activity to the goal's list
             TemplateViewModel.showSuccessMessage("Atividade adicionada com sucesso!");
-            goalViewModel.populateActivities();
+            goalViewModel.addActivity(activity);
             TemplateViewModel.goBack();
         }
     }

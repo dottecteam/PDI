@@ -1,6 +1,7 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.GoalController;
+import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.model.Activity;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -30,6 +31,12 @@ public class ActivityViewModel {
     @FXML private TitledPane activityTitledPane;
 
     private Activity activity;
+    private boolean creatingGoalMode = false;
+    public void setCreatingGoalMode(boolean creatingGoalMode){this.creatingGoalMode=creatingGoalMode;}
+    private GoalViewModel goalViewModel;
+    public void setGoalViewModel(GoalViewModel goalViewModel){
+        this.goalViewModel=goalViewModel;
+    }
 
     public void setActivity(Activity activity) {
         this.activity = activity;
@@ -121,7 +128,9 @@ public class ActivityViewModel {
         activity.setDescription(descriptionField.getText());
         activity.setDeadline(deadlineDatePicker.getValue());
 
-        //todo - update database
+        if(!creatingGoalMode){
+            ActivityDAO.update(activity);
+        }
 
         TemplateViewModel.showSuccessMessage("Meta atualizada com sucesso!");
 
@@ -146,5 +155,27 @@ public class ActivityViewModel {
         buttonVisible(deleteButton, true);
         buttonVisible(confirmButton, false);
         buttonVisible(cancelButton, false);
+    }
+
+    @FXML
+    private void handleEnableDelete(){
+        buttonVisible(deleteButton, false);
+        buttonVisible(editButton, false);
+        buttonVisible(confirmButton, true);
+        buttonVisible(cancelButton, true);
+
+        confirmButton.setOnMouseClicked(mouseEvent -> {handleConfirmDelete();});
+        cancelButton.setOnMouseClicked(mouseEvent -> {handleCancelEditing();});
+    }
+
+    @FXML
+    private void handleConfirmDelete(){
+        if(creatingGoalMode){
+            goalViewModel.removeActivity(activity);
+        } else {
+            goalViewModel.removeActivity(activity);
+            ActivityDAO.delete(activity);
+        }
+        TemplateViewModel.showSuccessMessage("Atividade excluída com sucesso!");
     }
 }

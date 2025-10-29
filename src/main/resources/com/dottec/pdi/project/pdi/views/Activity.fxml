@@ -16,7 +16,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
 <TitledPane fx:id="activityTitledPane" alignment="CENTER_RIGHT" nodeOrientation="RIGHT_TO_LEFT" style="-fx-background-color: #F6F6F6;" styleClass="activity-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.ActivityViewModel">
   <content>
       <VBox nodeOrientation="LEFT_TO_RIGHT" spacing="40.0">
@@ -66,7 +65,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ImageView fx:id="deleteButton" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#handleEnableEditing" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="deleteButton" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#handleEnableDelete" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../static/img/trash.png" />
                            </image>
