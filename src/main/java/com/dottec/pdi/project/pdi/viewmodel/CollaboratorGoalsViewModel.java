@@ -9,6 +9,7 @@ import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department;
 import com.dottec.pdi.project.pdi.model.Goal;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -75,7 +76,9 @@ public class CollaboratorGoalsViewModel implements Initializable {
             loadData(collaborator.getId());
         } else {
             updateCollaboratorFields();
+            editButton.setOpacity(0.3);
             collaboratorGoalsMainVBox.setDisable(true);
+            Platform.runLater(HeaderViewModel::clearButtons);
         }
     }
 

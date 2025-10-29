@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
@@ -50,17 +48,16 @@ public class TemplateViewModel implements Initializable {
     //ImageView
     @FXML private ImageView menuLogo;
 
-    private final String mainPage = "Dashboard.fxml";
-
     //Define a página que inicializa com o projeto
+    private final String mainPage = "Dashboard.fxml";
 
     private final Stack<Node> pageStack = new Stack<>();
     private final Stack<Node> headerStack = new Stack<>();
+    private final Stack<HeaderViewModel> headerControllersStack = new Stack<>();
     private static TemplateViewModel instance;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadHeader(mainPage);
         carregarPagina(mainPage);
         instance = this;
     }
@@ -70,37 +67,31 @@ public class TemplateViewModel implements Initializable {
 
     @FXML
     void goToMain(MouseEvent event){
-        HeaderViewModel.updateHeader(mainPage);
         carregarPagina(mainPage);
     }
 
     @FXML
     void goToDashboard(MouseEvent event) {
-        HeaderViewModel.updateHeader("Dashboard.fxml");
         carregarPagina("Dashboard.fxml");
     }
 
     @FXML
     void goToCollaborators(MouseEvent event) {
-        HeaderViewModel.updateHeader("Collaborators.fxml");
         carregarPagina("Collaborators.fxml");
     }
 
     @FXML
     void goToGoalTemplates(MouseEvent event) {
-        HeaderViewModel.updateHeader("Collaborators.fxml");
         carregarPagina("GoalTemplates.fxml");
     }
 
     @FXML
     void goToSettings(MouseEvent event) {
-        HeaderViewModel.updateHeader("Settings.fxml");
         carregarPagina("Settings.fxml");
     }
 
     @FXML
     void goToProfile(MouseEvent event) {
-        HeaderViewModel.updateHeader("Profile.fxml");
         carregarPagina("Profile.fxml");
     }
 
@@ -140,6 +131,7 @@ public class TemplateViewModel implements Initializable {
         updateSideBar(pageName);
         //'chama' a pagina
         try{
+            loadHeader(pageName);
             String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/" + pageName;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoCompleto));
             Parent root = loader.load();
@@ -150,12 +142,10 @@ public class TemplateViewModel implements Initializable {
             scrollPane.setFitToWidth(true);
             scrollPane.setFitToHeight(true);
 
-            if (tmpCenter.getCenter() != null && tmpCenter.getTop() != null) {
+            if (tmpCenter.getCenter() != null) {
                 pageStack.push(tmpCenter.getCenter());
-                headerStack.push(tmpCenter.getTop());
             }
 
-            HeaderViewModel.updateHeader(pageName);
             tmpCenter.setCenter(scrollPane);
 
         } catch (IOException e) {
@@ -180,6 +170,8 @@ public class TemplateViewModel implements Initializable {
         if(!instance.pageStack.isEmpty()){
             Node previousPage = instance.pageStack.pop();
             Node previousHeader = instance.headerStack.pop();
+            HeaderViewModel headerController = instance.headerControllersStack.pop();
+            HeaderViewModel.setInstance(headerController);
             instance.tmpCenter.setCenter(previousPage);
             instance.tmpCenter.setTop(previousHeader);
         }
@@ -189,6 +181,11 @@ public class TemplateViewModel implements Initializable {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Header.fxml"));
             Parent root = loader.load();
+
+            if(tmpCenter.getTop() != null){
+                headerStack.push(tmpCenter.getTop());
+                headerControllersStack.push(HeaderViewModel.getController());
+            }
 
             HeaderViewModel.updateHeader(pageName);
 
@@ -217,6 +214,5 @@ public class TemplateViewModel implements Initializable {
     public static void showErrorMessage(String headerMessage, String message){
         FXUtils.buildMessageBox(true, instance.mainStackPane, message, headerMessage);
     }
-
 
 }

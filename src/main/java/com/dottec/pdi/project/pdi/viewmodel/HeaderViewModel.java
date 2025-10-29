@@ -27,7 +27,13 @@ public class HeaderViewModel{
 
     public HeaderViewModel() {}
 
-    public static HeaderViewModel instance;
+    static HeaderViewModel instance;
+    public static void setInstance(HeaderViewModel headerViewModel){
+        instance = headerViewModel;
+    }
+    public static HeaderViewModel getController(){
+        return instance;
+    }
 
     public static void updateHeader(String page){
         setReturnButtonVisible(false);
@@ -52,9 +58,8 @@ public class HeaderViewModel{
                     if (currentUser.getRole() == Role.department_manager) {
                         buildHeaderStructure("Dashboard - Setor " + currentUser.getDepartment().getName(), false, false, true);
                     }
-                    else{
-                        buildHeaderStructure("Dashboard", false, false, true);
-                    }
+                } else{
+                    buildHeaderStructure("Dashboard", false, false, true);
                 }
             }
             case "Collaborators.fxml" -> {
@@ -97,8 +102,14 @@ public class HeaderViewModel{
 
                 buildHeaderStructure("PDI do Colaborador", true, false, false, buttonAddGoal);
             }
-            case "AddGoalFromTemplate.fxml" -> {
+            case "AddGoalFromTemplate.fxml", "Goal.fxml" -> {
                 buildHeaderStructure("Adicionar Meta", true, false, false);
+            }
+            case "AddActivity.fxml" -> {
+                buildHeaderStructure("Adicionar Atividade", true, false, false);
+            }
+            default -> {
+                buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false);
             }
 
         }
@@ -143,7 +154,7 @@ public class HeaderViewModel{
     }
 
     public static void addButton(Button button){
-        instance.headerButtonsField.getChildren().addLast(button);
+        instance.headerButtonsField.getChildren().addLast(button);t
     }
     public static void addButton(int position, Button button){
         instance.headerButtonsField.getChildren().add(position, button);
@@ -157,9 +168,5 @@ public class HeaderViewModel{
         setLabel("Plano de Desenvolvimento Individual");
         setReturnButtonVisible(false);
         setSearchBarVisible(false);
-    }
-
-    private void saveCurrentState(){
-
     }
 }

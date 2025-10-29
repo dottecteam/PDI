@@ -1,9 +1,11 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Goal;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -63,6 +65,7 @@ public class GoalViewModel {
     private void configHeader(){
         HeaderViewModel.clear();
         HeaderViewModel.setLabel("Adicionar Meta");
+        HeaderViewModel.setReturnButtonVisible(true);
         Button addActivity = new Button("Adicionar Atividade");
         addActivity.getStyleClass().add("basic-button");
         addActivity.setOnMouseClicked(mouseEvent -> {
@@ -75,12 +78,21 @@ public class GoalViewModel {
                 }
             });
         });
+
+        Button conclude = new Button("Concluir");
+        conclude.getStyleClass().add("basic-button");
+        Button cancel = new Button("Cancelar");
+        cancel.getStyleClass().add("cancel-button");
+        cancel.setOnMouseClicked(e -> TemplateViewModel.goBack());
+
         HeaderViewModel.addButton(addActivity);
+        HeaderViewModel.addButton(conclude);
+        HeaderViewModel.addButton(cancel);
     }
 
     private void enableCreationMode(){  //Set the name, descripton and add actvities, then update the database
         createGoal(); //Create a new goal
-        configHeader(); //Update header
+        Platform.runLater(this::configHeader);
 
         //Enter editable mode
         nameField.setEditable(true);

@@ -21,7 +21,7 @@
                 <Insets bottom="5.0" right="10.0" top="5.0" />
             </padding>
             <children>
-                <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" styleClass="header-label" text="Label" textAlignment="CENTER" textFill="#4b0081">
+                <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" styleClass="header-label" text="Plano de Desenvolvimento Individual" textAlignment="CENTER" textFill="#4b0081">
                     <font>
                         <Font size="32.0" />
                     </font>
@@ -31,7 +31,7 @@
                 </Label>
                 <HBox alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <HBox fx:id="headerButtonsField" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" />
+                        <HBox fx:id="headerButtonsField" alignment="BOTTOM_CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="8.0" />
                   <ButtonBar buttonMinWidth="0.0" maxHeight="33.0" nodeOrientation="LEFT_TO_RIGHT">
                      <buttons>
                         <StackPane fx:id="searchBarStackPane" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0">
