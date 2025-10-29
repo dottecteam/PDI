@@ -3,12 +3,23 @@ package com.dottec.pdi.project.pdi.controllers;
 import com.dottec.pdi.project.pdi.dao.GoalDAO;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Goal;
+import com.dottec.pdi.project.pdi.utils.GoalValidator;
+import com.dottec.pdi.project.pdi.viewmodel.GoalViewModel;
 
 import java.util.List;
 
 public final class GoalController {
 
     private GoalController() {}
+
+    public static boolean saveGoal(Goal goal){
+        if(GoalValidator.isValid(goal)){
+            GoalDAO.insert(goal);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static List<Goal> findGoalsByCollaborator(int collaboratorId) {
         return GoalDAO.findByCollaboratorId(collaboratorId);

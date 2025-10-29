@@ -4,7 +4,9 @@ import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
+import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Goal;
+import com.dottec.pdi.project.pdi.utils.GoalValidator;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class GoalViewModel {
     @FXML private TextField nameField;
@@ -32,10 +35,14 @@ public class GoalViewModel {
     }
 
     private Goal goal;
-
     public void setGoal(Goal goal) {
         this.goal = goal;
     }
+
+    private Collaborator collaborator;
+    public void setCollaborator(Collaborator collaborator){this.collaborator = collaborator;}
+
+    private boolean createGoalMode = false;
 
     @FXML
     private void initialize(){
@@ -81,6 +88,8 @@ public class GoalViewModel {
 
         Button conclude = new Button("Concluir");
         conclude.getStyleClass().add("basic-button");
+        conclude.setOnMouseClicked(e -> concludeGoalCreation());
+
         Button cancel = new Button("Cancelar");
         cancel.getStyleClass().add("cancel-button");
         cancel.setOnMouseClicked(e -> TemplateViewModel.goBack());
@@ -91,6 +100,7 @@ public class GoalViewModel {
     }
 
     private void enableCreationMode(){  //Set the name, descripton and add actvities, then update the database
+        createGoalMode = true;
         createGoal(); //Create a new goal
         Platform.runLater(this::configHeader);
 
@@ -104,6 +114,45 @@ public class GoalViewModel {
         descriptionField.getStyleClass().add("label-editable");
 
         editButton.setVisible(false);
+    }
+
+    private void concludeGoalCreation(){
+        goal.setName(nameField.getText());
+        setDeadline();
+        goal.setDescription(descriptionField.getText());
+        GoalController.assignGoalToCollaborator(goal, collaborator);
+        goal.setCollaborator(collaborator);
+
+        if(nameField.getText().isBlank()){
+            TemplateViewModel.showErrorMessage("Por favor, preencha o nome da meta.");
+            return;
+        }
+
+        boolean saved = GoalController.saveGoal(goal);
+        if(!saved){
+            TemplateViewModel.showErrorMessage("Não foi possível adicionar a meta.");
+            return;
+        }
+
+
+        disableCreationMode();
+        createGoalMode = false;
+        TemplateViewModel.showSuccessMessage("Meta criada com sucesso!");
+    }
+
+    private void setDeadline(){
+        goal.setDeadline(LocalDate.now().plusDays(1));
+        goal.getActivities().forEach(activity -> {
+            if(activity.getDeadline().isAfter(goal.getDeadline())){
+                goal.setDeadline(activity.getDeadline());
+            }
+        });
+    }
+
+    private void disableCreationMode(){
+        disableEditingState();
+        HeaderViewModel.removeLastButton();
+        HeaderViewModel.removeLastButton();
     }
 
     public void populateActivities() {

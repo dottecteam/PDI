@@ -36,9 +36,6 @@ public class HeaderViewModel{
     }
 
     public static void updateHeader(String page){
-        setReturnButtonVisible(false);
-        setSearchBarVisible(false);
-        setFilterButtonVisible(false);
         instance.buildHeader(page);
     }
 
@@ -75,32 +72,7 @@ public class HeaderViewModel{
                 buildHeaderStructure("Adicionar Colaborador", true, false, false);
             }
             case "CollaboratorGoals.fxml" -> {
-                Button buttonAddGoal = new Button("Adicionar Meta");
-                MenuItem goalFromTemplateButton = new MenuItem("Templates");
-                MenuItem emptyGoalButton = new MenuItem("Nova Meta");
-                goalFromTemplateButton.getStyleClass().add("basic-button");
-                emptyGoalButton.getStyleClass().add("basic-button");
-
-                goalFromTemplateButton.setOnAction(ft -> {
-                    TemplateViewModel.switchScreen("AddGoalFromTemplate.fxml");
-                    updateHeader("AddGoalFromTemplate.fxml");
-                });
-
-                emptyGoalButton.setOnAction(ft -> {
-                    TemplateViewModel.switchScreen("Goal.fxml", controller -> {
-                        if(controller instanceof GoalViewModel goalViewModel){
-                            goalViewModel.setGoalViewModel(goalViewModel);
-                        }
-                    });
-                    updateHeader("Goal.fxml");
-                });
-
-                ContextMenu buttonOptions = new ContextMenu(emptyGoalButton, goalFromTemplateButton);
-                buttonOptions.getStyleClass().add("context-menu-buttons");
-
-                buttonAddGoal.setOnMouseClicked(event2 -> buttonOptions.show(buttonAddGoal, Side.LEFT, 20, 40));
-
-                buildHeaderStructure("PDI do Colaborador", true, false, false, buttonAddGoal);
+                buildHeaderStructure("PDI do Colaborador", true, false, false);
             }
             case "AddGoalFromTemplate.fxml", "Goal.fxml" -> {
                 buildHeaderStructure("Adicionar Meta", true, false, false);
@@ -153,8 +125,17 @@ public class HeaderViewModel{
         instance.headerLabel.setText(label);
     }
 
+    public static void removeButton(int index){
+        instance.headerButtonsField.getChildren().remove(index);
+    }
+    public static void removeLastButton(){
+        instance.headerButtonsField.getChildren().removeLast();
+    }
+    public static void removeFirstButton(){
+        instance.headerButtonsField.getChildren().removeFirst();
+    }
     public static void addButton(Button button){
-        instance.headerButtonsField.getChildren().addLast(button);t
+        instance.headerButtonsField.getChildren().addLast(button);
     }
     public static void addButton(int position, Button button){
         instance.headerButtonsField.getChildren().add(position, button);

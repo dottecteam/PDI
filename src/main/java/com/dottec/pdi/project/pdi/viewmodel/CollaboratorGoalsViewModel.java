@@ -16,6 +16,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -74,12 +75,43 @@ public class CollaboratorGoalsViewModel implements Initializable {
             populateDepartments();
 
             loadData(collaborator.getId());
+            createAddGoalButton();
         } else {
             updateCollaboratorFields();
             editButton.setOpacity(0.3);
             collaboratorGoalsMainVBox.setDisable(true);
-            Platform.runLater(HeaderViewModel::clearButtons);
         }
+    }
+
+    private void createAddGoalButton(){
+        Button buttonAddGoal = new Button("Adicionar Meta");
+        buttonAddGoal.getStyleClass().add("basic-button");
+        MenuItem goalFromTemplateButton = new MenuItem("Templates");
+        MenuItem emptyGoalButton = new MenuItem("Nova Meta");
+        goalFromTemplateButton.getStyleClass().add("basic-button");
+        emptyGoalButton.getStyleClass().add("basic-button");
+
+        goalFromTemplateButton.setOnAction(ft -> {
+            TemplateViewModel.switchScreen("AddGoalFromTemplate.fxml");
+            HeaderViewModel.updateHeader("AddGoalFromTemplate.fxml");
+        });
+
+        emptyGoalButton.setOnAction(ft -> {
+            TemplateViewModel.switchScreen("Goal.fxml", controller -> {
+                if(controller instanceof GoalViewModel goalViewModel) {
+                    goalViewModel.setGoalViewModel(goalViewModel);
+                    goalViewModel.setCollaborator(collaborator);
+                }
+            });
+            HeaderViewModel.updateHeader("Goal.fxml");
+        });
+
+        ContextMenu buttonOptions = new ContextMenu(emptyGoalButton, goalFromTemplateButton);
+        buttonOptions.getStyleClass().add("context-menu-buttons");
+
+        buttonAddGoal.setOnMouseClicked(event2 -> buttonOptions.show(buttonAddGoal, Side.LEFT, 20, 40));
+
+        HeaderViewModel.addButton(buttonAddGoal);
     }
 
     // Atualiza os campos de texto com as informações do colaborador

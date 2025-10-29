@@ -9,17 +9,17 @@ public final class GoalValidator {
 
     public static boolean isValid(Goal goal) {
 
-        if (goal == null || goal.getName() == null || goal.getDescription() == null || goal.getDeadline() == null) {
+        if (goal == null || goal.getName() == null || goal.getDeadline() == null) {
             return false;
         }
 
-        boolean isNameValid = StringValidator.descriptionValidate(goal.getName());
-        boolean isDescriptionValid = StringValidator.descriptionValidate(goal.getDescription());
         boolean isDateValid = isFutureDate(goal.getDeadline());
+        boolean areTagsValid = true;
+        if(!goal.getTags().isEmpty()) {
+            areTagsValid = TagValidator.isListValid(goal.getTags());
+        }
 
-        boolean areTagsValid = TagValidator.isListValid(goal.getTags());
-
-        return isNameValid && isDescriptionValid && isDateValid && areTagsValid;
+        return isDateValid && areTagsValid;
     }
 
     private static boolean isFutureDate(LocalDate deadline) {
