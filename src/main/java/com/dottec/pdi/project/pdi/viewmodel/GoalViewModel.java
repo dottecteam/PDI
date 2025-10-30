@@ -1,7 +1,7 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.controllers.ActivityController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
-import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Collaborator;
@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -45,12 +46,17 @@ public class GoalViewModel {
 
     @FXML
     private void initialize(){
-        if(goal == null){   //Create a new goal if the create goal button was pressed
-            enableCreationMode();
-            updateFields();
-        } else {    //Update the fields for the selected goal
-            populateActivities();
-        }
+        Platform.runLater(() -> {
+            if(goal == null){   //Create a new goal if the create goal button was pressed
+                enableCreationMode();
+                updateFields();
+            } else {    //Update the fields for the selected goal
+                updateFields();
+                createAddActivityButton();
+                goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
+                populateActivities();
+            }
+        });
     }
 
     private void updateFields(){
@@ -68,10 +74,7 @@ public class GoalViewModel {
         this.goal = goal;
     }
 
-    private void configHeader(){
-        HeaderViewModel.clear();
-        HeaderViewModel.setLabel("Adicionar Meta");
-        HeaderViewModel.setReturnButtonVisible(true);
+    private void createAddActivityButton(){
         Button addActivity = new Button("Adicionar Atividade");
         addActivity.getStyleClass().add("basic-button");
         addActivity.setOnMouseClicked(mouseEvent -> {
@@ -81,9 +84,19 @@ public class GoalViewModel {
                 if(controller instanceof AddActivityViewModel addActivityViewModel){
                     addActivityViewModel.setActivity(activity);
                     addActivityViewModel.setGoalViewModel(goalViewModel);
+                    addActivityViewModel.setCreatingGoalMode(creatingGoalMode);
                 }
             });
         });
+        HeaderViewModel.addButton(addActivity);
+    }
+
+    private void configHeader(){
+        HeaderViewModel.clear();
+        HeaderViewModel.setLabel("Adicionar Meta");
+        HeaderViewModel.setReturnButtonVisible(true);
+
+        createAddActivityButton();
 
         Button conclude = new Button("Concluir");
         conclude.getStyleClass().add("basic-button");
@@ -93,7 +106,6 @@ public class GoalViewModel {
         cancel.getStyleClass().add("cancel-button");
         cancel.setOnMouseClicked(e -> TemplateViewModel.goBack());
 
-        HeaderViewModel.addButton(addActivity);
         HeaderViewModel.addButton(conclude);
         HeaderViewModel.addButton(cancel);
     }
@@ -133,6 +145,7 @@ public class GoalViewModel {
             return;
         }
 
+        goal.getActivities().forEach(ActivityController::saveActivity);
 
         disableCreationMode();
         creatingGoalMode = false;
@@ -150,8 +163,9 @@ public class GoalViewModel {
 
     private void disableCreationMode(){
         disableEditingState();
-        HeaderViewModel.removeLastButton();
-        HeaderViewModel.removeLastButton();
+        HeaderViewModel.clearButtons();
+        HeaderViewModel.clearButtons();
+        createAddActivityButton();
     }
 
     public void addActivity(Activity activity){
@@ -185,6 +199,9 @@ public class GoalViewModel {
             System.out.println("Goal is null");
         } else {
             System.out.println("Goal has no activities");
+            Label label = new Label("Este colaborador ainda não possui metas.");
+            label.getStyleClass().add("mid-label");
+            activitiesField.getChildren().add(label);
         }
     }
 

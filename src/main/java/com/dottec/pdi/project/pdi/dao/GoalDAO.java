@@ -22,7 +22,7 @@ public class GoalDAO {
 
     // ... (os métodos insert, delete, update, findById, readAll, deleteById continuam os mesmos) ...
     public static void insert(Goal goal) {
-        try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)){
+        try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)){
             stmt.setString(1, goal.getName());
             stmt.setString(2, goal.getDescription());
             stmt.setString(3, goal.getStatus().name());
@@ -31,6 +31,11 @@ public class GoalDAO {
 
             int rows = stmt.executeUpdate();
             System.out.println("Meta inserida! Linhas: " + rows);
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                goal.setId(rs.getInt(1));
+            }
         }
         catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir meta: " + e.getMessage(), e);

@@ -9,3 +9,19 @@
     -fx-text-fill: #9032BB;
 }
 
+.goal-card {
+    -fx-min-height: 60;
+    -fx-background-color: #F6F6F6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.goal-card:hover{
+    -fx-background-color: #D6D6D6;
+    -fx-border-color: #4B0081;
+}

@@ -396,6 +396,7 @@
 }
 
 .label-status {
+    -fx-background-color: grey;
     -fx-background-radius: 10;
     -fx-padding: 2 8;
     -fx-text-fill: white;

@@ -54,10 +54,16 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </StackPane.margin>
             </GridPane>
-            <HBox maxHeight="30.0" maxWidth="200.0" spacing="10.0">
+            <HBox maxHeight="30.0" nodeOrientation="RIGHT_TO_LEFT" spacing="10.0">
                <children>
-                  <Button fx:id="confirmEditButton" mnemonicParsing="false" onAction="#handleConfirmEdit" styleClass="basic-button" text="Confirmar" visible="false" />
-                  <Button fx:id="cancelEditButton" mnemonicParsing="false" onAction="#handleCancelEditing" styleClass="cancel-button" text="Cancelar" visible="false" />
+                  <Button fx:id="confirmEditButton" mnemonicParsing="false" onAction="#handleConfirmEdit" styleClass="basic-button" text="Confirmar" visible="false">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="cancelEditButton" mnemonicParsing="false" onAction="#handleCancelEditing" styleClass="cancel-button" text="Cancelar" visible="false">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin></Button>
                </children>
                <StackPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -98,6 +104,6 @@
       </VBox>
    </children>
    <padding>
-      <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+      <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
    </padding>
 </VBox>

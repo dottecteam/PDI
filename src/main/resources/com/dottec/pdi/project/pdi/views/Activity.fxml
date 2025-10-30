@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<TitledPane fx:id="activityTitledPane" alignment="CENTER_RIGHT" nodeOrientation="RIGHT_TO_LEFT" style="-fx-background-color: #F6F6F6;" styleClass="activity-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.ActivityViewModel">
+<TitledPane fx:id="activityTitledPane" alignment="CENTER_RIGHT" expanded="false" nodeOrientation="RIGHT_TO_LEFT" style="-fx-background-color: #F6F6F6;" styleClass="activity-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.ActivityViewModel">
   <content>
       <VBox nodeOrientation="LEFT_TO_RIGHT" spacing="40.0">
          <children>
@@ -96,7 +96,7 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextField fx:id="nameField" editable="false" maxWidth="1.7976931348623157E308" mouseTransparent="true" nodeOrientation="LEFT_TO_RIGHT" style="-fx-text-fill: #4B0081; -fx-font-size: 16;" styleClass="label-not-editable" text="Nome" />
+            <TextField fx:id="nameField" editable="false" maxWidth="1.7976931348623157E308" mouseTransparent="true" nodeOrientation="LEFT_TO_RIGHT" prefWidth="500.0" style="-fx-text-fill: #4B0081; -fx-font-size: 16;" styleClass="label-not-editable" text="Nome" GridPane.vgrow="ALWAYS" />
             <Label fx:id="statusLabel" mouseTransparent="true" styleClass="label-status" text="Label" GridPane.columnIndex="1" />
          </children>
       </GridPane>

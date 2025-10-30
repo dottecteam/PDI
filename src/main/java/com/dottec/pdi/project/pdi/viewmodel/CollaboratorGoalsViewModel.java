@@ -6,6 +6,7 @@ import com.dottec.pdi.project.pdi.dao.CollaboratorDAO;
 import com.dottec.pdi.project.pdi.controllers.DepartmentController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
 import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
+import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department;
 import com.dottec.pdi.project.pdi.model.Goal;
@@ -20,6 +21,8 @@ import javafx.geometry.Side;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
@@ -147,28 +150,60 @@ public class CollaboratorGoalsViewModel implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (Goal goal : goals) {
-            StackPane goalCard = new StackPane();
+            HBox goalCard = new HBox();
             goalCard.getStyleClass().add("goal-card");
 
             Label goalName = new Label(goal.getName());
-            goalName.getStyleClass().add("goal-name");
+            goalName.getStyleClass().add("mid-label");
+            goalName.setStyle("-fx-text-fill: #4B0081");
 
             String deadlineText;
             if (goal.getDeadline() != null) {
                 deadlineText = "Prazo: " + goal.getDeadline().format(formatter) + "                                  ";
             } else {
-                deadlineText = "Prazo: (Não definido)                                  ";
+                deadlineText = "Prazo: (Não definido)";
             }
             Label goalDeadline = new Label(deadlineText);
 
-            Label goalStatus = new Label(goal.getStatus().name());
-            goalStatus.getStyleClass().add("goal-status");
-            goalStatus.getStyleClass().add("status-" + goal.getStatus().name().toLowerCase());
+            Label statusLabel = new Label(goal.getStatus().name());
+            statusLabel.getStyleClass().add("label-status");
+            switch (goal.getStatus()) {
+                case completed -> {
+                    statusLabel.setText("Completo");
+                    statusLabel.setStyle("-fx-background-color: #6D00A1; -fx-text-fill: white");
+                }
+                case in_progress -> {
+                    statusLabel.setText("Em progresso");
+                    statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
+                }
+                case canceled -> {
+                    statusLabel.setText("Cancelado");
+                    statusLabel.setStyle("-fx-background-color: #E6CCEF; -fx-text-fill: #5c5c5c");
+                }
+                case pending -> {
+                    statusLabel.setText("Pendente");
+                    statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;");
+                }
+                default -> {
+                    statusLabel.setText("Desconhecido");
+                    statusLabel.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
+                }
+            }
 
-            goalCard.getChildren().addAll(goalName, goalDeadline, goalStatus);
-            StackPane.setAlignment(goalName, Pos.CENTER_LEFT);
-            StackPane.setAlignment(goalDeadline, Pos.TOP_RIGHT);
-            StackPane.setAlignment(goalStatus, Pos.BOTTOM_RIGHT);
+            goalCard.getChildren().addAll(goalName, goalDeadline, statusLabel);
+            goalCard.setAlignment(Pos.CENTER_LEFT);
+            goalCard.setSpacing(0);
+            HBox.setHgrow(goalName, Priority.ALWAYS);
+            goalName.setMaxWidth(Double.MAX_VALUE);
+
+            goalCard.setOnMouseClicked(mouseEvent -> {
+                TemplateViewModel.switchScreen("Goal.fxml", controller -> {
+                    if(controller instanceof GoalViewModel goalViewModel){
+                        goalViewModel.setGoal(goal);
+                        goalViewModel.setGoalViewModel(goalViewModel);
+                    }
+                });
+            });
 
             goalsVBox.getChildren().add(goalCard);
         }

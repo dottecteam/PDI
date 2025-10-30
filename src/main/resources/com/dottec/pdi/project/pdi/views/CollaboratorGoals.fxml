@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -28,13 +19,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="collaboratorGoalsMainVBox" prefHeight="600.0" prefWidth="900.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.CollaboratorGoalsViewModel">
+<VBox fx:id="collaboratorGoalsMainVBox" prefHeight="600.0" prefWidth="900.0" spacing="20.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.CollaboratorGoalsViewModel">
     <stylesheets>
         <URL value="@../static/style/style_Goals.css" />
         <URL value="@../static/style/style_template.css" />
     </stylesheets>
     <padding>
-        <Insets bottom="40.0" />
+        <Insets bottom="40.0" left="20.0" right="20.0" />
     </padding>
 
     <children>
@@ -117,7 +108,7 @@
                         <DropShadow color="#00000040" />
                     </effect>
                <children>
-                  <Label text="Dashboard pessoal" styleClass="chart-title"/>
+                  <Label styleClass="chart-title" text="Dashboard pessoal" />
                   <PieChart fx:id="statusPieChart" prefHeight="173.0" prefWidth="300.0" />
                   <Label fx:id="percentageLabel" styleClass="chart-title" text="Carregando..." />
                </children>
