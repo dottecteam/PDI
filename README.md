@@ -49,6 +49,8 @@ Este programa foi desenvolvido para otimizar o processo de criação e gestão d
 <br>
 
 Sprint 1 - <a href="https://www.youtube.com/watch?v=D2EGllhOuvc" target="_blank"> Cadastro de colaboradores</a> ✔️
+<br>
+Sprint 2 - <a href="https://youtu.be/Jl933PCuGKg" target="_blank"> Dashboard e login</a> ✔️
 
 <br>
 <br>
