@@ -14,17 +14,10 @@ import javafx.scene.layout.VBox;
 import java.util.List;
 
 public class CollaboratorsViewModel {
-    @FXML
-    private VBox mainVBox;
-    @FXML
-    private ScrollPane mainScrollPane;
+    @FXML private VBox mainVBox;
 
     @FXML
     public void initialize() {
-        // Garantindo que a ScrollPane se ajuste ao tamanho
-        mainScrollPane.setFitToHeight(true);
-        mainScrollPane.setFitToWidth(true);
-
         loadAndDisplayCollaborators();
     }
 
@@ -54,7 +47,7 @@ public class CollaboratorsViewModel {
                 departmentName = collaborator.getDepartment().getName();
             }
             Label department = new Label(departmentName);
-            department.getStyleClass().add("label-collaborator-department");
+            department.getStyleClass().addAll("label-collaborator-department", "mid-label");
 
 // --- NOVO: VBox para alinhar nome e departamento verticalmente ---
             VBox textBox = new VBox(5); // ← o número é o "gap" (5px entre os labels)

@@ -2,22 +2,15 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fx:id="mainScrollPane" fitToWidth="true" hbarPolicy="NEVER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.CollaboratorsViewModel">
-    <stylesheets>
-        <String fx:value="/com/dottec/pdi/project/pdi/static/style/style_collaborators.css" />
-        <String fx:value="/com/dottec/pdi/project/pdi/static/style/style_template.css" />
-    </stylesheets>
-    <content>
-        <VBox fx:id="mainVBox" alignment="TOP_CENTER" spacing="15.0">
-            <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            </padding>
-        </VBox>
-    </content>
-    <padding>
-        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-    </padding>
-</ScrollPane>
+
+  <VBox fx:id="mainVBox" alignment="TOP_CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.CollaboratorsViewModel">
+      <stylesheets>
+          <String fx:value="/com/dottec/pdi/project/pdi/static/style/style_collaborators.css" />
+          <String fx:value="/com/dottec/pdi/project/pdi/static/style/style_template.css" />
+      </stylesheets>
+      <padding>
+          <Insets bottom="60.0" left="60.0" right="60.0" top="40.0" />
+      </padding>
+  </VBox>
