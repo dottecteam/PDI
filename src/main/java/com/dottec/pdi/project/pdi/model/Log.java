@@ -10,6 +10,10 @@ public class Log {
     private Timestamp logCreatedAt;
     private int userId;
 
+    // ------- Putting an instanced control method so that this class can be assigned without passing attributes --- //
+
+    public Log(){};
+
     public Log(int logId, String logAction, String details, Timestamp logCreatedAt, int userId) {
         this.logId = logId;
         this.logAction = logAction;
@@ -34,11 +38,11 @@ public class Log {
         this.logAction = logAction;
     }
 
-    public String getDetails() {
+    public String getLogDetails() {
         return this.details;
     }
 
-    public void setDetails(String details) {
+    public void setLogDetails(String details) {
         this.details = details;
     }
 
@@ -50,11 +54,11 @@ public class Log {
         this.logCreatedAt = logCreatedAt;
     }
 
-    public int getUserId() {
+    public int getLogUserId() {
         return this.userId;
     }
 
-    public void setUserId(int userId) {
+    public void setLogUserId(int userId) {
         this.userId = userId;
     }
 
