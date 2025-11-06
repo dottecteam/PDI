@@ -13,10 +13,10 @@ public class LogDAO {
     // Adding the attributes for the LogDAO to connect the methods later on
 
     private static final String INSERT_SQL =
-            "INSERT INTO logs (log_action, log_details, user_id) VALUES (?, ?)";
+            "INSERT INTO logs (log_action, log_details, user_id) VALUES (?, ?, ?)";
 
     private static final String UPDATE_SQL =
-            "UPDATE logs SET log_action = ?, log_details = ?, log_userid = ? WHERE log_id = ?";
+            "UPDATE logs SET log_action = ?, log_details = ?, user_id = ? WHERE log_id = ?";
 
     private static final String DELETE_SQL =
             "DELETE FROM logs WHERE log_id = ?";
@@ -30,22 +30,23 @@ public class LogDAO {
 
     // --------- Adding helper method to call back in the getAllLogs and findLogbyId methods later on ------ //
 
-    private Log mapResultSetToLog(ResultSet rs) throws SQLException {
-        return new Log(
-                rs.getInt("log_id"),
-                rs.getString("log_action"),
-                rs.getString("log_details"),
-                rs.getTimestamp("log_created_at"),
-                rs.getInt("log_userid")
-        );
+    private static Log mapResultSetToLog(ResultSet rs) throws SQLException {
+        Log log = new Log();
+        log.setLogId(rs.getInt("log_id"));
+        log.setLogAction(rs.getString("log_action"));
+        log.setLogDetails(rs.getString("log_details"));
+        log.setLogCreatedAt(rs.getTimestamp("log_created_at"));
+        log.setLogUserId(rs.getInt("user_id"));
+        return log;
     }
 
-    public void insert(Log log) { // Adding method in the DAO
+    public static void insert(Log log) { // Adding method in the DAO
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)) {
 
             stmt.setString(1, log.getLogAction());
             stmt.setString(2, log.getLogDetails());
+            stmt.setInt(3, log.getLogUserId());
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -54,7 +55,7 @@ public class LogDAO {
     }
 
 
-    public void update(Log log) {
+    public static void update(Log log) {
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)) {
 
@@ -69,7 +70,7 @@ public class LogDAO {
         }
     }
 
-    public void delete(int id) {
+    public static void delete(int id) {
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_SQL)) {
 
@@ -81,7 +82,7 @@ public class LogDAO {
         }
     }
 
-    public Log getById(int id) {
+    public static Log getById(int id) {
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SELECT_BY_ID_SQL)) {
 
@@ -98,7 +99,7 @@ public class LogDAO {
         return null;
     }
 
-    public List<Log> getAll() {
+    public static List<Log> getAll() {
         List<Log> logs = new ArrayList<>();
 
         try (Connection conn = Database.getConnection();
