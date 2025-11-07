@@ -74,7 +74,7 @@
 }
 
 #leftMenu:hover{
-    -fx-pref-width: 325;
+    -fx-pref-width: 300;
 }
 
 .menuLabel {

@@ -18,6 +18,8 @@ import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.function.Consumer;
 
+import animatefx.animation.*;
+
 public class TemplateViewModel implements Initializable {
 
     //Declara os ID's criados
@@ -60,6 +62,37 @@ public class TemplateViewModel implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         carregarPagina(mainPage);
         instance = this;
+
+        menuDashboard.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuDashboard);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        menuCollaborators.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuCollaborators);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        menuGoalTemplates.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuGoalTemplates);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        menuSettings.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuSettings);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        menuProfile.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuProfile);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
     }
 
 
