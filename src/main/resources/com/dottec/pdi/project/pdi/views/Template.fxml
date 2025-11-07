@@ -24,7 +24,7 @@
    <children>
       <BorderPane fx:id="mainPane">
           <left>
-              <AnchorPane fx:id="leftMenu" prefHeight="200.0" prefWidth="70.0" BorderPane.alignment="CENTER">
+              <AnchorPane fx:id="leftMenu" prefHeight="200.0" BorderPane.alignment="CENTER">
                   <children>
                       <VBox alignment="CENTER_LEFT" layoutX="21.0" layoutY="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                           <children>
@@ -76,7 +76,7 @@
                                                       <Image url="@../static/img/collaborator.png" />
                                                   </image>
                                               </ImageView>
-                                              <Label fx:id="labelArrow1" layoutX="75.0" layoutY="22.0" styleClass="menuLabel" text="Colaboradores" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
+                                              <Label fx:id="labelCollaborator" layoutX="75.0" layoutY="22.0" styleClass="menuLabel" text="Colaboradores" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
                                                   <font>
                                                       <Font size="21.0" />
                                                   </font>
@@ -96,7 +96,7 @@
                                           <Image url="@../static/img/sector.png" />
                                        </image>
                                               </ImageView>
-                                              <Label fx:id="labelArrow2" layoutX="74.0" layoutY="5.0" styleClass="menuLabel" text="Modelos" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
+                                              <Label fx:id="labelSector" layoutX="74.0" layoutY="5.0" styleClass="menuLabel" text="Modelos" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
                                                   <font>
                                           <Font size="21.0" />
                                        </font>
@@ -116,7 +116,7 @@
                                           <Image url="@../static/img/settings.png" />
                                        </image>
                                               </ImageView>
-                                              <Label fx:id="labelArrow3" layoutX="76.0" layoutY="23.0" styleClass="menuLabel" text="Gerenciamento" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
+                                              <Label fx:id="labelSettings" layoutX="76.0" layoutY="23.0" styleClass="menuLabel" text="Gerenciamento" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
                                                   <font>
                                           <Font size="21.0" />
                                        </font>
@@ -140,7 +140,7 @@
                                     <Image url="@../static/img/profile.png" />
                                  </image>
                                       </ImageView>
-                                      <Label fx:id="labelArrow4" layoutX="77.0" layoutY="21.0" styleClass="menuLabel" text="Perfil" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
+                                      <Label fx:id="labelProfile" layoutX="77.0" layoutY="21.0" styleClass="menuLabel" text="Perfil" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="0.0">
                                           <font>
                                     <Font size="21.0" />
                                  </font>
