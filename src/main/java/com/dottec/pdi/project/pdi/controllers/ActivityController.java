@@ -4,6 +4,7 @@ import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.dao.GoalDAO;
 import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Goal;
+import com.dottec.pdi.project.pdi.model.Tag;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ public class ActivityController {
         return ActivityDAO.findByGoalId(id);
     }
 
-    public static List<Activity> findAllGoals() {
+    public static List<Activity> findAllActivities() {
         return ActivityDAO.readAll();
     }
 
-    public static void updateGoal(Activity activity){
+    public static void updateActivity(Activity activity){
         ActivityDAO.update(activity);
     }
 }

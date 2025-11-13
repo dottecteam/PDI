@@ -46,17 +46,18 @@ public class GoalViewModel {
 
     @FXML
     private void initialize(){
-        Platform.runLater(() -> {
-            if(goal == null){   //Create a new goal if the create goal button was pressed
-                enableCreationMode();
-                updateFields();
-            } else {    //Update the fields for the selected goal
-                updateFields();
-                createAddActivityButton();
-                goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
-                populateActivities();
-            }
-        });
+    }
+
+    public void refresh(){
+        if(goal == null){   //Create a new goal if the create goal button was pressed
+            enableCreationMode();
+            updateFields();
+        } else {    //Update the fields for the selected goal
+            updateFields();
+            createAddActivityButton();
+            goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
+            populateActivities();
+        }
     }
 
     private void updateFields(){
@@ -111,6 +112,7 @@ public class GoalViewModel {
     }
 
     private void enableCreationMode(){  //Set the name, descripton and add actvities, then update the database
+        updateFields();
         creatingGoalMode = true;
         createGoal(); //Create a new goal
         Platform.runLater(this::configHeader);
@@ -199,7 +201,7 @@ public class GoalViewModel {
             System.out.println("Goal is null");
         } else {
             System.out.println("Goal has no activities");
-            Label label = new Label("Este colaborador ainda não possui metas.");
+            Label label = new Label("Esta meta ainda não possui atividades.");
             label.getStyleClass().add("mid-label");
             activitiesField.getChildren().add(label);
         }

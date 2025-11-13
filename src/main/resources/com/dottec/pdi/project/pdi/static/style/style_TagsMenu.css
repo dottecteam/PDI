@@ -1,0 +1,116 @@
+.tags-context-menu,
+.custom-menu-item,
+.custom-menu-item:hover,
+.custom-menu-item:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 10;
+    -fx-effect: none;
+}
+
+.flow-pane {
+    -fx-background-color: transparent;
+}
+
+.tag-menu {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+    -fx-background-color: #f6f6f6;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+}
+
+.tag {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-pref-height: 30;
+    -fx-max-height: 30;
+    -fx-text-align: center;
+    -fx-font-size: 16;
+    -fx-cursor: hand;
+    -fx-padding: 3 5;
+}
+
+.tag .box {
+    -fx-background-color: #9032BB, #f6f6f6;
+    -fx-background-insets: 0, 2;
+    -fx-background-radius: 5, 3;
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+}
+
+.tag .mark {
+    -fx-shape: "M1,0 H4 A1,1 0 0 1 5,1 V4 A1,1 0 0 1 4,5 H1 A1,1 0 0 1 0,4 V1 A1,1 0 0 1 1,0 Z";
+    -fx-background-color: transparent;
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+}
+
+.tag:selected .mark {
+    -fx-background-color: #9032BB;
+    -fx-opacity: 1;
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+    -fx-translate-x: -0.5;
+    -fx-translate-y: -0.25;
+}
+
+.selected-tag {
+    -fx-background-color: #9032BB;
+    -fx-background-radius: 4;
+    -fx-text-fill: #F6F6F6;
+    -fx-font-size: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+    -fx-padding: -1 5 0 3;
+    -fx-border-radius: 4;
+    -fx-alignment: center;
+}
+
+.hard-skill {
+    -fx-background-color: #6D00A1;
+}
+
+.titled-pane,
+.titled-pane .title,
+.titled-pane .content {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-effect: none;
+}
+
+.titled-pane .arrow {
+    -fx-shape: null;
+    -fx-background-color: transparent;
+}
+
+.titled-pane .arrow-button {
+    -fx-background-image: url("../img/up.png");
+    -fx-background-size: 15 15;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 5;
+    -fx-rotate: 180;
+    -fx-scale-x: 1.2;
+}
+
+.titled-pane:expanded .arrow-button {
+    -fx-rotate: 0;
+}
+
+.clear-tags-button {
+    -fx-background-color: transparent;
+    -fx-padding: 1;
+    -fx-text-fill: #888888;
+    -fx-cursor: hand;
+}
+
+.clear-tags-button:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333333;
+}

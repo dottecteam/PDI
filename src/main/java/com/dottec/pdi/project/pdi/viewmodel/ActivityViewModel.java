@@ -3,14 +3,15 @@ package com.dottec.pdi.project.pdi.viewmodel;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
 import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.model.Activity;
+import com.dottec.pdi.project.pdi.model.Tag;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+
 import java.time.LocalDate;
 
 
@@ -23,8 +24,9 @@ public class ActivityViewModel {
     @FXML private TextField descriptionField;
     @FXML private Label statusLabel;
     @FXML private DatePicker deadlineDatePicker;
-    @FXML private GridPane titledPaneHeader;
+    @FXML private HBox titledPaneHeader;
     @FXML private TitledPane activityTitledPane;
+    @FXML private VBox activityBody;
 
     private Activity activity;
     private boolean creatingGoalMode = false;
@@ -34,6 +36,7 @@ public class ActivityViewModel {
         this.goalViewModel=goalViewModel;
     }
 
+    private TagsMenuViewModel tagsMenuViewModel;
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
@@ -44,12 +47,29 @@ public class ActivityViewModel {
         deadlineDatePicker.setMouseTransparent(true);
         buttonVisible(cancelButton, false);
         buttonVisible(confirmButton, false);
+        loadTagsMenu();
+        titledPaneHeader.setMinWidth(activityTitledPane.getWidth());
+    }
+
+    private void loadTagsMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/TagsMenu.fxml"));
+            Parent root = loader.load();
+            tagsMenuViewModel = loader.getController();
+            activityBody.getChildren().add(1, root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateFields(){
         nameField.setText(activity.getName());
         descriptionField.setText(activity.getDescription());
         deadlineDatePicker.setValue(activity.getDeadline());
+
+        tagsMenuViewModel.disableEditing();
+        tagsMenuViewModel.setSelectedTags(activity.getTags());
+        tagsMenuViewModel.refresh();
 
         switch (activity.getStatus()) {
             case completed -> {
@@ -58,7 +78,7 @@ public class ActivityViewModel {
             }
             case in_progress -> {
                 statusLabel.setText("Em progresso");
-                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;");
+                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
             }
             case canceled -> {
                 statusLabel.setText("Cancelado");
@@ -99,6 +119,8 @@ public class ActivityViewModel {
         descriptionField.getStyleClass().add("label-editable");
         descriptionField.setEditable(true);
 
+        tagsMenuViewModel.enableEditing();
+
         deadlineDatePicker.getStyleClass().remove("label-not-editable");
         deadlineDatePicker.getStyleClass().add("label-editable");
         deadlineDatePicker.setMouseTransparent(false);
@@ -108,6 +130,7 @@ public class ActivityViewModel {
     private void handleCancelEditing() {
         updateFields();
         disableEditingState();
+        tagsMenuViewModel.cancelEdit();
     }
 
     @FXML
@@ -119,6 +142,8 @@ public class ActivityViewModel {
             TemplateViewModel.showErrorMessage("O prazo deve ser uma data futura.");
             return;
         }
+
+        tagsMenuViewModel.confirmEdit();
 
         activity.setName(nameField.getText());
         activity.setDescription(descriptionField.getText());
