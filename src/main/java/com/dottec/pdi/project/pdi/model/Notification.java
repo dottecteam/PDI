@@ -4,6 +4,7 @@
 package com.dottec.pdi.project.pdi.model;
 import com.dottec.pdi.project.pdi.enums.NotificationType;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 
 public class Notification {
@@ -76,5 +77,30 @@ public class Notification {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+     @Override
+    public int hashCode() {
+        return Objects.hash(notId);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Notification other = (Notification) obj;
+        return notId == other.notId;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "notId=" + notId +
+                ", notMessage='" + notMessage + '\'' +
+                ", notType=" + notType +
+                ", notIsRead=" + notIsRead +
+                ", notCreatedAt=" + notCreatedAt +
+                ", userId=" + userId +
+                '}';
     }
 }
