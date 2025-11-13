@@ -1,0 +1,23 @@
+.card-profile{
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+}
+
+.card-title{
+    -fx-font-size: 30px;
+    -fx-text-fill: #4B0081;
+}
+
+.status-active{
+    -fx-background-color: #01B8AA;
+    -fx-text-fill: white;
+    -fx-background-radius: 15;
+    -fx-font-weight: bold;
+    -fx-pref-width: 180px;
+}
+
+.status-inactive{
+    -fx-background-color: #FD625E;
+    -fx-font-fill: white;
+    -fx-background-radius: 15;
+    -fx-font-weight: bold;
+}
