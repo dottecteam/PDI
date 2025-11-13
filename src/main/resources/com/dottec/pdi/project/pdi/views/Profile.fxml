@@ -1,19 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import java.net.URL?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.ProfileViewModel">
+<VBox alignment="CENTER_RIGHT" maxWidth="1232.0" prefHeight="571.0" prefWidth="1188.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.ProfileViewModel">
+    <stylesheets>
+        <URL value="@../static/style/style_Profile.css" />
+    </stylesheets>
 
    <children>
-      <Text fill="#9032bb" layoutX="68.0" layoutY="234.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile" wrappingWidth="484.6708984375">
-         <font>
-            <Font size="96.0" />
-         </font>
-      </Text>
+      <StackPane styleClass="card-profile">
+         <children>
+            <GridPane prefHeight="544.0" prefWidth="602.0" style="-fx-background-color: F6F6F6; -fx-background-radius: 20;" styleClass="card-profile">
+               <children>
+                  <ImageView fitHeight="118.0" fitWidth="129.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                     <image>
+                        <Image url="@../static/img/user.png" />
+                     </image>
+                  </ImageView>
+                  <Label style="-fx-background-color: F6F6F6; -fx-background-radius: 20;" styleClass="card-title" text="Nome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label styleClass="card-title" text="Email" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Label styleClass="card-title" text="Cargo" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label styleClass="card-title" text="Status" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Label fx:id="labelNome" text="Carregando nome..." GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="labelEmail" text="Carregando email..." GridPane.columnIndex="3" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Label>
+                  <Label fx:id="labelCargo" lineSpacing="1.0" prefHeight="85.0" prefWidth="229.0" text="Carregandoc cargo..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Label>
+                  <Label fx:id="labelStatus" prefHeight="21.0" prefWidth="232.0" text="Carregando status..." GridPane.columnIndex="3" GridPane.rowIndex="4">
+                     <padding>
+                        <Insets left="65.0" />
+                     </padding>
+                     <font>
+                        <Font size="20.0" />
+                     </font></Label>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                     <children>
+                        <AnchorPane fx:id="anchorLogout" layoutX="7.0" layoutY="27.0" onMouseClicked="#logout" prefHeight="35.0" prefWidth="82.0">
+                           <children>
+                              <Label layoutX="44.0" layoutY="-4.0" styleClass="card-title" text="Sair" />
+                              <ImageView fitHeight="30.0" fitWidth="38.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../static/img/logout.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="0.0" prefWidth="153.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="273.0" minWidth="10.0" prefWidth="216.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="261.0" minWidth="10.0" prefWidth="130.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="416.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.0" minWidth="0.0" prefWidth="12.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="220.0" minHeight="10.0" prefHeight="220.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="121.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="99.0" minHeight="4.0" prefHeight="88.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="168.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+         </children>
+      </StackPane>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets left="250.0" />
+   </padding>
+</VBox>

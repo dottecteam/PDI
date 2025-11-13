@@ -166,6 +166,9 @@ public class HeaderViewModel {
             case "UserManagement.fxml" -> {
                 buildHeaderStructure("Gerenciar Usuários", true, false, false, showNotificationButton);
             }
+            case "Profile.fxml" -> {
+                buildHeaderStructure("Perfil do usuário", true, false, false);
+            }
             default -> {
                 buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false, showNotificationButton);
             }
