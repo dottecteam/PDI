@@ -1,0 +1,54 @@
+.tags-context-menu,
+.custom-menu-item,
+.custom-menu-item:hover,
+.custom-menu-item:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 10;
+    -fx-effect: none;
+}
+
+.flow-pane {
+    -fx-background-color: transparent;
+}
+
+.tag-menu {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+    -fx-background-color: #f6f6f6;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+}
+
+.tag {
+    -fx-text-fill: black;
+}
+
+.selected-tag {
+    -fx-background-color: #9032BB;
+    -fx-background-radius: 4;
+    -fx-text-fill: #F6F6F6;
+    -fx-font-size: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+    -fx-padding: -1 5 0 3;
+    -fx-border-radius: 4;
+    -fx-alignment: center;
+}
+
+.hard-skill {
+    -fx-background-color: #6D00A1;
+}
+
+.clear-tags-button {
+    -fx-background-color: transparent;
+    -fx-padding: 1;
+    -fx-text-fill: #888888;
+    -fx-cursor: hand;
+}
+
+.clear-tags-button:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333333;
+}

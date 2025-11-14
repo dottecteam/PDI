@@ -25,6 +25,10 @@ public class HeaderViewModel{
     @FXML private TextField searchBar;
     @FXML private StackPane searchBarStackPane;
 
+    public Button getFilterButton(){
+        return filterButton;
+    }
+
     public HeaderViewModel() {}
 
     static HeaderViewModel instance;
@@ -72,7 +76,7 @@ public class HeaderViewModel{
                 buildHeaderStructure("Adicionar Colaborador", true, false, false);
             }
             case "CollaboratorGoals.fxml" -> {
-                buildHeaderStructure("PDI do Colaborador", true, false, false);
+                buildHeaderStructure("PDI do Colaborador", true, false, true);
             }
             case "AddGoalFromTemplate.fxml", "Goal.fxml" -> {
                 buildHeaderStructure("Adicionar Meta", true, false, false);
