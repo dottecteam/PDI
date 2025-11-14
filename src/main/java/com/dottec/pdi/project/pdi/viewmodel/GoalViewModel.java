@@ -2,7 +2,11 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.ActivityController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
+
 import com.dottec.pdi.project.pdi.dao.ActivityDAO;
+
+import com.dottec.pdi.project.pdi.enums.ActivityStatus;
+
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Collaborator;
@@ -10,15 +14,17 @@ import com.dottec.pdi.project.pdi.model.Goal;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class GoalViewModel {
     @FXML private TextField nameField;
@@ -59,6 +65,54 @@ public class GoalViewModel {
             goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
             populateActivities();
         }
+    }
+
+    private void setFilterMenu(){
+        HeaderViewModel.setFilterButtonVisible(true);
+        FilterMenuViewModel filterMenu = new FilterMenuViewModel();
+
+        //status based filter
+        List<Node> statuses = new ArrayList<>();
+        for(ActivityStatus activityStatus : ActivityStatus.values()){
+            CheckBox checkBox = new CheckBox();
+            checkBox.setSelected(true);
+            switch (activityStatus.toString()) {
+                case "in_progress" -> checkBox.setText("Em progresso");
+                case "pending" -> checkBox.setText("Pendente");
+                case "completed" -> checkBox.setText("Completo");
+                case "canceled" -> checkBox.setText("Cancelado");
+            }
+            statuses.add(checkBox);
+        }
+        filterMenu.addFilterField("Filtrar por status", statuses);
+
+        List<Node> deadlineDates = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+        labels.add("De:");
+        labels.add("À: ");
+        labels.forEach(text -> {
+            Label label = new Label(text);
+            DatePicker datePicker = new DatePicker();
+            datePicker.setEditable(false);
+            datePicker.getStyleClass().add("formInput");
+            datePicker.getEditor().setMouseTransparent(true);
+            datePicker.setMaxSize(150, 10);
+            datePicker.setStyle("-fx-padding: -3 -15 -3 3;");
+            label.setGraphic(datePicker);
+            label.setContentDisplay(ContentDisplay.RIGHT);
+            deadlineDates.add(label);
+        });
+
+        filterMenu.addFilterField("Filtrar por prazo", deadlineDates);
+
+        filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> handleFilter());
+
+        Button filterButton = HeaderViewModel.getController().getFilterButton();
+        filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
+    }
+
+    private void handleFilter(){
+        //TODO colocar aqui a função de filtragem
     }
 
     private void updateFields(){
@@ -184,6 +238,8 @@ public class GoalViewModel {
 
     public void populateActivities() {
         activitiesField.getChildren().clear();
+        List<Activity> activities = goal.getActivities();
+        activities.sort(Comparator.comparing(Activity::getStatus));
         if(goal != null && goal.numberActivities() != 0) {
             goal.getActivities().forEach(activity -> {
                 if (creatingGoalMode) {

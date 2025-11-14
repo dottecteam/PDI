@@ -64,6 +64,10 @@ public class TemplateViewModel implements Initializable {
     @FXML
     private StackPane mainStackPane;
 
+    public static StackPane getMainStackPane(){
+        return instance.mainStackPane;
+    }
+
     //BorderPane
     @FXML
     private BorderPane mainPane;

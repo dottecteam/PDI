@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -29,6 +30,8 @@ import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -71,6 +74,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
     // Este é o método principal para carregar os dados na tela
     public void setCollaborator(Collaborator collaborator) {
+        setFilter();
         this.collaborator = collaborator;
         if(collaborator.getStatus() == CollaboratorStatus.active){
             updateCollaboratorFields();
@@ -118,6 +122,53 @@ public class CollaboratorGoalsViewModel implements Initializable {
         HeaderViewModel.addButton(buttonAddGoal);
     }
 
+    private void setFilter(){
+        FilterMenuViewModel filterMenu = new FilterMenuViewModel();
+
+        //status based filter
+        List<Node> statuses = new ArrayList<>();
+        for(GoalStatus goalStatus : GoalStatus.values()){
+            CheckBox checkBox = new CheckBox();
+            checkBox.setSelected(true);
+            switch (goalStatus.toString()) {
+                case "in_progress" -> checkBox.setText("Em progresso");
+                case "pending" -> checkBox.setText("Pendente");
+                case "completed" -> checkBox.setText("Completo");
+                case "canceled" -> checkBox.setText("Cancelado");
+            }
+            statuses.add(checkBox);
+        }
+        filterMenu.addFilterField("Filtrar por status", statuses);
+
+        List<Node> deadlineDates = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+        labels.add("De:");
+        labels.add("À: ");
+        labels.forEach(text -> {
+            Label label = new Label(text);
+            DatePicker datePicker = new DatePicker();
+            datePicker.setEditable(false);
+            datePicker.getStyleClass().add("formInput");
+            datePicker.getEditor().setMouseTransparent(true);
+            datePicker.setMaxSize(150, 10);
+            datePicker.setStyle("-fx-padding: -3 -15 -3 3;");
+            label.setGraphic(datePicker);
+            label.setContentDisplay(ContentDisplay.RIGHT);
+            deadlineDates.add(label);
+        });
+
+        filterMenu.addFilterField("Filtrar por prazo", deadlineDates);
+
+        filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> handleFilter());
+
+        Button filterButton = HeaderViewModel.getController().getFilterButton();
+        filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
+    }
+
+    private void handleFilter(){
+        //TODO colocar aqui a função de filtragem
+    }
+
     // Atualiza os campos de texto com as informações do colaborador
     private void updateCollaboratorFields() {
         if (collaborator == null) return;
@@ -140,6 +191,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
         goalsVBox.getChildren().clear(); // Limpa a lista antes de adicionar
         List<Goal> goals = GoalController.findGoalsByCollaborator(collaborator.getId());
+        goals.sort(Comparator.comparing(Goal::getStatus));
 
         if (goals.isEmpty()) {
             Label label = new Label("Este colaborador ainda não possui metas.");

@@ -1,17 +1,29 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
+import com.dottec.pdi.project.pdi.controllers.DepartmentController;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
+import com.dottec.pdi.project.pdi.model.Department;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import animatefx.animation.*;
@@ -20,6 +32,9 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 import javafx.concurrent.Task;
+
+import static java.util.Collections.sort;
+
 
 public class CollaboratorsViewModel {
     @FXML private VBox mainVBox;
@@ -34,6 +49,46 @@ public class CollaboratorsViewModel {
         this.setupSearchListener();
 
         loadAndDisplayCollaborators();
+
+        setFilterMenu();
+    }
+
+    private void setFilterMenu(){
+        //Status based filter
+        List<Node> statusList = new ArrayList<>();
+        for(CollaboratorStatus status : CollaboratorStatus.values()){
+            CheckBox checkBox = new CheckBox();
+            checkBox.setSelected(true);
+            switch (status.name()) {
+                case "active" -> checkBox.setText("Ativo");
+                case "on_leave"-> checkBox.setText("Afastado");
+                case "inactive" -> checkBox.setText("Inativo");
+            }
+            statusList.add(checkBox);
+        }
+
+        //Department based filter
+        List<Node> departmentList = new ArrayList<>();
+        List<Department> departments = DepartmentController.findAllDepartments();
+        departments.sort(Comparator.comparing(Department::getName));
+        departments.forEach(department -> {
+            CheckBox checkBox = new CheckBox(department.getName());
+            departmentList.add(checkBox);
+        });
+
+        FilterMenuViewModel filterMenu = new FilterMenuViewModel();
+        filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> handleFilter());
+        filterMenu.addFilterField("Filtrar por status", statusList);
+        filterMenu.addFilterField("Filtrar por setor", departmentList);
+
+        Button filterButton = HeaderViewModel.getController().getFilterButton();
+
+        filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
+
+    }
+
+    private void handleFilter(){
+        //TODO colocar aqui a função de filtragem
     }
 
     private void setupSearchListener() {
@@ -93,6 +148,7 @@ public class CollaboratorsViewModel {
         // Limpar antes de adicionar novos elementos
         mainVBox.getChildren().clear();
 
+        collaborators.sort(Comparator.comparing(Collaborator::getStatus));
         collaborators.forEach(collaborator -> {
             StackPane stackPane = new StackPane();
             stackPane.getStyleClass().add("stackpane-collaborator");

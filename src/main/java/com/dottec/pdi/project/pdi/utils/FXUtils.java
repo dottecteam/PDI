@@ -1,13 +1,17 @@
 package com.dottec.pdi.project.pdi.utils;
 
-import com.dottec.pdi.project.pdi.viewmodel.TemplateViewModel;
 import javafx.animation.PauseTransition;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import javafx.util.Pair;
+
+import java.io.IOException;
 
 public class FXUtils {
     private FXUtils(){};

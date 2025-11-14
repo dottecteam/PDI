@@ -50,7 +50,12 @@ public class HeaderViewModel {
     @FXML
     private StackPane searchBarStackPane;
 
+
     public HeaderViewModel() {
+    }
+
+    public Button getFilterButton(){
+        return filterButton;
     }
 
     static HeaderViewModel instance;
@@ -167,7 +172,7 @@ public class HeaderViewModel {
                 buildHeaderStructure("Gerenciar Usuários", true, false, false, showNotificationButton);
             }
             case "Profile.fxml" -> {
-                buildHeaderStructure("Perfil do usuário", true, false, false);
+                buildHeaderStructure("Perfil do usuário", true, false, false, showNotificationButton);
             }
             default -> {
                 buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false, showNotificationButton);

@@ -149,7 +149,17 @@
 
 .cancel-button:hover{
     -fx-background-color: #d6d6d6;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 4)
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 4);
+}
+
+.filter-menu {
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 2);
+    -fx-background-color: f6f6f6;
+    -fx-background-radius: 10;
+    -fx-border-color: 333333;
+    -fx-border-radius: 10;
+    -fx-border-width: 1.5;
 }
 
 .filter-button{
@@ -162,6 +172,19 @@
 .filter-button:hover{
     -fx-text-fill: #9032BB;
     -fx-cursor: hand;
+}
+
+.confirm-filter-button {
+    -fx-background-color: transparent;
+    -fx-padding: -1 10;
+    -fx-font-size: 18;
+    -fx-text-fill: #555555;
+    -fx-cursor: hand;
+}
+
+.confirm-filter-button:hover {
+    -fx-background-color: #d6d6d6;
+    -fx-text-fill: #333333;
 }
 
 .search-bar{
@@ -285,6 +308,7 @@
     -fx-border-width: 2px;
     -fx-background-color: transparent;
     -fx-font-size: 16;
+    -fx-cursor: hand;
 }
 
 .formInput-label-focused {
@@ -377,4 +401,69 @@
     -fx-padding: 2 8;
     -fx-text-fill: white;
     -fx-font-size: 14;
+}
+
+.check-box {
+    -fx-background-color: transparent;
+    -fx-pref-height: 30;
+    -fx-max-height: 30;
+    -fx-text-align: center;
+    -fx-font-size: 16;
+    -fx-cursor: hand;
+    -fx-padding: 3 5;
+}
+
+.check-box .box {
+    -fx-background-color: #9032BB, #f6f6f6;
+    -fx-background-insets: 0, 2;
+    -fx-background-radius: 5, 3;
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+}
+
+.check-box .mark {
+    -fx-shape: "M1,0 H4 A1,1 0 0 1 5,1 V4 A1,1 0 0 1 4,5 H1 A1,1 0 0 1 0,4 V1 A1,1 0 0 1 1,0 Z";
+    -fx-background-color: transparent;
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #9032BB;
+    -fx-opacity: 1;
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+    -fx-translate-x: -0.5;
+    -fx-translate-y: -0.25;
+}
+
+.titled-pane,
+.titled-pane .title,
+.titled-pane .content {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-effect: none;
+}
+
+.titled-pane .arrow {
+    -fx-shape: null;
+    -fx-background-color: transparent;
+}
+
+.titled-pane .arrow-button {
+    -fx-background-image: url("../img/up.png");
+    -fx-background-size: 15 15;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 5;
+    -fx-rotate: 180;
+    -fx-scale-x: 1.2;
+}
+
+.titled-pane:expanded .arrow-button {
+    -fx-rotate: 0;
 }
