@@ -1,5 +1,6 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -43,8 +44,7 @@ public class FilterMenuViewModel extends VBox {
 
         scrollPane.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_template.css").toExternalForm());
         scrollPane.getStyleClass().add("filter-menu");
-        scrollPane.setMaxHeight(400);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setMaxHeight(550);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setContent(this);
         scrollPane.setFitToWidth(true);
@@ -72,6 +72,22 @@ public class FilterMenuViewModel extends VBox {
         titledPane.setGraphic(header);
         titledPane.setContent(content);
         this.getChildren().add(titledPane);
+    }
+
+    public DatePicker buildDatePicker(){DatePicker datePicker = new DatePicker();
+        datePicker.setEditable(false);
+        datePicker.getStyleClass().add("formInput");
+        datePicker.getEditor().setMouseTransparent(true);
+        datePicker.setMaxSize(150, 10);
+        datePicker.setStyle("-fx-padding: -3 -15 -3 3;");
+        return datePicker;
+    }
+
+    public Label addDatePickerLabel(String text, DatePicker datePicker){
+        Label label = new Label(text);
+        label.setGraphic(datePicker);
+        label.setContentDisplay(ContentDisplay.RIGHT);
+        return label;
     }
 
     public void show(Node node){
