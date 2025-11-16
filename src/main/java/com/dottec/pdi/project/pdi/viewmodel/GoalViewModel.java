@@ -101,32 +101,17 @@ public class GoalViewModel {
         }
         filterMenu.addFilterField("Filtrar por status", statuses);
 
-        List<Node> deadlineDates = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
-        labels.add("De:");
-        labels.add("À: ");
-        labels.forEach(text -> {
-            Label label = new Label(text);
-            DatePicker datePicker = new DatePicker();
-            datePicker.setEditable(false);
-            datePicker.getStyleClass().add("formInput");
-            datePicker.getEditor().setMouseTransparent(true);
-            datePicker.setMaxSize(150, 10);
-            datePicker.setStyle("-fx-padding: -3 -15 -3 3;");
-            label.setGraphic(datePicker);
-            label.setContentDisplay(ContentDisplay.RIGHT);
-            deadlineDates.add(label);
+        DatePicker startDayDatePicker = filterMenu.buildDatePicker();
+        startDayDatePicker.setValue(startDay);
+        startDayDatePicker.setOnAction(actionEvent -> startDay = startDayDatePicker.getValue());
 
-            if(text.equals(labels.get(0))){
-                datePicker.setValue(startDay);
-                datePicker.setOnAction(actionEvent -> startDay = datePicker.getValue());
-            } else if (text.equals(labels.get(1))) {
-                datePicker.setValue(endDay);
-                datePicker.setOnAction(actionEvent -> endDay = datePicker.getValue());
-            }
-        });
+        DatePicker endDayDatePicker = filterMenu.buildDatePicker();
+        endDayDatePicker.setValue(endDay);
+        endDayDatePicker.setOnAction(actionEvent -> endDay = endDayDatePicker.getValue());
 
-        filterMenu.addFilterField("Filtrar por prazo", deadlineDates);
+        filterMenu.addFilterField("Filtrar por prazo",
+                filterMenu.addDatePickerLabel("De: ", startDayDatePicker),
+                filterMenu.addDatePickerLabel("À: ", endDayDatePicker));
 
         filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> populateActivities());
 
@@ -278,6 +263,11 @@ public class GoalViewModel {
         } else {
             System.out.println("Goal has no activities");
             Label label = new Label("Esta meta ainda não possui atividades.");
+            label.getStyleClass().add("mid-label");
+            activitiesField.getChildren().add(label);
+        }
+        if(activitiesField.getChildren().isEmpty()) {
+            Label label = new Label("Sem resultados a serem exibidos.");
             label.getStyleClass().add("mid-label");
             activitiesField.getChildren().add(label);
         }

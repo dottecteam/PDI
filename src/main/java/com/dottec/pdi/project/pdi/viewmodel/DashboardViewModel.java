@@ -6,7 +6,10 @@ import com.dottec.pdi.project.pdi.dao.DashboardDAO;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import com.dottec.pdi.project.pdi.enums.Role;
+import com.dottec.pdi.project.pdi.enums.*;
+import com.dottec.pdi.project.pdi.model.Department;
+import com.dottec.pdi.project.pdi.model.Goal;
+import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.model.User;
 
 import javafx.application.Platform;
@@ -15,8 +18,9 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.chart.*;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -90,6 +94,15 @@ public class DashboardViewModel implements Initializable {
     private final List<Rectangle> highlightRects = new ArrayList<>();
     private Rectangle targetRect = null;
 
+    // --- Filters ---
+    private LocalDate startDay = LocalDate.now().withMonth(1).withDayOfMonth(1);
+    private LocalDate endDay = LocalDate.now().withMonth(12).withDayOfMonth(31);
+    private List<ActivityStatus> filteredActivityStatuses = new ArrayList<>(Arrays.asList(ActivityStatus.values()));
+    private List<GoalStatus> filteredGoalStatuses = new ArrayList<>(Arrays.asList(GoalStatus.values()));
+    private List<Department> filteredDepartments = DepartmentController.findAllDepartments();
+    private List<Tag> filteredTags = TagController.findAllTags();
+    private List<TagType> filteredTagTypes = new ArrayList<>(Arrays.asList(TagType.values()));
+
     private final String STATUS_CONCLUIDO = "completed";
     private final DashboardDAO tagDAO;
 
@@ -97,9 +110,12 @@ public class DashboardViewModel implements Initializable {
         this.tagDAO = new DashboardDAO();
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setFilter();
         tagBarChart.setAnimated(false);
+        tagBarChart.setAnimated(false); //Deixar em 'false' para arrumar o nome das tags no grafico
         taskPieChart.setAnimated(false);
         taskPieChart.setLegendVisible(false);
         monthsLineChart.setAnimated(false);
@@ -167,7 +183,139 @@ public class DashboardViewModel implements Initializable {
             return;
         }
 
+
         loadBarChartData(dataFetchingTask);
+    }
+
+    private void setFilter(){
+        FilterMenuViewModel filterMenu = new FilterMenuViewModel();
+
+        //Date based filter
+        DatePicker startDayDatePicker = filterMenu.buildDatePicker();
+        startDayDatePicker.setValue(startDay);
+        startDayDatePicker.setOnAction(actionEvent -> startDay = startDayDatePicker.getValue());
+
+        DatePicker endDayDatePicker = filterMenu.buildDatePicker();
+        endDayDatePicker.setValue(endDay);
+        endDayDatePicker.setOnAction(actionEvent -> endDay = endDayDatePicker.getValue());
+
+        filterMenu.addFilterField("Filtrar por data",
+                filterMenu.addDatePickerLabel("De: ", startDayDatePicker),
+                filterMenu.addDatePickerLabel("À: ", endDayDatePicker));
+
+        //Department based filter
+        List<Node> departmentCheckBoxes = new ArrayList<>();
+        filteredDepartments.sort(Comparator.comparing(Department::getName));
+        filteredDepartments.forEach(department -> {
+            CheckBox checkBox  = new CheckBox(department.getName());
+            checkBox.setSelected(true);
+            checkBox.setOnAction(e -> {
+                if(filteredDepartments.contains(department)){
+                    filteredDepartments.remove(department);
+                } else {
+                    filteredDepartments.add(department);
+                }
+            });
+            departmentCheckBoxes.add(checkBox);
+        });
+        filterMenu.addFilterField("Filtrar por departamento", departmentCheckBoxes);
+
+        //Goal status based filter
+        List<Node> goalStatusCheckBoxes = new ArrayList<>();
+        for(GoalStatus goalStatus : GoalStatus.values()){
+            CheckBox checkBox = new CheckBox();
+            checkBox.setSelected(true);
+            checkBox.setOnAction(e -> {
+                if(!filteredGoalStatuses.contains(goalStatus)) {
+                    filteredGoalStatuses.add(goalStatus);
+                } else {
+                    filteredGoalStatuses.remove(goalStatus);
+                }
+            });
+            switch (goalStatus.toString()) {
+                case "in_progress" -> checkBox.setText("Em progresso");
+                case "pending" -> checkBox.setText("Pendente");
+                case "completed" -> checkBox.setText("Completo");
+                case "canceled" -> checkBox.setText("Cancelado");
+            }
+            goalStatusCheckBoxes.add(checkBox);
+        }
+        filterMenu.addFilterField("Filtrar por status de meta", goalStatusCheckBoxes);
+
+        //Activity status based filter
+        List<Node> activityStatusCheckBoxes = new ArrayList<>();
+        for(ActivityStatus activityStatus : ActivityStatus.values()){
+            CheckBox checkBox = new CheckBox();
+            checkBox.setSelected(true);
+            checkBox.setOnAction(e -> {
+                if(!filteredActivityStatuses.contains(activityStatus)) {
+                    filteredActivityStatuses.add(activityStatus);
+                } else {
+                    filteredActivityStatuses.remove(activityStatus);
+                }
+            });
+            switch (activityStatus.toString()) {
+                case "in_progress" -> checkBox.setText("Em progresso");
+                case "pending" -> checkBox.setText("Pendente");
+                case "completed" -> checkBox.setText("Completo");
+                case "canceled" -> checkBox.setText("Cancelado");
+            }
+            activityStatusCheckBoxes.add(checkBox);
+        }
+        filterMenu.addFilterField("Filtrar por status de atividade", activityStatusCheckBoxes);
+
+        //Tag type based filter
+        List<Node> tagTypesCheckBoxes = new ArrayList<>();
+        filteredTagTypes.forEach(tagType -> {
+            CheckBox checkBox  = new CheckBox();
+            checkBox.setSelected(true);
+            if(tagType.equals(TagType.SOFT)){
+                checkBox.setText("Soft Skill");
+            } else if (tagType.equals(TagType.HARD)){
+                checkBox.setText("Hard Skill");
+            }
+            checkBox.setOnAction(e -> {
+                if(filteredTagTypes.contains(tagType)){
+                    filteredTagTypes.remove(tagType);
+                } else {
+                    filteredTagTypes.add(tagType);
+                }
+            });
+            tagTypesCheckBoxes.add(checkBox);
+        });
+        filterMenu.addFilterField("Filtrar por skills", tagTypesCheckBoxes);
+
+        //Tag based filter
+        List<Node> tagSoftCheckBoxes = new ArrayList<>();
+        List<Node> tagHardCheckBoxes = new ArrayList<>();
+        filteredTags.sort(Comparator.comparing(Tag::getName));
+        filteredTags.forEach(tag -> {
+            CheckBox checkBox  = new CheckBox(tag.getName());
+            checkBox.setSelected(true);
+            checkBox.setOnAction(e -> {
+                if(filteredTags.contains(tag)){
+                    filteredTags.remove(tag);
+                } else {
+                    filteredTags.add(tag);
+                }
+            });
+            if(tag.getType().equals(TagType.HARD)){
+                tagHardCheckBoxes.add(checkBox);
+            } else {
+                tagSoftCheckBoxes.add(checkBox);
+            }
+        });
+        filterMenu.addFilterField("Filtrar por soft skills", tagSoftCheckBoxes);
+        filterMenu.addFilterField("Filtrar por hard skills", tagHardCheckBoxes);
+
+        filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> handleFilter());
+
+        Button filterButton = HeaderViewModel.getController().getFilterButton();
+        filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
+    }
+
+    private void handleFilter(){
+        //TODO CRIAR LÓGICAS DE FILTRAGEM
     }
 
     @FXML
@@ -891,3 +1039,6 @@ public class DashboardViewModel implements Initializable {
         }
     }
 }
+
+
+//DashboardViewModel.java

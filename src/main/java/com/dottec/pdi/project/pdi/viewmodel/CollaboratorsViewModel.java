@@ -189,6 +189,12 @@ public class CollaboratorsViewModel {
                 mainVBox.getChildren().add(stackPane);
             }
         });
+
+        if(mainVBox.getChildren().isEmpty()){
+            Label label = new Label("Sem resultados a serem exibidos.");
+            label.getStyleClass().add("mid-label");
+            mainVBox.getChildren().add(label);
+        }
     }
 
     private void openCollaboratorPage(Collaborator collaborator) {
