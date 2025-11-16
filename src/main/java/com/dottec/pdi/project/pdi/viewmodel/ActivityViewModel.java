@@ -1,10 +1,12 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.ActivityController;
+import com.dottec.pdi.project.pdi.controllers.GoalController;
 import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.model.Activity;
 
 import com.dottec.pdi.project.pdi.model.Attachment;
+import com.dottec.pdi.project.pdi.model.Goal;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 
@@ -283,6 +285,14 @@ public class ActivityViewModel {
 
         if (!creatingGoalMode) {
             ActivityDAO.update(activity);
+            Goal goal = activity.getGoal();
+            if(goal.getDeadline() == null) {
+                goal.setDeadline(activity.getDeadline());
+                GoalController.updateGoal(goal);
+            } else if(activity.getDeadline().isAfter(goal.getDeadline())){
+                goal.setDeadline(activity.getDeadline());
+                GoalController.updateGoal(goal);
+            }
         }
 
         TemplateViewModel.showSuccessMessage("Meta atualizada com sucesso!");

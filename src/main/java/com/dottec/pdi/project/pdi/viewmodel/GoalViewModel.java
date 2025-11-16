@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -36,6 +37,11 @@ public class GoalViewModel {
 
     @FXML private VBox activitiesField;
 
+    // --- Filtros ---
+    private LocalDate startDay = LocalDate.now().minusDays(15);
+    private LocalDate endDay = LocalDate.now().plusMonths(1);
+    private List<ActivityStatus> filteredStatuses = new ArrayList<>(Arrays.asList(ActivityStatus.values()));
+
     private GoalViewModel goalViewModel;
     public void setGoalViewModel(GoalViewModel goalViewModel){
         this.goalViewModel = goalViewModel;
@@ -45,6 +51,7 @@ public class GoalViewModel {
     public void setGoal(Goal goal) {
         this.goal = goal;
     }
+    public Goal getGoal(){return goal;}
 
     private Collaborator collaborator;
     public void setCollaborator(Collaborator collaborator){this.collaborator = collaborator;}
@@ -61,6 +68,7 @@ public class GoalViewModel {
             updateFields();
         } else {    //Update the fields for the selected goal
             updateFields();
+            setFilterMenu();
             createAddActivityButton();
             goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
             populateActivities();
@@ -76,6 +84,13 @@ public class GoalViewModel {
         for(ActivityStatus activityStatus : ActivityStatus.values()){
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(true);
+            checkBox.setOnAction(e -> {
+                if(!filteredStatuses.contains(activityStatus)) {
+                    filteredStatuses.add(activityStatus);
+                } else {
+                    filteredStatuses.remove(activityStatus);
+                }
+            });
             switch (activityStatus.toString()) {
                 case "in_progress" -> checkBox.setText("Em progresso");
                 case "pending" -> checkBox.setText("Pendente");
@@ -101,11 +116,19 @@ public class GoalViewModel {
             label.setGraphic(datePicker);
             label.setContentDisplay(ContentDisplay.RIGHT);
             deadlineDates.add(label);
+
+            if(text.equals(labels.get(0))){
+                datePicker.setValue(startDay);
+                datePicker.setOnAction(actionEvent -> startDay = datePicker.getValue());
+            } else if (text.equals(labels.get(1))) {
+                datePicker.setValue(endDay);
+                datePicker.setOnAction(actionEvent -> endDay = datePicker.getValue());
+            }
         });
 
         filterMenu.addFilterField("Filtrar por prazo", deadlineDates);
 
-        filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> handleFilter());
+        filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> populateActivities());
 
         Button filterButton = HeaderViewModel.getController().getFilterButton();
         filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
@@ -241,18 +264,13 @@ public class GoalViewModel {
         List<Activity> activities = goal.getActivities();
         activities.sort(Comparator.comparing(Activity::getStatus));
         if(goal != null && goal.numberActivities() != 0) {
-            goal.getActivities().forEach(activity -> {
-                if (creatingGoalMode) {
+            activities.forEach(activity -> {
+                boolean statusOk = filteredStatuses.contains(activity.getStatus());
+                boolean startDayOk = activity.getDeadline().isAfter(startDay);
+                boolean endDayOk = activity.getDeadline().isBefore(endDay);
 
-                    loadActivityPane(activity);
-                } else {
-
-                    Activity fullActivity = ActivityDAO.findById(activity.getId());
-                    if (fullActivity != null) {
-                        loadActivityPane(fullActivity);
-                    } else {
-                        System.err.println("Aviso: Atividade com ID " + activity.getId() + " não encontrada no banco.");
-                    }
+                if(statusOk && startDayOk && endDayOk) {
+                    addActivity(activity);
                 }
             });
         } else if(goal == null) {

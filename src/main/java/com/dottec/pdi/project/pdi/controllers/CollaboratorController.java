@@ -116,6 +116,10 @@ public class CollaboratorController {
         }
     }
 
+    public static List<Collaborator> findByDepartmentId(int departmentId) {
+        return CollaboratorDAO.findByDepartmentId(departmentId);
+    }
+
     public static void deleteCollaboratorById(int id) {
         CollaboratorDAO.deleteById(id);
 

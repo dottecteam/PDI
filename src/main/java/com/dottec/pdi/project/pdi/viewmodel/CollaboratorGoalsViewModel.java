@@ -29,8 +29,11 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -45,6 +48,11 @@ public class CollaboratorGoalsViewModel implements Initializable {
     @FXML private TextField cpfField;
     @FXML private TextField emailField;
     @FXML private ChoiceBox<Department> departmentField;
+
+    // --- Filtros ---
+    private LocalDate startDay = LocalDate.now().minusDays(15);
+    private LocalDate endDay = LocalDate.now().plusMonths(1);
+    private List<GoalStatus> filteredStatuses = new ArrayList<>(Arrays.asList(GoalStatus.values()));
 
     // --- FXML Controles de Edição ---
     @FXML private ImageView editButton;
@@ -130,6 +138,13 @@ public class CollaboratorGoalsViewModel implements Initializable {
         for(GoalStatus goalStatus : GoalStatus.values()){
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(true);
+            checkBox.setOnAction(e -> {
+                if(!filteredStatuses.contains(goalStatus)) {
+                    filteredStatuses.add(goalStatus);
+                } else {
+                    filteredStatuses.remove(goalStatus);
+                }
+            });
             switch (goalStatus.toString()) {
                 case "in_progress" -> checkBox.setText("Em progresso");
                 case "pending" -> checkBox.setText("Pendente");
@@ -155,6 +170,14 @@ public class CollaboratorGoalsViewModel implements Initializable {
             label.setGraphic(datePicker);
             label.setContentDisplay(ContentDisplay.RIGHT);
             deadlineDates.add(label);
+
+            if(text.equals(labels.get(0))){
+                datePicker.setValue(startDay);
+                datePicker.setOnAction(actionEvent -> startDay = datePicker.getValue());
+            } else if (text.equals(labels.get(1))) {
+                datePicker.setValue(endDay);
+                datePicker.setOnAction(actionEvent -> endDay = datePicker.getValue());
+            }
         });
 
         filterMenu.addFilterField("Filtrar por prazo", deadlineDates);
@@ -200,54 +223,73 @@ public class CollaboratorGoalsViewModel implements Initializable {
             return;
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (Goal goal : goals) {
+            if(goal.getDeadline() == null){
+                buildGoalCard(goal);
+            }
+        }
 
         for (Goal goal : goals) {
-            HBox goalCard = new HBox();
-            goalCard.getStyleClass().add("goal-card");
+            if(goal.getDeadline() != null){
+                boolean statusOk = filteredStatuses.contains(goal.getStatus());
+                boolean startDayOk = goal.getDeadline().isAfter(startDay);
+                boolean endDayOk = goal.getDeadline().isBefore(endDay);
 
-            Label goalName = new Label(goal.getName());
-            goalName.getStyleClass().add("mid-label");
-            goalName.setStyle("-fx-text-fill: #4B0081");
-
-            String deadlineText;
-            if (goal.getDeadline() != null) {
-                deadlineText = "Prazo: " + goal.getDeadline().format(formatter) + "                                  ";
-            } else {
-                deadlineText = "Prazo: (Não definido)                                  ";
-            }
-            Label goalDeadline = new Label(deadlineText);
-
-            Label statusLabel = new Label(goal.getStatus().name());
-            statusLabel.getStyleClass().add("label-status");
-            switch (goal.getStatus()) {
-                case completed -> {
-                    statusLabel.setText("Completo");
-                    statusLabel.setStyle("-fx-background-color: #6D00A1; -fx-text-fill: white");
-                }
-                case in_progress -> {
-                    statusLabel.setText("Em progresso");
-                    statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
-                }
-                case canceled -> {
-                    statusLabel.setText("Cancelado");
-                    statusLabel.setStyle("-fx-background-color: #E6CCEF; -fx-text-fill: #5c5c5c");
-                }
-                case pending -> {
-                    statusLabel.setText("Pendente");
-                    statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;");
-                }
-                default -> {
-                    statusLabel.setText("Desconhecido");
-                    statusLabel.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
+                if(statusOk && startDayOk && endDayOk) {
+                    buildGoalCard(goal);
                 }
             }
+        }
+    }
 
-            goalCard.getChildren().addAll(goalName, goalDeadline, statusLabel);
-            goalCard.setAlignment(Pos.CENTER_LEFT);
-            goalCard.setSpacing(0);
-            HBox.setHgrow(goalName, Priority.ALWAYS);
-            goalName.setMaxWidth(Double.MAX_VALUE);
+    private void buildGoalCard(Goal goal){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        HBox goalCard = new HBox();
+        goalCard.getStyleClass().add("goal-card");
+
+        Label goalName = new Label(goal.getName());
+        goalName.getStyleClass().add("mid-label");
+        goalName.setStyle("-fx-text-fill: #4B0081");
+
+        String deadlineText;
+        if (goal.getDeadline() != null) {
+            deadlineText = "Prazo: " + goal.getDeadline().format(formatter) + "                                  ";
+        } else {
+            deadlineText = "Prazo: (Não definido)";
+        }
+        Label goalDeadline = new Label(deadlineText);
+
+        Label statusLabel = new Label(goal.getStatus().name());
+        statusLabel.getStyleClass().add("label-status");
+        switch (goal.getStatus()) {
+            case completed -> {
+                statusLabel.setText("Completo");
+                statusLabel.setStyle("-fx-background-color: #6D00A1; -fx-text-fill: white");
+            }
+            case in_progress -> {
+                statusLabel.setText("Em progresso");
+                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
+            }
+            case canceled -> {
+                statusLabel.setText("Cancelado");
+                statusLabel.setStyle("-fx-background-color: #E6CCEF; -fx-text-fill: #5c5c5c");
+            }
+            case pending -> {
+                statusLabel.setText("Pendente");
+                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;");
+            }
+            default -> {
+                statusLabel.setText("Desconhecido");
+                statusLabel.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
+            }
+        }
+
+        goalCard.getChildren().addAll(goalName, goalDeadline, statusLabel);
+        goalCard.setAlignment(Pos.CENTER_LEFT);
+        goalCard.setSpacing(0);
+        HBox.setHgrow(goalName, Priority.ALWAYS);
+        goalName.setMaxWidth(Double.MAX_VALUE);
 
             goalCard.setOnMouseClicked(mouseEvent -> {
                 TemplateViewModel.switchScreen("Goal.fxml", controller -> {
@@ -259,8 +301,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
                 });
             });
 
-            goalsVBox.getChildren().add(goalCard);
-        }
+        goalsVBox.getChildren().add(goalCard);
     }
 
     private void populateDepartments() {
@@ -435,5 +476,14 @@ public class CollaboratorGoalsViewModel implements Initializable {
         });
 
         new Thread(loadDataTask).start();
+    }
+
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

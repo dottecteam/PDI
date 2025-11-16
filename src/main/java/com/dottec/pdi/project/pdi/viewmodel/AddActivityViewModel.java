@@ -1,8 +1,10 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.ActivityController;
+import com.dottec.pdi.project.pdi.controllers.GoalController;
 import com.dottec.pdi.project.pdi.enums.ActivityStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
+import com.dottec.pdi.project.pdi.model.Goal;
 import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.event.ActionEvent;
@@ -90,6 +92,14 @@ public class AddActivityViewModel extends VBox {
             ActivityController.saveActivity(activity);
             TemplateViewModel.showSuccessMessage("Atividade adicionada com sucesso!");
             TemplateViewModel.goBack();
+            Goal goal = goalViewModel.getGoal();
+            if(goal.getDeadline()== null) {
+                goal.setDeadline(activity.getDeadline());
+                GoalController.updateGoal(goal);
+            } else if(activity.getDeadline().isAfter(goal.getDeadline())){
+                goal.setDeadline(activity.getDeadline());
+                GoalController.updateGoal(goal);
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -32,6 +33,7 @@ public class FilterMenuViewModel extends VBox {
         headerLabel.setStyle("-fx-text-fill: #4B0081");
         headerLabel.setAlignment(Pos.CENTER_LEFT);
         confirmFilterButton.getStyleClass().add("confirm-filter-button");
+        confirmFilterButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> popup.hide());
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
