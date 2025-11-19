@@ -21,6 +21,8 @@ public class UserDAO {
     private static final String UPDATE_PASSWORD_SQL = "UPDATE users SET use_password_hash = ?, use_updated_at = NOW() WHERE use_id = ?";
     private static final String LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_password_hash = ? AND use_status = 'active' AND use_deleted_at IS NULL";
     private static final String FIND_BY_ROLE_SQL = "SELECT * FROM users WHERE use_role = ? AND use_status = 'active' AND use_deleted_at IS NULL";
+//    private static final String LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_password_hash = ? AND use_status = 'active' AND use_deleted_at IS NULL";
+private static final String FIND_BY_EMAIL_FOR_LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_status = 'active' AND use_deleted_at IS NULL";
 
     public static void insert(User user) {
         try (Connection connection = Database.getConnection();
@@ -30,7 +32,7 @@ public class UserDAO {
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPasswordHash());
             stmt.setObject(4, user.getRole().name());
-            stmt.setInt(3, user.getDepartment().getId());
+            stmt.setInt(5, user.getDepartment().getId());
 
             int rows = stmt.executeUpdate();
             System.out.println("Usuário inserido! Linhas afetadas: " + rows);
@@ -150,11 +152,12 @@ public class UserDAO {
 
 
     public static User login(String email, String password) {
+        User user = null;
+
         try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(LOGIN_SQL)) {
+             PreparedStatement stmt = conn.prepareStatement(FIND_BY_EMAIL_FOR_LOGIN_SQL)) {
 
             stmt.setString(1, email);
-            stmt.setString(2, password);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 // Se encontrou um usuário, reutiliza o método mapUser para criar o objeto
@@ -165,6 +168,14 @@ public class UserDAO {
         } catch (SQLException e) {
             // Mantém o padrão de tratamento de erro da classe DAO
             throw new RuntimeException("Erro ao autenticar usuário: " + e.getMessage(), e);
+        }
+
+        if (user != null) {
+            if (password.hashCode() == user.getPasswordHash().hashCode()) {
+                return user;
+            } else {
+                return null; // Senha incorreta
+            }
         }
 
         // Retorna null se o login falhar (credenciais incorretas ou usuário inativo)
