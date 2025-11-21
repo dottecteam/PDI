@@ -20,6 +20,7 @@ public class UserDAO {
     private static final String SOFT_DELETE_SQL = "UPDATE users SET use_deleted_at = NOW(), use_status = 'inactive' WHERE use_id = ?";
     private static final String UPDATE_PASSWORD_SQL = "UPDATE users SET use_password_hash = ?, use_updated_at = NOW() WHERE use_id = ?";
     private static final String LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_password_hash = ? AND use_status = 'active' AND use_deleted_at IS NULL";
+    private static final String FIND_BY_ROLE_SQL = "SELECT * FROM users WHERE use_role = ? AND use_status = 'active' AND use_deleted_at IS NULL";
 
     public static void insert(User user) {
         try (Connection connection = Database.getConnection();
@@ -168,6 +169,24 @@ public class UserDAO {
 
         // Retorna null se o login falhar (credenciais incorretas ou usuário inativo)
         return null;
+    }
+
+    public static List<User> findByRole(Role role) {
+        List<User> users = new ArrayList<>();
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(FIND_BY_ROLE_SQL)) {
+
+            stmt.setString(1, role.name());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    users.add(mapUser(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar usuários por role: " + e.getMessage(), e);
+        }
+        return users;
     }
 
 

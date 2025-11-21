@@ -80,6 +80,18 @@ public class HeaderViewModel{
             case "AddActivity.fxml" -> {
                 buildHeaderStructure("Adicionar Atividade", true, false, false);
             }
+            case "Settings.fxml" -> {
+                Button buttonAddSector = new Button("Adicionar Setor");
+                buttonAddSector.setOnMouseClicked(event2 -> {
+                    TemplateViewModel.switchScreen("AddSector.fxml");
+                    updateHeader("AddSector.fxml");
+                });
+
+                buildHeaderStructure("Setor", false, false, false, buttonAddSector);
+            }
+            case "AddSector.fxml" -> {
+                buildHeaderStructure("Adicionar Setor", true, false, false);
+            }
             default -> {
                 buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false);
             }
