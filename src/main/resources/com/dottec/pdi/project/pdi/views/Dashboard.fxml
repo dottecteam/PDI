@@ -32,7 +32,7 @@
                 </LineChart>
             </AnchorPane>
 
-            <AnchorPane fx:id="widgetTaskPieChart" prefHeight="350.0" prefWidth="300.0" styleClass="widget-container" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="widgetTaskPieChart" prefHeight="250.0" prefWidth="300.0" styleClass="widget-container" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="0.0">
                 <PieChart fx:id="taskPieChart"
                           styleClass="ChartTags-Title" title="."
                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="40.0" />
@@ -51,7 +51,7 @@
                 </BarChart>
             </AnchorPane>
 
-            <AnchorPane fx:id="widgetTagBarChart" prefHeight="250.0" prefWidth="300.0" styleClass="widget-container" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="360.0">
+            <AnchorPane fx:id="widgetTagBarChart" prefHeight="250.0" prefWidth="600.0" styleClass="widget-container" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="360.0">
 
                 <BarChart fx:id="tagBarChart" prefHeight="250.0" prefWidth="300.0" styleClass="ChartTags-Title" title="." AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <xAxis>

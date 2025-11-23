@@ -59,8 +59,8 @@ public class DashboardViewModel implements Initializable {
 
     // Grid Config
     private final double MIN_CELL_SIZE = 220.0;
-    private final double GAP = 8.0; // Espaçamento entre widgets
-    private final double RESIZE_THRESHOLD = 20.0; // Área de clique para redimensionar
+    private final double GAP = 8.0;
+    private final double RESIZE_THRESHOLD = 40.0;
     private int cols = 3;
     private int rows = 3;
     private double cellWidth;
@@ -69,12 +69,11 @@ public class DashboardViewModel implements Initializable {
     private boolean[][] occupied;
     private final Map<Node, GridItem> items = new HashMap<>();
 
-    // Highlight Layer
     private final List<Rectangle> highlightRects = new ArrayList<>();
     private Rectangle targetRect = null;
 
     private final String STATUS_CONCLUIDO = "completed";
-    private DashboardDAO tagDAO;
+    private final DashboardDAO tagDAO;
 
     public DashboardViewModel() {
         this.tagDAO = new DashboardDAO();
@@ -82,7 +81,6 @@ public class DashboardViewModel implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Desativa animações e define mouse transparency para drag
         tagBarChart.setAnimated(false);
         taskPieChart.setAnimated(false);
         taskPieChart.setLegendVisible(false);
@@ -102,12 +100,11 @@ public class DashboardViewModel implements Initializable {
         dashboardContentPane.heightProperty().addListener((obs, oldV, newV) -> recomputeGridAndReposition());
 
         Platform.runLater(() -> {
-            // colspan/rowspan definem o tamanho inicial/mínimo
-            registerWidget(widgetMonthsLineChart, 2, 1);
-            registerWidget(widgetTaskPieChart, 1, 1);
-            registerWidget(widgetProgressBarChart, 2, 1);
-            registerWidget(widgetTagBarChart, 1, 1);
-            registerWidget(widgetSkillsDistribution, 1, 1);
+            registerWidget(widgetMonthsLineChart, 0, 0, 2, 1);
+            registerWidget(widgetTagBarChart, 2, 0, 2, 1);
+            registerWidget(widgetProgressBarChart, 0, 1, 2, 1);
+            registerWidget(widgetSkillsDistribution, 2, 1, 2, 1);
+            registerWidget(widgetTaskPieChart, 4, 0, 1, 2);
 
             createHighlightLayer();
             recomputeGridAndReposition();
@@ -157,9 +154,9 @@ public class DashboardViewModel implements Initializable {
 
     // ---------- GRID / WIDGETS ----------
 
-    private void registerWidget(AnchorPane widget, int colspan, int rowspan) {
+    private void registerWidget(AnchorPane widget, int startCol, int startRow, int colspan, int rowspan) {
         AnchorPane.clearConstraints(widget);
-        GridItem gi = new GridItem(widget, 0, 0, colspan, rowspan);
+        GridItem gi = new GridItem(widget, startRow, startCol, colspan, rowspan);
         items.put(widget, gi);
         widget.setLayoutX(widget.getLayoutX());
         widget.setLayoutY(widget.getLayoutY());
@@ -172,10 +169,10 @@ public class DashboardViewModel implements Initializable {
 
         if (w <= 0 || h <= 0) return;
 
-        cols = Math.max(3, (int) Math.floor(w / MIN_CELL_SIZE));
-        rows = Math.max(3, (int) Math.floor(h / MIN_CELL_SIZE));
+        cols = Math.max(5, (int) Math.floor(w / MIN_CELL_SIZE)); // Definido mínimo de 5 colunas
+        rows = Math.max(3, (int) Math.floor(h / MIN_CELL_SIZE)); // Mantido mínimo de 3 linhas
 
-        cols = Math.max(3, cols);
+        cols = Math.max(5, cols);
         rows = Math.max(3, rows);
 
         cellWidth = w / (double) cols;
@@ -184,16 +181,15 @@ public class DashboardViewModel implements Initializable {
         occupied = new boolean[rows][cols];
         List<GridItem> ordered = new ArrayList<>(items.values());
 
-        // Ordena para garantir que os itens maiores e mais prioritários sejam colocados primeiro
         ordered.sort(Comparator.comparingInt((GridItem gi) -> gi.colspan * gi.rowspan).reversed()
                 .thenComparingInt((GridItem gi) -> gi.row)
                 .thenComparingInt((GridItem gi) -> gi.col));
 
         for (GridItem gi : ordered) {
-            int approxCol = Math.max(0, Math.min(cols - gi.colspan, (int) Math.round(gi.node.getLayoutX() / cellWidth)));
-            int approxRow = Math.max(0, Math.min(rows - gi.rowspan, (int) Math.round(gi.node.getLayoutY() / cellHeight)));
+            int preferredCol = gi.col;
+            int preferredRow = gi.row;
 
-            int[] free = findFirstFit(approxRow, approxCol, gi.colspan, gi.rowspan);
+            int[] free = findFirstFit(preferredRow, preferredCol, gi.colspan, gi.rowspan);
 
             if (free == null) free = findFirstFit(0, 0, gi.colspan, gi.rowspan);
 
@@ -250,11 +246,9 @@ public class DashboardViewModel implements Initializable {
         gi.placed = true;
         occupyRegion(row, col, gi.rowspan, gi.colspan, true);
 
-        // Calcula posição com GAP/2 de margem
         double lx = col * cellWidth + GAP / 2.0;
         double ly = row * cellHeight + GAP / 2.0;
 
-        // Calcula tamanho com GAP
         double w = gi.colspan * cellWidth - GAP;
         double h = gi.rowspan * cellHeight - GAP;
 
@@ -268,8 +262,6 @@ public class DashboardViewModel implements Initializable {
         gi.node.setLayoutX(Math.round(lx));
         gi.node.setLayoutY(Math.round(ly));
     }
-
-    // ---------- HIGHLIGHT LAYER ----------
 
     private void createHighlightLayer() {
         clearHighlights();
@@ -386,8 +378,6 @@ public class DashboardViewModel implements Initializable {
         targetRect.setOpacity(1.0);
     }
 
-    // ---------- DRAG & DROP + RESIZE ----------
-
     private void makeDraggable(Node node) {
         node.setOnMousePressed((MouseEvent event) -> {
             if (event.getButton() != MouseButton.PRIMARY) return;
@@ -398,7 +388,6 @@ public class DashboardViewModel implements Initializable {
             double mouseX = event.getX();
             double mouseY = event.getY();
 
-            // Verifica se o clique foi na área de resize (canto inferior direito)
             if (mouseX > node.getBoundsInLocal().getWidth() - RESIZE_THRESHOLD &&
                     mouseY > node.getBoundsInLocal().getHeight() - RESIZE_THRESHOLD) {
                 isResizing = true;
@@ -428,15 +417,12 @@ public class DashboardViewModel implements Initializable {
             if (gi == null) return;
 
             if (isResizing) {
-                // Lógica para redimensionar
                 double newWidth = event.getX();
                 double newHeight = event.getY();
 
-                // Calcula novos spans, garantindo o mínimo
                 int newColspan = (int) Math.max(gi.minColspan, Math.round(newWidth / cellWidth));
                 int newRowspan = (int) Math.max(gi.minRowspan, Math.round(newHeight / cellHeight));
 
-                // Clamp para não sair do grid
                 newColspan = Math.min(newColspan, cols - gi.col);
                 newRowspan = Math.min(newRowspan, rows - gi.row);
 
@@ -444,7 +430,6 @@ public class DashboardViewModel implements Initializable {
                     gi.colspan = newColspan;
                     gi.rowspan = newRowspan;
 
-                    // Aplica o novo tamanho imediatamente (sem reposicionar)
                     double w = gi.colspan * cellWidth - GAP;
                     double h = gi.rowspan * cellHeight - GAP;
                     ((AnchorPane) gi.node).setPrefWidth(w);
@@ -456,7 +441,6 @@ public class DashboardViewModel implements Initializable {
                 node.getScene().setCursor(javafx.scene.Cursor.SE_RESIZE);
 
             } else {
-                // Lógica para arrastar
                 double dx = event.getSceneX() - xOffset;
                 double dy = event.getSceneY() - yOffset;
 
@@ -491,14 +475,12 @@ public class DashboardViewModel implements Initializable {
                 return;
             }
 
-            // Calcula a célula alvo
             int targetCol = (int) Math.round(node.getLayoutX() / cellWidth);
             int targetRow = (int) Math.round(node.getLayoutY() / cellHeight);
 
             targetCol = Math.max(0, Math.min(cols - gi.colspan, targetCol));
             targetRow = Math.max(0, Math.min(rows - gi.rowspan, targetRow));
 
-            // Resolução de Conflito
             if (!isRegionOccupied(targetRow, targetCol, gi.rowspan, gi.colspan)) {
                 placeItemAt(gi, targetRow, targetCol);
             } else {
@@ -564,7 +546,7 @@ public class DashboardViewModel implements Initializable {
         return null;
     }
 
-    // --- MÉTODOS DE GRÁFICOS E AUXILIARES (SEU CÓDIGO) ---
+    // --- MÉTODOS DE GRÁFICOS E AUXILIARES ---
 
     private void loadSkillsDistributionChartData() {
         skillsDistributionPieChart.setTitle("Distribuição de Soft/Hard Skills");
