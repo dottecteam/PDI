@@ -1,3 +1,18 @@
+.widget-container {
+    -fx-border-color: #AAAAAA;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-background-color: #FFFFFF; /* CRÍTICO: Garante que o contêiner capture o evento do mouse */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-cursor: move; /* Feedback visual */
+}
+
+/* Opcional: Adiciona um efeito ao passar o mouse */
+.widget-container:hover {
+    -fx-effect: dropshadow(gaussian, rgba(75,0,129,0.3), 10, 0.5, 0, 0);
+}
+
+/* Seus estilos de cores de gráfico (já existentes) */
 .chart-legend-item-symbol.default-color0 {
     -fx-background-color: #9032BB;
 }
@@ -22,4 +37,3 @@
 #progressBarChart .default-color0.chart-bar {
     -fx-bar-fill: #F2C80F;
 }
-
