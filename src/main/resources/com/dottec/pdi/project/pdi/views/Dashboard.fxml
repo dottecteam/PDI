@@ -34,8 +34,9 @@
 
             <AnchorPane fx:id="widgetTaskPieChart" prefHeight="350.0" prefWidth="300.0" styleClass="widget-container" AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="0.0">
                 <PieChart fx:id="taskPieChart"
-                          prefHeight="300.0" prefWidth="300.0" styleClass="ChartTags-Title" title="." AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                <Label fx:id="percentage" layoutX="14.0" layoutY="320.0" styleClass="Special-Text" text="Label" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="310.0" />
+                          styleClass="ChartTags-Title" title="."
+                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="40.0" />
+                <Label fx:id="percentage" layoutX="14.0" layoutY="320.0" styleClass="Special-Text" text="Label" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="315.0" />
             </AnchorPane>
 
             <AnchorPane fx:id="widgetProgressBarChart" prefHeight="250.0" prefWidth="600.0" styleClass="widget-container" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="360.0">
