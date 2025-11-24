@@ -1,0 +1,49 @@
+.list-view .list-cell {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: transparent;
+}
+
+.notification-card {
+    -fx-min-height: 75;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
+    -fx-border-color: transparent;
+    -fx-border-radius: 15;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+}
+
+.notification-card:hover {
+    -fx-border-color: #AF69CD;
+}
+
+.notification-unread {
+    -fx-background-color: #F6F6FC;
+}
+
+.notification-read {
+    -fx-background-color: #F0F0F0;
+}
+
+.notification-message {
+    -fx-font-size: 16px;
+    -fx-text-fill: black;
+    -fx-wrap-text: true;
+    -fx-max-width: 500;
+}
+
+.notification-details {
+    -fx-font-size: 14px;
+    -fx-text-fill: #4B0081; /* Roxo escuro para contraste */
+    -fx-font-weight: bold;
+}
+
+.notification-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: #808080;
+}

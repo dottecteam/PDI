@@ -22,7 +22,7 @@
         </Label>
         <ListView fx:id="notificationsListView" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
             <stylesheets>
-                <URL value="@../static/style/style_AddGoal.css" />
+                <URL value="@../static/style/style_notifications.css" />
             </stylesheets>
         </ListView>
     </children>
