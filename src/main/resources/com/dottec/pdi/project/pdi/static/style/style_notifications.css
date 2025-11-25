@@ -1,5 +1,6 @@
+
 .list-view .list-cell {
-    -fx-padding: 0;
+    -fx-padding: 10;
     -fx-background-color: transparent;
 }
 
@@ -11,7 +12,7 @@
     -fx-min-height: 75;
     -fx-background-radius: 15;
     -fx-padding: 20;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 1);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1);
     -fx-border-color: transparent;
     -fx-border-radius: 15;
     -fx-border-width: 2;
