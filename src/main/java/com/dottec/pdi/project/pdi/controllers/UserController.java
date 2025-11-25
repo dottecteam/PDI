@@ -22,8 +22,10 @@ public class UserController {
             User loggedUser = AuthController.getInstance().getLoggedUser();
             if (loggedUser != null) {
                 Log log = new Log();
-                log.setLogAction("CREATE_USER");
-                log.setLogDetails("User created: " + user.getName() + " (" + user.getEmail() + ")");
+                log.setLogAction("create_user");
+                String details = String.format("{\"user_name\": \"%s\", \"user_email\": \"%s\", \"log_message\": \"User created\"}",
+                        user.getName(), user.getEmail());
+                log.setLogDetails(details);
                 log.setLogUserId(loggedUser.getId());
                 LogController.addLog(log);
             }
@@ -48,8 +50,10 @@ public class UserController {
             User loggedUser = AuthController.getInstance().getLoggedUser();
             if (loggedUser != null) {
                 Log log = new Log();
-                log.setLogAction("INACTIVATE_USER");
-                log.setLogDetails("User inactivated: " + user.getName() + " (ID: " + user.getId() + ")");
+                log.setLogAction("inactivate_user");
+                String details = String.format("{\"user_id\": %d, \"user_name\": \"%s\", \"log_message\": \"User inactivated\"}",
+                        user.getId(), user.getName());
+                log.setLogDetails(details);
                 log.setLogUserId(loggedUser.getId());
                 LogController.addLog(log);
             }
@@ -73,8 +77,10 @@ public class UserController {
             User loggedUser = AuthController.getInstance().getLoggedUser();
             if (loggedUser != null) {
                 Log log = new Log();
-                log.setLogAction("UPDATE_USER");
-                log.setLogDetails("User updated: " + user.getName() + " (ID: " + user.getId() + ")");
+                log.setLogAction("update_user");
+                String details = String.format("{\"user_id\": %d, \"user_name\": \"%s\", \"log_message\": \"User data updated\"}",
+                        user.getId(), user.getName());
+                log.setLogDetails(details);
                 log.setLogUserId(loggedUser.getId());
                 LogController.addLog(log);
             }

@@ -11,17 +11,20 @@ import java.util.List;
 
 public final class GoalController {
 
-    private GoalController() {}
+    private GoalController() {
+    }
 
-    public static boolean saveGoal(Goal goal){
-        if(GoalValidator.isValid(goal)){
+    public static boolean saveGoal(Goal goal) {
+        if (GoalValidator.isValid(goal)) {
             GoalDAO.insert(goal);
 
             User loggedUser = AuthController.getInstance().getLoggedUser();
             if (loggedUser != null) {
                 Log log = new Log();
-                log.setLogAction("CREATE_GOAL");
-                log.setLogDetails("Goal created: " + goal.getName() + " for collaborator ID: " + goal.getCollaborator().getId());
+                log.setLogAction("create_goal");
+                String details = String.format("{\"goal_id\": %d, \"goal_name\": \"%s\", \"collaborator_id\": %d, \"log_message\": \"Goal created\"}",
+                        goal.getId(), goal.getName(), goal.getCollaborator().getId());
+                log.setLogDetails(details);
                 log.setLogUserId(loggedUser.getId());
                 LogController.addLog(log);
             }
@@ -40,14 +43,16 @@ public final class GoalController {
         return GoalDAO.readAll();
     }
 
-    public static void updateGoal(Goal goal){
+    public static void updateGoal(Goal goal) {
         GoalDAO.update(goal);
 
         User loggedUser = AuthController.getInstance().getLoggedUser();
         if (loggedUser != null) {
             Log log = new Log();
-            log.setLogAction("UPDATE_GOAL");
-            log.setLogDetails("Goal updated: " + goal.getName() + " (ID: " + goal.getId() + ")");
+            log.setLogAction("update_goal");
+            String details = String.format("{\"goal_id\": %d, \"goal_name\": \"%s\", \"goal_status\": \"%s\", \"log_message\": \"Goal updated\"}",
+                    goal.getId(), goal.getName(), goal.getStatus().name());
+            log.setLogDetails(details);
             log.setLogUserId(loggedUser.getId());
             LogController.addLog(log);
         }

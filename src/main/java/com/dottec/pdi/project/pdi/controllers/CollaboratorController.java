@@ -13,7 +13,8 @@ import static com.dottec.pdi.project.pdi.enums.CollaboratorStatus.active;
 
 public class CollaboratorController {
 
-    private CollaboratorController(){}
+    private CollaboratorController() {
+    }
 
     public static void saveCollaborator(String name, String cpf, String email, Department department) {
         Collaborator collaborator = new Collaborator();
@@ -21,15 +22,17 @@ public class CollaboratorController {
         collaborator.setCpf(cpf);
         collaborator.setEmail(email);
         collaborator.setDepartment(department);
-        collaborator.setStatus(active); // Define o status padrão como ativo
+        collaborator.setStatus(active);
 
         CollaboratorDAO.insert(collaborator);
 
         User loggedUser = AuthController.getInstance().getLoggedUser();
         if (loggedUser != null) {
             Log log = new Log();
-            log.setLogAction("CREATE_COLLABORATOR");
-            log.setLogDetails("Collaborator created: " + name + " (CPF: " + cpf + ")");
+            log.setLogAction("create_collaborator");
+            String details = String.format("{\"col_name\": \"%s\", \"col_cpf\": \"%s\", \"dep_name\": \"%s\", \"log_message\": \"Collaborator created\"}",
+                    name, cpf, department != null ? department.getName() : "N/A");
+            log.setLogDetails(details);
             log.setLogUserId(loggedUser.getId());
             LogController.addLog(log);
         }
@@ -46,8 +49,10 @@ public class CollaboratorController {
         User loggedUser = AuthController.getInstance().getLoggedUser();
         if (loggedUser != null) {
             Log log = new Log();
-            log.setLogAction("UPDATE_COLLABORATOR");
-            log.setLogDetails("Collaborator updated: " + collaborator.getName() + " (ID: " + collaborator.getId() + ")");
+            log.setLogAction("update_collaborator");
+            String details = String.format("{\"col_id\": %d, \"col_name\": \"%s\", \"dep_id\": %d, \"log_message\": \"Collaborator data updated\"}",
+                    collaborator.getId(), collaborator.getName(), collaborator.getDepartment() != null ? collaborator.getDepartment().getId() : 0);
+            log.setLogDetails(details);
             log.setLogUserId(loggedUser.getId());
             LogController.addLog(log);
         }
@@ -59,8 +64,9 @@ public class CollaboratorController {
         User loggedUser = AuthController.getInstance().getLoggedUser();
         if (loggedUser != null) {
             Log log = new Log();
-            log.setLogAction("INACTIVATE_COLLABORATOR");
-            log.setLogDetails("Collaborator inactivated (soft delete): ID " + id);
+            log.setLogAction("inactivate_collaborator");
+            String details = String.format("{\"col_id\": %d, \"log_message\": \"Collaborator soft deleted\"}", id);
+            log.setLogDetails(details);
             log.setLogUserId(loggedUser.getId());
             LogController.addLog(log);
         }

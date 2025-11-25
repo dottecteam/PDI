@@ -10,7 +10,8 @@ import java.util.List;
 
 public final class TagController {
 
-    private TagController() {}
+    private TagController() {
+    }
 
     public static void addTag(Tag tag) {
         TagDAO.insert(tag);
@@ -18,8 +19,10 @@ public final class TagController {
         User loggedUser = AuthController.getInstance().getLoggedUser();
         if (loggedUser != null) {
             Log log = new Log();
-            log.setLogAction("CREATE_TAG");
-            log.setLogDetails("Tag created: " + tag.getName() + " (Type: " + tag.getType().name() + ")");
+            log.setLogAction("create_tag");
+            String details = String.format("{\"tag_name\": \"%s\", \"tag_type\": \"%s\", \"log_message\": \"Tag created\"}",
+                    tag.getName(), tag.getType().name());
+            log.setLogDetails(details);
             log.setLogUserId(loggedUser.getId());
             LogController.addLog(log);
         }
@@ -33,8 +36,10 @@ public final class TagController {
         User loggedUser = AuthController.getInstance().getLoggedUser();
         if (loggedUser != null) {
             Log log = new Log();
-            log.setLogAction("DELETE_TAG");
-            log.setLogDetails("Tag deleted: " + (tag != null ? tag.getName() : "ID " + id));
+            log.setLogAction("delete_tag");
+            String details = String.format("{\"tag_id\": %d, \"tag_name\": \"%s\", \"log_message\": \"Tag deleted\"}",
+                    id, tag != null ? tag.getName() : "N/A");
+            log.setLogDetails(details);
             log.setLogUserId(loggedUser.getId());
             LogController.addLog(log);
         }
@@ -58,8 +63,10 @@ public final class TagController {
             User loggedUser = AuthController.getInstance().getLoggedUser();
             if (loggedUser != null) {
                 Log log = new Log();
-                log.setLogAction("UPDATE_TAG");
-                log.setLogDetails("Tag updated: " + existingTag.getName() + " (ID: " + id + ")");
+                log.setLogAction("update_tag");
+                String details = String.format("{\"tag_id\": %d, \"tag_name\": \"%s\", \"tag_type\": \"%s\", \"log_message\": \"Tag updated\"}",
+                        id, newName, newType.name());
+                log.setLogDetails(details);
                 log.setLogUserId(loggedUser.getId());
                 LogController.addLog(log);
             }
