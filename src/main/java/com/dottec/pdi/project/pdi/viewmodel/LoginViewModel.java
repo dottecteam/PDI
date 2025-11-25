@@ -1,6 +1,7 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.AuthController;
+import com.dottec.pdi.project.pdi.controllers.NotificationCreationController;
 import com.dottec.pdi.project.pdi.dao.UserDAO;
 import com.dottec.pdi.project.pdi.model.User;
 import javafx.collections.ObservableList;
@@ -150,6 +151,7 @@ public class LoginViewModel implements Initializable {
 
         if (user != null) {
             AuthController.getInstance().login(user);
+            NotificationCreationController.createExpirationNotifications(user);
             try {
                 Stage currentStage = (Stage) emailField.getScene().getWindow();
                 currentStage.close();

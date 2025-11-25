@@ -39,7 +39,7 @@
 
 .notification-details {
     -fx-font-size: 14px;
-    -fx-text-fill: #4B0081; /* Roxo escuro para contraste */
+    -fx-text-fill: #4B0081;
     -fx-font-weight: bold;
 }
 
