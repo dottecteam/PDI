@@ -10,9 +10,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import java.util.Arrays;
+import java.util.List;
+
+import javafx.application.Platform;
 
 import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.model.Notification;
+import com.dottec.pdi.project.pdi.controllers.NotificationController;
 
 public class HeaderViewModel {
     @FXML
@@ -31,6 +36,8 @@ public class HeaderViewModel {
     private Button filterButton;
     @FXML
     private Button notificationButton;
+    @FXML
+    private Label notificationBadge;
     @FXML
     private TextField searchBar;
     @FXML
@@ -57,6 +64,7 @@ public class HeaderViewModel {
     private void initialize() {
         instance = this;
         returnButton.setOnMouseClicked(e -> TemplateViewModel.goBack());
+        Platform.runLater(this::updateNotificationBadge);
     }
 
     @FXML
@@ -65,8 +73,36 @@ public class HeaderViewModel {
         updateHeader("Notifications.fxml");
     }
 
+    public void updateNotificationBadge() {
+        User user = AuthController.getInstance().getLoggedUser();
+        if (user == null) {
+            notificationBadge.setVisible(false);
+            return;
+        }
+
+        List<Notification> allNotifications = NotificationController.findAllNotifications();
+
+        long unreadCount = allNotifications.stream()
+                .filter(n -> n.getUserId() == user.getId())
+                .filter(n -> !n.isNotIsRead())
+                .count();
+
+        if (unreadCount > 0) {
+            String text = (unreadCount > 9) ? "9+" : String.valueOf(unreadCount);
+            notificationBadge.setText(text);
+            notificationBadge.setVisible(true);
+        } else {
+            notificationBadge.setVisible(false);
+        }
+    }
+
+    public static void refreshNotificationBadge() {
+        if (instance != null) {
+            instance.updateNotificationBadge();
+        }
+    }
+
     private void buildHeader(String page) {
-        // Por padrão, o botão de notificação deve ser visível (true)
         boolean showNotificationButton = true;
 
         switch (page) {
@@ -91,7 +127,6 @@ public class HeaderViewModel {
 
                 buildHeaderStructure("Colaboradores", false, true, true, showNotificationButton, buttonAddCollaborator);
             }
-            // NOVO: Caso para a tela de Notificações, e atualização das telas modais (que não devem ter o botão)
             case "RegisterCollaborator.fxml", "CollaboratorGoals.fxml", "AddGoalFromTemplate.fxml", "Goal.fxml",
                  "AddActivity.fxml", "Notifications.fxml" -> {
                 buildHeaderStructure(
@@ -100,10 +135,10 @@ public class HeaderViewModel {
                             case "CollaboratorGoals.fxml" -> "PDI do Colaborador";
                             case "AddGoalFromTemplate.fxml", "Goal.fxml" -> "Adicionar Meta";
                             case "AddActivity.fxml" -> "Adicionar Atividade";
-                            case "Notifications.fxml" -> "Notificações"; // NOVO
+                            case "Notifications.fxml" -> "Notificações";
                             default -> "Plano de Desenvolvimento Individual";
                         },
-                        true, false, false, false // Oculta o botão de notificação nessas telas
+                        true, false, false, false
                 );
             }
             default -> {
@@ -121,7 +156,7 @@ public class HeaderViewModel {
         setReturnButtonVisible(returnBtn);
         setFilterButtonVisible(filterButton);
         setSearchBarVisible(searchBar);
-        setNotificationButtonVisible(notificationButton); // NOVO
+        setNotificationButtonVisible(notificationButton);
 
         Arrays.stream(headerItems).forEach(item -> {
             if (item instanceof Button btn) {

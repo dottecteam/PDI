@@ -22,7 +22,8 @@ import java.util.List;
 
 public class NotificationsViewModel {
 
-    @FXML private ListView<Notification> notificationsListView;
+    @FXML
+    private ListView<Notification> notificationsListView;
 
     private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -120,6 +121,8 @@ public class NotificationsViewModel {
                         NotificationController.markAsRead(notification.getNotId());
                         notification.setNotIsRead(true);
                         updateItem(notification, false);
+
+                        HeaderViewModel.refreshNotificationBadge();
                     }
                 });
             }

@@ -72,11 +72,24 @@
                                 <Button fx:id="filterButton" maxWidth="70.0" mnemonicParsing="false" prefHeight="33.0"
                                         styleClass="filter-button" text="Filtrar"/>
 
-                                <Button fx:id="notificationButton" mnemonicParsing="false" onMouseClicked="#goToNotifications" styleClass="basic-button" text="🔔" maxWidth="40.0" prefHeight="33.0" HBox.hgrow="NEVER">
+                                <StackPane alignment="BOTTOM_CENTER"
+                                           nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" maxWidth="55.0">
+                                    <children>
+                                        <Button fx:id="notificationButton" mnemonicParsing="false"
+                                                onMouseClicked="#goToNotifications" styleClass="basic-button" text="🔔"
+                                                maxWidth="40.0" prefHeight="33.0"/>
+
+                                        <Label fx:id="notificationBadge" text="•" visible="false"
+                                               styleClass="notification-badge" StackPane.alignment="TOP_RIGHT">
+                                            <StackPane.margin>
+                                                <Insets right="-5.0" top="-5.0"/>
+                                            </StackPane.margin>
+                                        </Label>
+                                    </children>
                                     <HBox.margin>
-                                        <Insets bottom="4.0" />
+                                        <Insets bottom="4.0"/>
                                     </HBox.margin>
-                                </Button>
+                                </StackPane>
 
                             </buttons>
                         </ButtonBar>
