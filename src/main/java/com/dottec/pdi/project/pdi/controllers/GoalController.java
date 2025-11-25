@@ -3,8 +3,9 @@ package com.dottec.pdi.project.pdi.controllers;
 import com.dottec.pdi.project.pdi.dao.GoalDAO;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Goal;
+import com.dottec.pdi.project.pdi.model.Log;
+import com.dottec.pdi.project.pdi.model.User;
 import com.dottec.pdi.project.pdi.utils.GoalValidator;
-import com.dottec.pdi.project.pdi.viewmodel.GoalViewModel;
 
 import java.util.List;
 
@@ -15,6 +16,16 @@ public final class GoalController {
     public static boolean saveGoal(Goal goal){
         if(GoalValidator.isValid(goal)){
             GoalDAO.insert(goal);
+
+            User loggedUser = AuthController.getInstance().getLoggedUser();
+            if (loggedUser != null) {
+                Log log = new Log();
+                log.setLogAction("CREATE_GOAL");
+                log.setLogDetails("Goal created: " + goal.getName() + " for collaborator ID: " + goal.getCollaborator().getId());
+                log.setLogUserId(loggedUser.getId());
+                LogController.addLog(log);
+            }
+
             return true;
         } else {
             return false;
@@ -31,6 +42,15 @@ public final class GoalController {
 
     public static void updateGoal(Goal goal){
         GoalDAO.update(goal);
+
+        User loggedUser = AuthController.getInstance().getLoggedUser();
+        if (loggedUser != null) {
+            Log log = new Log();
+            log.setLogAction("UPDATE_GOAL");
+            log.setLogDetails("Goal updated: " + goal.getName() + " (ID: " + goal.getId() + ")");
+            log.setLogUserId(loggedUser.getId());
+            LogController.addLog(log);
+        }
     }
 
     public static void assignGoalToCollaborator(Goal goal, Collaborator collaborator) {

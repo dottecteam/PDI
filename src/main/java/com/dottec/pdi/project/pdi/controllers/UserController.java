@@ -2,10 +2,13 @@ package com.dottec.pdi.project.pdi.controllers;
 
 import com.dottec.pdi.project.pdi.dao.UserDAO;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.model.Log;
+
 import java.util.List;
 
 public class UserController {
-    private UserController() {}
+    private UserController() {
+    }
 
     public static boolean addUser(User user) {
         if (UserDAO.findById(user.getId()) != null) {
@@ -15,6 +18,16 @@ public class UserController {
 
         try {
             UserDAO.insert(user);
+
+            User loggedUser = AuthController.getInstance().getLoggedUser();
+            if (loggedUser != null) {
+                Log log = new Log();
+                log.setLogAction("CREATE_USER");
+                log.setLogDetails("User created: " + user.getName() + " (" + user.getEmail() + ")");
+                log.setLogUserId(loggedUser.getId());
+                LogController.addLog(log);
+            }
+
             return true;
         } catch (Exception e) {
             System.err.println("User insert failed. Error: " + e.getMessage());
@@ -31,6 +44,16 @@ public class UserController {
 
         try {
             UserDAO.softDelete(user);
+
+            User loggedUser = AuthController.getInstance().getLoggedUser();
+            if (loggedUser != null) {
+                Log log = new Log();
+                log.setLogAction("INACTIVATE_USER");
+                log.setLogDetails("User inactivated: " + user.getName() + " (ID: " + user.getId() + ")");
+                log.setLogUserId(loggedUser.getId());
+                LogController.addLog(log);
+            }
+
             return true;
         } catch (Exception e) {
             System.err.println("User soft delete failed for ID " + id + ". Error: " + e.getMessage());
@@ -46,6 +69,16 @@ public class UserController {
 
         try {
             UserDAO.update(user);
+
+            User loggedUser = AuthController.getInstance().getLoggedUser();
+            if (loggedUser != null) {
+                Log log = new Log();
+                log.setLogAction("UPDATE_USER");
+                log.setLogDetails("User updated: " + user.getName() + " (ID: " + user.getId() + ")");
+                log.setLogUserId(loggedUser.getId());
+                LogController.addLog(log);
+            }
+
             return true;
         } catch (Exception e) {
             System.err.println("User update failed for ID " + user.getId() + ". Error: " + e.getMessage());
