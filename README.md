@@ -10,6 +10,33 @@ Este programa foi desenvolvido para otimizar o processo de criação e gestão d
 <br>
 <br>
 
+## Instalação 🛠️
+
+- Programas necessários: [MySQL](https://www.mysql.com/), [MySQL Workbench](https://www.mysql.com/products/workbench/), [Git](https://git-scm.com/) e [Java](https://www.java.com/en/).
+
+<br>
+
+1. [Ative o servidor MySQL](https://youtu.be/u96rVINbAUI?si=vAKutvf2RUC8Z7oL) e [abra](https://youtu.be/q0EBUXTQQRY?si=ynDUgV0q8uhTZ4VP) o [banco de dados](documents/database.sql) no MySQL workbench.
+
+2. Copie esse repositório usando Git:
+
+```
+git clone https://github.com/dottecteam/PDI.git
+```
+
+3. Dentro da pasta "PDI", crie um arquivo chamado ".env" com as seguintes informações:
+
+```
+DB_URL= // caminho do banco de dados, exemplo: jdbc:mysql://localhost:3306/database
+DB_USER= // nome de usuário do servidor, exemplo: root
+DB_PASSWORD= // senha do servidor, exemplo: root
+```
+
+4. Abra o [arquivo principal](src/main/java/com/dottec/pdi/project/pdi/Application.java).
+
+<br>
+<br>
+
 ## Product backlog 📋
 
 <br>
