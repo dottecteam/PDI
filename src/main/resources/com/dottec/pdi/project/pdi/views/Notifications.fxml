@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #F6F6F6;"
+      stylesheets="@../static/style/style_template.css"
+      xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.dottec.pdi.project.pdi.viewmodel.NotificationsViewModel">
+    <padding>
+        <Insets bottom="40.0" left="60.0" right="60.0" top="40.0" />
+    </padding>
+    <children>
+        <Label style="-fx-text-fill: #4B0081;" styleClass="big-label" text="Suas Notificações">
+            <font>
+                <Font size="32.0" />
+            </font>
+        </Label>
+        <ListView fx:id="notificationsListView" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+            <stylesheets>
+                <URL value="@../static/style/style_notifications.css" />
+            </stylesheets>
+        </ListView>
+    </children>
+</VBox>

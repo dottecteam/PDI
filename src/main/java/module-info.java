@@ -17,5 +17,6 @@ module com.dottec.pdi.project.pdi {
     exports com.dottec.pdi.project.pdi.controllers;
     exports com.dottec.pdi.project.pdi.utils;
     exports com.dottec.pdi.project.pdi.viewmodel;
+    exports com.dottec.pdi.project.pdi.model;
     opens com.dottec.pdi.project.pdi.utils to javafx.fxml;
 }
