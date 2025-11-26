@@ -123,36 +123,55 @@ public class DashboardViewModel implements Initializable {
     private void handleExportData() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Salvar Relatório PDI");
+
+        // Adiciona o filtro para CSV
         fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*.csv)", "*.csv"));
 
+        // Adiciona o filtro para XLSX
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("Excel Workbook (*.xlsx)", "*.xlsx"));
+
         User loggedUser = AuthController.getInstance().getLoggedUser();
-        String defaultFileName = "relatorio_pdi.csv";
+        String defaultBaseName = "relatorio_pdi";
         boolean isDepartmentManager = loggedUser != null && loggedUser.getRole() == Role.department_manager;
 
         if (isDepartmentManager && loggedUser.getDepartment() != null) {
             int departmentId = loggedUser.getDepartment().getId();
-            defaultFileName = "relatorio_departamento_" + departmentId + ".csv";
+            defaultBaseName = "relatorio_departamento_" + departmentId;
         } else {
-            defaultFileName = "relatorio_geral_pdi.csv";
+            defaultBaseName = "relatorio_geral_pdi";
         }
 
-        fileChooser.setInitialFileName(defaultFileName);
+        fileChooser.setInitialFileName(defaultBaseName + ".csv");
 
         File file = fileChooser.showSaveDialog(exportButton.getScene().getWindow());
 
         if (file != null) {
             Path savePath = file.toPath();
+            String pathString = savePath.toString();
+
+            String extension = pathString.substring(pathString.lastIndexOf(".") + 1).toLowerCase();
 
             try {
-                if (isDepartmentManager && loggedUser.getDepartment() != null) {
-                    int departmentId = loggedUser.getDepartment().getId();
-                    ExportDataController.sendDepartmentConsolidatedCSV(savePath.toString(), departmentId);
+                boolean isDepartment = isDepartmentManager && loggedUser.getDepartment() != null;
+                int departmentId = isDepartment ? loggedUser.getDepartment().getId() : -1;
+
+
+                if (extension.equals("xlsx")) {
+                    if (isDepartment) {
+                        ExportDataController.sendDepartmentConsolidatedXLSX(pathString, departmentId);
+                    } else {
+                        ExportDataController.sendConsolidatedXLSX(pathString);
+                    }
                 } else {
-                    ExportDataController.sendConsolidatedCSV(savePath.toString());
+                    if (isDepartment) {
+                        ExportDataController.sendDepartmentConsolidatedCSV(pathString, departmentId);
+                    } else {
+                        ExportDataController.sendConsolidatedCSV(pathString);
+                    }
                 }
 
                 TemplateViewModel.showSuccessMessage("Exportação Concluída",
-                        "O relatório foi salvo em:\n" + savePath.toString());
+                        "O relatório foi salvo em:\n" + pathString);
 
             } catch (Exception e) {
                 e.printStackTrace();
