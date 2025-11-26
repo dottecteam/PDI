@@ -6,6 +6,8 @@ module com.dottec.pdi.project.pdi {
     requires javafx.controls;
     requires javafx.base;
     requires jbcrypt;
+    requires org.apache.poi.ooxml;
+    requires org.apache.poi.poi;
 
     opens com.dottec.pdi.project.pdi to javafx.fxml;
     opens com.dottec.pdi.project.pdi.controllers;
