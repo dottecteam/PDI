@@ -5,6 +5,7 @@ import com.dottec.pdi.project.pdi.dao.DashboardDAO;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import com.dottec.pdi.project.pdi.enums.Role;
 import com.dottec.pdi.project.pdi.model.User;
 import javafx.collections.FXCollections;
@@ -19,6 +20,14 @@ import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
+import javafx.scene.control.Button;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLException;
 
 import java.net.URL;
 import java.util.List;
@@ -36,6 +45,9 @@ public class DashboardViewModel implements Initializable {
 
     @FXML
     private Label percentage;
+
+    @FXML
+    private Button exportButton;
 
     @FXML
     private LineChart monthsLineChart;
@@ -65,7 +77,7 @@ public class DashboardViewModel implements Initializable {
         User loggedUser = AuthController.getInstance().getLoggedUser();
 
         if (loggedUser == null) {
-            showAlert("Usuário não encontrado","Erro: Nenhum usuário está logado.");
+            showAlert("Usuário não encontrado", "Erro: Nenhum usuário está logado.");
             return;
         }
 
@@ -105,6 +117,49 @@ public class DashboardViewModel implements Initializable {
 
 
         loadBarChartData(dataFetchingTask);
+    }
+
+    @FXML
+    private void handleExportData() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salvar Relatório PDI");
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*.csv)", "*.csv"));
+
+        User loggedUser = AuthController.getInstance().getLoggedUser();
+        String defaultFileName = "relatorio_pdi.csv";
+        boolean isDepartmentManager = loggedUser != null && loggedUser.getRole() == Role.department_manager;
+
+        if (isDepartmentManager && loggedUser.getDepartment() != null) {
+            int departmentId = loggedUser.getDepartment().getId();
+            defaultFileName = "relatorio_departamento_" + departmentId + ".csv";
+        } else {
+            defaultFileName = "relatorio_geral_pdi.csv";
+        }
+
+        fileChooser.setInitialFileName(defaultFileName);
+
+        File file = fileChooser.showSaveDialog(exportButton.getScene().getWindow());
+
+        if (file != null) {
+            Path savePath = file.toPath();
+
+            try {
+                if (isDepartmentManager && loggedUser.getDepartment() != null) {
+                    int departmentId = loggedUser.getDepartment().getId();
+                    ExportDataController.sendDepartmentConsolidatedCSV(savePath.toString(), departmentId);
+                } else {
+                    ExportDataController.sendConsolidatedCSV(savePath.toString());
+                }
+
+                TemplateViewModel.showSuccessMessage("Exportação Concluída",
+                        "O relatório foi salvo em:\n" + savePath.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                TemplateViewModel.showErrorMessage("Erro na Exportação",
+                        "Falha ao salvar o arquivo:\n" + e.getMessage());
+            }
+        }
     }
 
 
@@ -219,9 +274,13 @@ public class DashboardViewModel implements Initializable {
                 int contagem = data.cont();
 
                 String nomeParaExibir = statusDoBanco;
-                switch(statusDoBanco.toLowerCase()) {
-                    case "completed": nomeParaExibir = "Concluído"; break;
-                    case "in_progress":   nomeParaExibir = "Em Progresso"; break;
+                switch (statusDoBanco.toLowerCase()) {
+                    case "completed":
+                        nomeParaExibir = "Concluído";
+                        break;
+                    case "in_progress":
+                        nomeParaExibir = "Em Progresso";
+                        break;
                 }
 
 
@@ -366,8 +425,12 @@ public class DashboardViewModel implements Initializable {
             if (newNode != null) {
                 String color = "#808080";
                 switch (statusOriginal.toLowerCase()) {
-                    case "completed": color = "#01B8AA"; break;
-                    case "in_progress":   color = "#FD625E"; break;
+                    case "completed":
+                        color = "#01B8AA";
+                        break;
+                    case "in_progress":
+                        color = "#FD625E";
+                        break;
                 }
 
                 newNode.setStyle("-fx-background-color: " + color + ";");
