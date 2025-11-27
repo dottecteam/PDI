@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -54,7 +56,7 @@ public class HeaderViewModel {
     public HeaderViewModel() {
     }
 
-    public Button getFilterButton(){
+    public Button getFilterButton() {
         return filterButton;
     }
 
@@ -122,12 +124,31 @@ public class HeaderViewModel {
                 AuthController auth = AuthController.getInstance();
                 User currentUser = auth.getLoggedUser();
 
+                // --- NOVO: Botão de Exportar Dados ---
+                Button exportButton = new Button("Exportar Dados");
+                ImageView exportIcon = new ImageView(new Image(getClass().getResourceAsStream("/com/dottec/pdi/project/pdi/static/img/download.png")));
+                exportIcon.setFitHeight(25.0);
+                exportIcon.setFitWidth(25.0);
+                exportButton.setGraphic(exportIcon);
+                exportButton.setContentDisplay(ContentDisplay.RIGHT);
+
+                // Adiciona a ação ao botão
+                exportButton.setOnAction(e -> {
+                    DashboardViewModel controller = DashboardViewModel.getInstance();
+                    if (controller != null) {
+                        controller.handleExportData(e);
+                    } else {
+                        // Mensagem de fallback, caso o controller não tenha sido inicializado corretamente
+                        TemplateViewModel.showErrorMessage("Erro de Acesso", "A tela do Dashboard não está pronta para exportação. Tente novamente.");
+                    }
+                });
+
                 if (currentUser != null) {
                     if (currentUser.getRole() == Role.department_manager) {
-                        buildHeaderStructure("Dashboard - Setor " + currentUser.getDepartment().getName(), false, false, true, showNotificationButton);
+                        buildHeaderStructure("Dashboard - Setor " + currentUser.getDepartment().getName(), false, false, true, showNotificationButton, exportButton);
                     }
                 } else {
-                    buildHeaderStructure("Dashboard", false, false, true, showNotificationButton);
+                    buildHeaderStructure("Dashboard", false, false, true, showNotificationButton, exportButton);
                 }
             }
             case "Collaborators.fxml" -> {
@@ -153,10 +174,10 @@ public class HeaderViewModel {
                 );
             }
 
-            case "Notifications.fxml" ->{
+            case "Notifications.fxml" -> {
                 buildHeaderStructure("Notificações", true, false, false, false);
             }
-                case "Settings.fxml" -> {
+            case "Settings.fxml" -> {
                 Button buttonAddSector = new Button("Adicionar Setor");
                 buttonAddSector.setOnMouseClicked(event2 -> {
                     TemplateViewModel.switchScreen("AddSector.fxml");
@@ -221,11 +242,11 @@ public class HeaderViewModel {
     }
 
 
-    public StringProperty getSearchText(){
+    public StringProperty getSearchText() {
         return searchBar.textProperty();
     }
 
-    public static void setLabel(String label){
+    public static void setLabel(String label) {
         instance.headerLabel.setText(label);
     }
 

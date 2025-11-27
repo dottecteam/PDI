@@ -20,15 +20,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
-import javafx.scene.control.*;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -54,24 +53,39 @@ import java.util.concurrent.Callable;
 public class DashboardViewModel implements Initializable {
 
     // --- FXML FIELDS ---
-    @FXML private VBox rootVBox;
-    @FXML private AnchorPane dashboardContentPane;
+    @FXML
+    private VBox rootVBox;
+    @FXML
+    private AnchorPane dashboardContentPane;
 
-    @FXML private BarChart<String, Number> tagBarChart;
-    @FXML private PieChart taskPieChart;
-    @FXML private Label percentage;
-    @FXML private LineChart monthsLineChart;
-    @FXML private BarChart<Number, String> progressBarChart;
-    @FXML private PieChart skillsDistributionPieChart;
+    @FXML
+    private BarChart<String, Number> tagBarChart;
+    @FXML
+    private PieChart taskPieChart;
+    @FXML
+    private Label percentage;
+    @FXML
+    private LineChart monthsLineChart;
+    @FXML
+    private BarChart<Number, String> progressBarChart;
+    @FXML
+    private PieChart skillsDistributionPieChart;
 
-    @FXML private AnchorPane widgetTagBarChart;
-    @FXML private AnchorPane widgetTaskPieChart;
-    @FXML private AnchorPane widgetMonthsLineChart;
-    @FXML private AnchorPane widgetProgressBarChart;
-    @FXML private AnchorPane widgetSkillsDistribution;
+    @FXML
+    private AnchorPane widgetTagBarChart;
+    @FXML
+    private AnchorPane widgetTaskPieChart;
+    @FXML
+    private AnchorPane widgetMonthsLineChart;
+    @FXML
+    private AnchorPane widgetProgressBarChart;
+    @FXML
+    private AnchorPane widgetSkillsDistribution;
 
     @FXML
     private Button exportButton;
+
+    private static DashboardViewModel instance;
 
     // --- DRAG & GRID FIELDS ---
     private double xOffset = 0;
@@ -113,6 +127,7 @@ public class DashboardViewModel implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        instance = this;
         setFilter();
         tagBarChart.setAnimated(false);
         tagBarChart.setAnimated(false); //Deixar em 'false' para arrumar o nome das tags no grafico
@@ -154,27 +169,39 @@ public class DashboardViewModel implements Initializable {
             return;
         }
 
-        Callable<List<DashboardTagFrequencyController>> dataFetchingTask;
+        // Limpa os dados dos gráficos antes de recarregar
+        tagBarChart.getData().clear();
+        taskPieChart.getData().clear();
+        monthsLineChart.getData().clear();
+        progressBarChart.getData().clear();
+        skillsDistributionPieChart.getData().clear();
+        percentage.setText("Carregando...");
+
+
+        Callable<List<DashboardTagFrequencyController>> dataFetchingTask = null;
         boolean isDeptManager = loggedUser.getRole() == Role.department_manager;
 
         if (isDeptManager && loggedUser.getDepartment() != null) {
             int departmentId = loggedUser.getDepartment().getId();
 
-            tagBarChart.setTitle("Tags Mais Usadas");
-            dataFetchingTask = () -> DashboardDAO.getTopTagsDepartment(departmentId);
+            tagBarChart.setTitle("Tags Mais Usadas (Setor: " + loggedUser.getDepartment().getName() + ")");
+            // CHAMADA COM FILTROS: Tag, TagType
+            dataFetchingTask = () -> DashboardDAO.getTopTagsDepartment(departmentId, filteredTags, filteredTagTypes);
 
             taskPieChart.setTitle("Relação de conclusão de tarefas");
             monthsLineChart.setTitle("Progresso médio mensal de tarefas");
             progressBarChart.setTitle("Objetivos com menor progresso");
 
-            loadPieChartData(departmentId);
-            loadLineChartData(departmentId);
-            loadProgressChartData(departmentId);
-            loadSkillsDistributionChartData();
-        } else if (loggedUser.getRole() == Role.hr_manager) {
-            tagBarChart.setTitle("Tags Mais Usadas");
-            dataFetchingTask = () -> DashboardDAO.getTopTags();
-            loadSkillsDistributionChartData();
+            // CHAMADAS COM FILTROS
+            loadPieChartData(departmentId, filteredGoalStatuses);
+            loadLineChartData(departmentId, startDay, endDay);
+            loadProgressChartData(departmentId, filteredGoalStatuses);
+            loadSkillsDistributionChartData(filteredTagTypes);
+        } else if (loggedUser.getRole() == Role.hr_manager || loggedUser.getRole() == Role.general_manager) {
+            tagBarChart.setTitle("Tags Mais Usadas (Geral)");
+            // CHAMADA COM FILTROS: Tag, TagType
+            dataFetchingTask = () -> DashboardDAO.getTopTags(filteredTags, filteredTagTypes);
+            loadSkillsDistributionChartData(filteredTagTypes);
         } else if (isDeptManager) {
             showAlert("Departamento não encontrado", "Erro: O gerente não possui um departamento.");
             return;
@@ -184,10 +211,18 @@ public class DashboardViewModel implements Initializable {
         }
 
 
-        loadBarChartData(dataFetchingTask);
+        if (dataFetchingTask != null) {
+            loadBarChartData(dataFetchingTask);
+        }
     }
 
-    private void setFilter(){
+    @FXML
+    private void handleFilter() {
+        // Agora que loadData() aceita e passa os filtros, basta recarregar.
+        loadData();
+    }
+
+    private void setFilter() {
         FilterMenuViewModel filterMenu = new FilterMenuViewModel();
 
         //Date based filter
@@ -205,15 +240,23 @@ public class DashboardViewModel implements Initializable {
 
         //Department based filter
         List<Node> departmentCheckBoxes = new ArrayList<>();
-        filteredDepartments.sort(Comparator.comparing(Department::getName));
-        filteredDepartments.forEach(department -> {
-            CheckBox checkBox  = new CheckBox(department.getName());
+
+        // Recarregar a lista de departamentos para a UI, garantindo que o estado de `filteredDepartments` seja o inicial
+        List<Department> allDepartments = DepartmentController.findAllDepartments();
+        filteredDepartments.clear();
+        allDepartments.forEach(d -> filteredDepartments.add(d));
+
+        allDepartments.sort(Comparator.comparing(Department::getName));
+        allDepartments.forEach(department -> {
+            CheckBox checkBox = new CheckBox(department.getName());
             checkBox.setSelected(true);
             checkBox.setOnAction(e -> {
-                if(filteredDepartments.contains(department)){
-                    filteredDepartments.remove(department);
+                if (checkBox.isSelected()) {
+                    if (!filteredDepartments.contains(department)) {
+                        filteredDepartments.add(department);
+                    }
                 } else {
-                    filteredDepartments.add(department);
+                    filteredDepartments.remove(department);
                 }
             });
             departmentCheckBoxes.add(checkBox);
@@ -222,12 +265,18 @@ public class DashboardViewModel implements Initializable {
 
         //Goal status based filter
         List<Node> goalStatusCheckBoxes = new ArrayList<>();
-        for(GoalStatus goalStatus : GoalStatus.values()){
+        // Recria a lista de status de gol para a UI, garantindo que o estado inicial esteja completo.
+        filteredGoalStatuses.clear();
+        Arrays.asList(GoalStatus.values()).forEach(s -> filteredGoalStatuses.add(s));
+
+        for (GoalStatus goalStatus : GoalStatus.values()) {
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(true);
             checkBox.setOnAction(e -> {
-                if(!filteredGoalStatuses.contains(goalStatus)) {
-                    filteredGoalStatuses.add(goalStatus);
+                if (checkBox.isSelected()) {
+                    if (!filteredGoalStatuses.contains(goalStatus)) {
+                        filteredGoalStatuses.add(goalStatus);
+                    }
                 } else {
                     filteredGoalStatuses.remove(goalStatus);
                 }
@@ -244,12 +293,18 @@ public class DashboardViewModel implements Initializable {
 
         //Activity status based filter
         List<Node> activityStatusCheckBoxes = new ArrayList<>();
-        for(ActivityStatus activityStatus : ActivityStatus.values()){
+        // Recria a lista de status de atividade para a UI, garantindo que o estado inicial esteja completo.
+        filteredActivityStatuses.clear();
+        Arrays.asList(ActivityStatus.values()).forEach(s -> filteredActivityStatuses.add(s));
+
+        for (ActivityStatus activityStatus : ActivityStatus.values()) {
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(true);
             checkBox.setOnAction(e -> {
-                if(!filteredActivityStatuses.contains(activityStatus)) {
-                    filteredActivityStatuses.add(activityStatus);
+                if (checkBox.isSelected()) {
+                    if (!filteredActivityStatuses.contains(activityStatus)) {
+                        filteredActivityStatuses.add(activityStatus);
+                    }
                 } else {
                     filteredActivityStatuses.remove(activityStatus);
                 }
@@ -266,19 +321,25 @@ public class DashboardViewModel implements Initializable {
 
         //Tag type based filter
         List<Node> tagTypesCheckBoxes = new ArrayList<>();
+        // Recria a lista de tipos de tag para a UI, garantindo que o estado inicial esteja completo.
+        filteredTagTypes.clear();
+        Arrays.asList(TagType.values()).forEach(t -> filteredTagTypes.add(t));
+
         filteredTagTypes.forEach(tagType -> {
-            CheckBox checkBox  = new CheckBox();
+            CheckBox checkBox = new CheckBox();
             checkBox.setSelected(true);
-            if(tagType.equals(TagType.SOFT)){
+            if (tagType.equals(TagType.SOFT)) {
                 checkBox.setText("Soft Skill");
-            } else if (tagType.equals(TagType.HARD)){
+            } else if (tagType.equals(TagType.HARD)) {
                 checkBox.setText("Hard Skill");
             }
             checkBox.setOnAction(e -> {
-                if(filteredTagTypes.contains(tagType)){
-                    filteredTagTypes.remove(tagType);
+                if (checkBox.isSelected()) {
+                    if (!filteredTagTypes.contains(tagType)) {
+                        filteredTagTypes.add(tagType);
+                    }
                 } else {
-                    filteredTagTypes.add(tagType);
+                    filteredTagTypes.remove(tagType);
                 }
             });
             tagTypesCheckBoxes.add(checkBox);
@@ -288,18 +349,25 @@ public class DashboardViewModel implements Initializable {
         //Tag based filter
         List<Node> tagSoftCheckBoxes = new ArrayList<>();
         List<Node> tagHardCheckBoxes = new ArrayList<>();
-        filteredTags.sort(Comparator.comparing(Tag::getName));
-        filteredTags.forEach(tag -> {
-            CheckBox checkBox  = new CheckBox(tag.getName());
+        // Recria a lista de tags para a UI, garantindo que o estado inicial esteja completo.
+        filteredTags.clear();
+        TagController.findAllTags().forEach(t -> filteredTags.add(t));
+
+        List<Tag> allTags = TagController.findAllTags();
+        allTags.sort(Comparator.comparing(Tag::getName));
+        allTags.forEach(tag -> {
+            CheckBox checkBox = new CheckBox(tag.getName());
             checkBox.setSelected(true);
             checkBox.setOnAction(e -> {
-                if(filteredTags.contains(tag)){
-                    filteredTags.remove(tag);
+                if (checkBox.isSelected()) {
+                    if (!filteredTags.contains(tag)) {
+                        filteredTags.add(tag);
+                    }
                 } else {
-                    filteredTags.add(tag);
+                    filteredTags.remove(tag);
                 }
             });
-            if(tag.getType().equals(TagType.HARD)){
+            if (tag.getType().equals(TagType.HARD)) {
                 tagHardCheckBoxes.add(checkBox);
             } else {
                 tagSoftCheckBoxes.add(checkBox);
@@ -314,12 +382,11 @@ public class DashboardViewModel implements Initializable {
         filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
     }
 
-    private void handleFilter(){
-        //TODO CRIAR LÓGICAS DE FILTRAGEM
+    public static DashboardViewModel getInstance() {
+        return instance;
     }
 
-    @FXML
-    private void handleExportData() {
+    public void handleExportData(javafx.event.ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Salvar Relatório PDI");
 
@@ -340,9 +407,12 @@ public class DashboardViewModel implements Initializable {
             defaultBaseName = "relatorio_geral_pdi";
         }
 
+        // Obtém a Stage a partir de qualquer elemento de cena, como o rootVBox
+        Stage stage = (Stage) rootVBox.getScene().getWindow();
+
         fileChooser.setInitialFileName(defaultBaseName + ".csv");
 
-        File file = fileChooser.showSaveDialog(exportButton.getScene().getWindow());
+        File file = fileChooser.showSaveDialog(stage); // Usa a Stage para mostrar a caixa de diálogo
 
         if (file != null) {
             Path savePath = file.toPath();
@@ -777,12 +847,14 @@ public class DashboardViewModel implements Initializable {
 
     // --- MÉTODOS DE GRÁFICOS E AUXILIARES ---
 
-    private void loadSkillsDistributionChartData() {
+    // ASSINATURA ALTERADA: agora recebe o filtro de TagType
+    private void loadSkillsDistributionChartData(List<TagType> tagTypes) {
         skillsDistributionPieChart.setTitle("Distribuição de Soft/Hard Skills");
         Task<Map<String, Object[]>> loadDataTask = new Task<>() {
             @Override
             protected Map<String, Object[]> call() throws Exception {
-                return DashboardDAO.getSkillsDistribution();
+                // CHAMADA ALTERADA
+                return DashboardDAO.getSkillsDistribution(tagTypes);
             }
         };
 
@@ -878,12 +950,13 @@ public class DashboardViewModel implements Initializable {
         new Thread(loadDataTask).start();
     }
 
-    private void loadPieChartData(int departmentId) {
+
+    private void loadPieChartData(int departmentId, List<GoalStatus> statuses) {
         percentage.setText("Carregando status...");
         Task<List<DashboardStatusData>> loadDataTask = new Task<>() {
             @Override
             protected List<DashboardStatusData> call() throws Exception {
-                return DashboardDAO.getGoalStatusCountsForDepartment(departmentId);
+                return DashboardDAO.getGoalStatusCountsForDepartment(departmentId, statuses);
             }
         };
 
@@ -900,14 +973,41 @@ public class DashboardViewModel implements Initializable {
             int totalTasks = 0;
             int completedTasks = 0;
 
+            // Mapeamento de cores para os status (inversão Concluído/Cancelado)
+            // Cores baseadas nos estilos do seu projeto: #01B8AA (Turquesa), #FD625E (Vermelho Coral), #F2C80F (Amarelo)
+            Map<String, String> statusColors = new HashMap<>();
+            statusColors.put("completed", "#FD625E"); // NOVO: Cor do Cancelado/Erro
+            statusColors.put("canceled", "#01B8AA"); // NOVO: Cor do Concluído/Sucesso
+            statusColors.put("in_progress", "#AF69CD"); // Roxo médio
+            statusColors.put("pending", "#F2C80F"); // Amarelo/Atenção
+
+
             for (DashboardStatusData data : dataFromDB) {
                 String statusDoBanco = data.status();
                 int contagem = data.cont();
 
-                String nomeParaExibir = statusDoBanco.toLowerCase().equals("completed") ? "Concluído" : "Em Progresso";
+                String nomeParaExibir;
+
+                // CORREÇÃO: Traduzir TODOS os status
+                switch (statusDoBanco.toLowerCase()) {
+                    case "completed" -> nomeParaExibir = "Concluído";
+                    case "in_progress" -> nomeParaExibir = "Em Progresso";
+                    case "pending" -> nomeParaExibir = "Pendente";
+                    case "canceled" -> nomeParaExibir = "Cancelado";
+                    default -> nomeParaExibir = statusDoBanco;
+                }
+
                 PieChart.Data pieData = new PieChart.Data(nomeParaExibir, contagem);
                 pieChartData.add(pieData);
-                applyPieSliceColor(pieData, statusDoBanco);
+
+                // Aplica a cor definida
+                String color = statusColors.getOrDefault(statusDoBanco.toLowerCase(), "#808080");
+                pieData.nodeProperty().addListener((ov, oldNode, newNode) -> {
+                    if (newNode != null) {
+                        newNode.setStyle(String.format("-fx-pie-color: %s;", color));
+                    }
+                });
+
 
                 totalTasks += contagem;
                 if (statusDoBanco.equalsIgnoreCase(STATUS_CONCLUIDO)) {
@@ -927,11 +1027,14 @@ public class DashboardViewModel implements Initializable {
         new Thread(loadDataTask).start();
     }
 
-    private void loadLineChartData(int departmentId) {
+    // ASSINATURA ALTERADA: agora recebe os filtros de data
+    private void loadLineChartData(int departmentId, LocalDate startDate, LocalDate endDate) {
+        monthsLineChart.getData().clear();
         Task<List<DashboardMonthlyData>> loadDataTask = new Task<>() {
             @Override
             protected List<DashboardMonthlyData> call() throws Exception {
-                return DashboardDAO.getMonthlyActivityCounts(departmentId);
+                // CHAMADA ALTERADA
+                return DashboardDAO.getMonthlyActivityCounts(departmentId, startDate, endDate);
             }
         };
 
@@ -946,12 +1049,14 @@ public class DashboardViewModel implements Initializable {
             ObservableList<XYChart.Data<String, Number>> chartData =
                     FXCollections.observableArrayList();
 
-            DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            // Usando "yyyy-MM" para parsear, pois o DAO retorna "mes_ano" formatado.
+            DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
             DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("MMM/yy");
 
             for (DashboardMonthlyData data : dataFromDB) {
                 String monthYear = data.mesAno();
-                LocalDate date = LocalDate.parse(monthYear + "-01", dbFormatter);
+                // Assumindo dia 01 para parsing
+                LocalDate date = LocalDate.parse(monthYear + "-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 String formattedLabel = date.format(displayFormatter);
                 chartData.add(new XYChart.Data<>(formattedLabel, data.cont()));
             }
@@ -965,11 +1070,13 @@ public class DashboardViewModel implements Initializable {
         new Thread(loadDataTask).start();
     }
 
-    private void loadProgressChartData(int departmentId) {
+    // ASSINATURA ALTERADA: agora recebe o filtro de GoalStatus
+    private void loadProgressChartData(int departmentId, List<GoalStatus> statuses) {
         Task<List<DashboardProgressData>> loadDataTask = new Task<>() {
             @Override
             protected List<DashboardProgressData> call() throws Exception {
-                return DashboardDAO.getBottomCollaboratorProgress(departmentId);
+                // CHAMADA ALTERADA
+                return DashboardDAO.getBottomCollaboratorProgress(departmentId, statuses);
             }
         };
 
@@ -1006,14 +1113,6 @@ public class DashboardViewModel implements Initializable {
         alert.showAndWait();
     }
 
-    private void applyPieSliceColor(PieChart.Data pieData, String statusOriginal) {
-        pieData.nodeProperty().addListener((ov, oldNode, newNode) -> {
-            if (newNode != null) {
-                String color = statusOriginal.toLowerCase().equals("completed") ? "#01B8AA" : "#FD625E";
-                newNode.setStyle(String.format("-fx-pie-color: %s;", color));
-            }
-        });
-    }
 
     // ---------- HELPERS / CLASSES ----------
 
@@ -1033,12 +1132,9 @@ public class DashboardViewModel implements Initializable {
             this.col = col;
             this.colspan = colspan;
             this.rowspan = rowspan;
-            this.minColspan = colspan;
-            this.minRowspan = rowspan;
+            this.minColspan = 1;
+            this.minRowspan = 1;
             this.placed = false;
         }
     }
 }
-
-
-//DashboardViewModel.java
