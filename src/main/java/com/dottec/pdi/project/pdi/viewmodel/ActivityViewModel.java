@@ -5,10 +5,14 @@ import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Attachment;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -116,17 +120,52 @@ public class ActivityViewModel {
         }
 
         for (Attachment attachment : attachments) {
-
             String fullPath = attachment.getFilePath();
             String fileName = fullPath.substring(fullPath.lastIndexOf('/') + 1);
 
+            // Container HBox para o nome do arquivo e o botão de exclusão
+            HBox attachmentBox = new HBox(10);
+            attachmentBox.setAlignment(Pos.CENTER_LEFT);
+            HBox.setHgrow(attachmentBox, Priority.ALWAYS);
+
+            // Link para abrir o arquivo
             Hyperlink fileLink = new Hyperlink("🔗 " + fileName);
             fileLink.setStyle("-fx-text-fill: #4B0081;");
-
             fileLink.setOnAction(e -> handleOpenFile(attachment));
 
-            attachmentsVBox.getChildren().add(fileLink);
+            // Botão/Ícone de Lixeira
+            ImageView deleteIcon = new ImageView(new Image(getClass().getResourceAsStream("/com/dottec/pdi/project/pdi/static/img/trash.png")));
+            deleteIcon.setFitHeight(20);
+            deleteIcon.setFitWidth(20);
+            deleteIcon.setStyle("-fx-cursor: hand;");
+
+            deleteIcon.setOnMouseClicked(e -> handleDeleteAttachment(attachment));
+
+            attachmentBox.getChildren().addAll(fileLink, deleteIcon);
+            attachmentsVBox.getChildren().add(attachmentBox);
         }
+    }
+
+    private void handleDeleteAttachment(Attachment attachment) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Exclusão");
+        alert.setHeaderText(null);
+        alert.setContentText("Tem certeza que deseja excluir o anexo '" + attachment.getFilePath().substring(attachment.getFilePath().lastIndexOf('/') + 1) + "'?");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                boolean success = ActivityController.deleteAttachment(attachment);
+
+                if (success) {
+                    activity.getAttachments().remove(attachment);
+
+                    displayAttachments(activity.getAttachments());
+                    TemplateViewModel.showSuccessMessage("Sucesso!", "Anexo excluído com sucesso.");
+                } else {
+                    TemplateViewModel.showErrorMessage("Erro ao excluir", "Falha ao excluir o anexo. Tente novamente.");
+                }
+            }
+        });
     }
 
     private void handleOpenFile(Attachment attachment) {

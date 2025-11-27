@@ -18,6 +18,7 @@ public class AttachmentDAO {
 
     private static final String INSERT_SQL = "INSERT INTO attachments (att_file_path, uploaded_by, goal_id, activity_id) VALUES (?, ?, ?, ?)";
     private static final String FIND_BY_ACTIVITY_ID_SQL = "SELECT * FROM attachments WHERE activity_id = ?";
+    private static final String DELETE_SQL = "DELETE FROM attachments WHERE att_id = ?";
 
     public static void insert(Attachment attachment) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL)) {
@@ -88,5 +89,15 @@ public class AttachmentDAO {
         }
 
         return attachment;
+    }
+
+    public static void deleteById(int attachmentId) {
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_SQL)) {
+            stmt.setInt(1, attachmentId);
+            int rows = stmt.executeUpdate();
+            System.out.println("Anexo deletado! Linhas: " + rows);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar anexo: " + e.getMessage(), e);
+        }
     }
 }

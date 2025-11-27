@@ -81,4 +81,30 @@ public class ActivityController {
         }
     }
 
+    public static boolean deleteAttachment(Attachment attachment) {
+        if (attachment == null || attachment.getId() == 0) {
+            return false;
+        }
+
+        try {
+            String filePath = attachment.getFilePath().substring(1);
+            File fileToDelete = new File(filePath);
+
+            if (fileToDelete.exists()) {
+                Files.delete(fileToDelete.toPath());
+                System.out.println("Arquivo físico deletado: " + filePath);
+            } else {
+                System.err.println("Aviso: Arquivo físico não encontrado para exclusão: " + filePath);
+            }
+
+            AttachmentDAO.deleteById(attachment.getId());
+
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar anexo: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
