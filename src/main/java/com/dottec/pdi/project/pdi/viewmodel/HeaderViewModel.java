@@ -92,6 +92,9 @@ public class HeaderViewModel{
             case "AddSector.fxml" -> {
                 buildHeaderStructure("Adicionar Setor", true, false, false);
             }
+            case "UserManagement.fxml" -> {
+                buildHeaderStructure("Gerenciar Usuários", true, false, false);
+            }
             default -> {
                 buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false);
             }
