@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
-import javafx.stage.StageStyle;
 
 
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class Application extends javafx.application.Application {
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
 
         // Verificar se está correto o local de adição dessa linha de código
-        scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_AddGoal.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_GoalTemplates.css").toExternalForm());
 
         stage.setTitle("PDI");
         stage.setScene(scene);

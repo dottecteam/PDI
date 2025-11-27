@@ -80,6 +80,12 @@ public class HeaderViewModel{
             case "AddActivity.fxml" -> {
                 buildHeaderStructure("Adicionar Atividade", true, false, false);
             }
+            case "GoalTemplates.fxml" -> {
+                buildHeaderStructure("Modelos", false, true, true);
+            }
+            case "TemplateGoals.fxml" -> {
+                buildHeaderStructure("Modelo", true, false, false);
+            }
             default -> {
                 buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false);
             }

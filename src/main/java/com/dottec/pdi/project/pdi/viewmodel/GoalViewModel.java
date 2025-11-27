@@ -150,6 +150,7 @@ public class GoalViewModel {
         disableCreationMode();
         creatingGoalMode = false;
         TemplateViewModel.showSuccessMessage("Meta criada com sucesso!");
+        HeaderViewModel.updateHeader("Goal.fxml");
     }
 
     private void setDeadline(){
