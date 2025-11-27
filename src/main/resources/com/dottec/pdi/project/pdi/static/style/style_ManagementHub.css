@@ -1,0 +1,34 @@
+// main/resources/com/dottec/pdi/project/pdi/static/style/style_ManagementHub.css
+.management-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-color: #E6CCEF;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-min-height: 150;
+    -fx-min-width: 200;
+}
+
+.management-card:hover {
+    -fx-background-color: #E6CCEF;
+    -fx-border-color: #4B0081;
+}
+
+.management-card:hover .label {
+    -fx-text-fill: #4B0081;
+    -fx-font-weight: bold;
+}
+
+.management-card .image-view {
+    -fx-opacity: 0.8;
+}
+
+.management-card:hover .image-view {
+    -fx-opacity: 1.0;
+}
+
+.management-card.disabled-access {
+    -fx-opacity: 0.6;
+    -fx-cursor: default;
+    -fx-border-color: gray;
+}

@@ -1,5 +1,7 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.controllers.AuthController;
+import com.dottec.pdi.project.pdi.enums.Role;
 import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -18,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
+
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -64,7 +67,7 @@ public class TemplateViewModel implements Initializable {
     @FXML
     private StackPane mainStackPane;
 
-    public static StackPane getMainStackPane(){
+    public static StackPane getMainStackPane() {
         return instance.mainStackPane;
     }
 
@@ -177,7 +180,7 @@ public class TemplateViewModel implements Initializable {
 
     //Define os métodos que "chamam" as páginas para a tela
     @FXML
-    void goToMain(MouseEvent event){
+    void goToMain(MouseEvent event) {
         carregarPagina(mainPage);
     }
 
@@ -198,7 +201,11 @@ public class TemplateViewModel implements Initializable {
 
     @FXML
     void goToSettings(MouseEvent event) {
-        carregarPagina("Settings.fxml");
+        if (AuthController.getInstance().getLoggedUser().getRole() == Role.hr_manager) {
+            carregarPagina("ManagementHub.fxml"); // O Hub de Gerenciamento
+        } else {
+            TemplateViewModel.showErrorMessage("Acesso Negado", "Apenas Gerentes de RH podem acessar as configurações de gerenciamento.");
+        }
     }
 
     @FXML
@@ -206,7 +213,7 @@ public class TemplateViewModel implements Initializable {
         carregarPagina("Profile.fxml");
     }
 
-    private void updateSideBar(String pageName){
+    private void updateSideBar(String pageName) {
         //Configuracao pro 'selecionado' do menu
         menuDashboard.getStyleClass().remove("selecionado");
         menuCollaborators.getStyleClass().remove("selecionado");
@@ -233,15 +240,16 @@ public class TemplateViewModel implements Initializable {
         }
     }
 
-    public void carregarPagina(String pageName){
-        carregarPagina(pageName, controller -> {});
+    public void carregarPagina(String pageName) {
+        carregarPagina(pageName, controller -> {
+        });
     }
 
     //Método carregarPagina (para carregar uma pagina)
-    public void carregarPagina(String pageName,  Consumer<Object> configurator) {
+    public void carregarPagina(String pageName, Consumer<Object> configurator) {
         updateSideBar(pageName);
         //'chama' a pagina
-        try{
+        try {
             loadHeader(pageName);
             String caminhoCompleto = "/com/dottec/pdi/project/pdi/views/" + pageName;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminhoCompleto));
@@ -265,7 +273,8 @@ public class TemplateViewModel implements Initializable {
     }
 
     public static void switchScreen(String pageName) {
-        instance.carregarPagina(pageName,  controller -> {});
+        instance.carregarPagina(pageName, controller -> {
+        });
     }
 
     public static void switchScreen(String pageName, Consumer<Object> configurator) {
@@ -277,8 +286,8 @@ public class TemplateViewModel implements Initializable {
         }
     }
 
-    public static void goBack(){
-        if(!instance.pageStack.isEmpty()){
+    public static void goBack() {
+        if (!instance.pageStack.isEmpty()) {
             Node previousPage = instance.pageStack.pop();
             Node previousHeader = instance.headerStack.pop();
             HeaderViewModel headerController = instance.headerControllersStack.pop();
@@ -288,12 +297,12 @@ public class TemplateViewModel implements Initializable {
         }
     }
 
-    private void loadHeader(String pageName){
-        try{
+    private void loadHeader(String pageName) {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Header.fxml"));
             Parent root = loader.load();
 
-            if(tmpCenter.getTop() != null){
+            if (tmpCenter.getTop() != null) {
                 headerStack.push(tmpCenter.getTop());
                 headerControllersStack.push(HeaderViewModel.getController());
             }
@@ -306,23 +315,23 @@ public class TemplateViewModel implements Initializable {
         }
     }
 
-    public static void showMessage(String headerMessage, String message){
+    public static void showMessage(String headerMessage, String message) {
         FXUtils.buildMessageBox(instance.mainStackPane, message, headerMessage);
     }
 
-    public static void showSuccessMessage(String message){
+    public static void showSuccessMessage(String message) {
         FXUtils.buildMessageBox(instance.mainStackPane, message, "Sucesso!");
     }
 
-    public static void showSuccessMessage(String headerMessage, String message){
+    public static void showSuccessMessage(String headerMessage, String message) {
         FXUtils.buildMessageBox(instance.mainStackPane, message, headerMessage);
     }
 
-    public static void showErrorMessage(String message){
+    public static void showErrorMessage(String message) {
         FXUtils.buildMessageBox(true, instance.mainStackPane, message, "Erro!");
     }
 
-    public static void showErrorMessage(String headerMessage, String message){
+    public static void showErrorMessage(String headerMessage, String message) {
         FXUtils.buildMessageBox(true, instance.mainStackPane, message, headerMessage);
     }
 

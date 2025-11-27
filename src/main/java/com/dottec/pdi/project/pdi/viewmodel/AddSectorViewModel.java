@@ -1,5 +1,6 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
+import com.dottec.pdi.project.pdi.controllers.UserController;
 import com.dottec.pdi.project.pdi.dao.DepartmentDAO;
 import com.dottec.pdi.project.pdi.dao.UserDAO;
 import com.dottec.pdi.project.pdi.enums.DepartmentStatus;
@@ -37,25 +38,27 @@ public class AddSectorViewModel implements Initializable {
 
     private void carregarGerentes() {
         try {
-            // 1. Busca no banco apenas usuários com a role 'department_manager'
-            // Usa o método findByRole que adicionamos no UserDAO
+            // 1. Busca no banco todos os usuários com a role 'department_manager'
             List<User> gerentes = UserDAO.findByRole(Role.department_manager);
 
-            ObservableList<User> observableGerentes = FXCollections.observableArrayList(gerentes);
+            // NOVO: 2. Filtra os gerentes que AINDA NÃO estão associados a um departamento.
+            // O UserDAO já carrega o objeto Department se o campo department_id for preenchido.
+            List<User> gerentesDisponiveis = gerentes.stream()
+                    // Mantém apenas os usuários onde o campo Department é null
+                    .filter(user -> user.getDepartment() == null)
+                    .toList();
+
+            ObservableList<User> observableGerentes = FXCollections.observableArrayList(gerentesDisponiveis);
             cbGerente.setItems(observableGerentes);
 
-            // 2. Configura o Converter para exibir apenas o NOME na interface,
-            // mas mantendo o objeto User selecionado no valor
+            // 3. Configura o Converter (restante do método)
             cbGerente.setConverter(new StringConverter<User>() {
                 @Override
                 public String toString(User user) {
-                    // Se o usuário não for nulo, mostra o nome. Senão, mostra vazio.
                     return (user != null) ? user.getName() : "";
                 }
-
                 @Override
                 public User fromString(String string) {
-                    // Método inverso (necessário caso o combo fosse editável)
                     return cbGerente.getItems().stream()
                             .filter(user -> user.getName().equals(string))
                             .findFirst().orElse(null);
@@ -76,7 +79,8 @@ public class AddSectorViewModel implements Initializable {
     @FXML
     void salvarSetor() {
         String nome = txtNome.getText();
-        User gerenteSelecionado = cbGerente.getValue(); // Recupera o objeto User selecionado
+        User gerenteSelecionado = cbGerente.getValue();
+        // String contato = txtContato.getText(); // O Department Model/DAO não suporta o campo contato
 
         if (nome == null || nome.trim().isEmpty()) {
             TemplateViewModel.showErrorMessage("Erro", "O nome do setor é obrigatório.");
@@ -88,16 +92,18 @@ public class AddSectorViewModel implements Initializable {
             novoSetor.setName(nome);
             novoSetor.setStatus(DepartmentStatus.active);
 
-            // LÓGICA PARA SALVAR O GERENTE:
-            // Como seu modelo Department atual ainda não tem o campo 'managerId',
-            // deixei comentado abaixo. Assim que você adicionar o campo no banco/modelo, basta descomentar:
-            /*
-            if (gerenteSelecionado != null) {
-                novoSetor.setManagerId(gerenteSelecionado.getId());
-            }
-            */
-
+            // 1. Salva o departamento (o DAO modificado irá preencher novoSetor.id)
             DepartmentDAO.insert(novoSetor);
+
+            // 2. Se um gerente foi selecionado (ele estará desassociado graças ao filtro),
+            // vincula o novo departamento ao usuário.
+            if (gerenteSelecionado != null) {
+                // Associa o departamento recém-criado ao objeto User
+                gerenteSelecionado.setDepartment(novoSetor);
+
+                // Atualiza o usuário no banco de dados para setar o department_id
+                UserController.updateUser(gerenteSelecionado);
+            }
 
             // Feedback de sucesso
             TemplateViewModel.showSuccessMessage("Sucesso", "Setor cadastrado com sucesso!");

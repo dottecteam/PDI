@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:controller="com.dottec.pdi.project.pdi.viewmodel.UserManagementViewModel" alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #F6F6F6;"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+    </padding>
+    <children>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent;"
+                    VBox.vgrow="ALWAYS">
+            <content>
+                <VBox fx:id="mainField" alignment="TOP_CENTER" spacing="15.0" />
+            </content>
+        </ScrollPane>
+    </children>
+</VBox>

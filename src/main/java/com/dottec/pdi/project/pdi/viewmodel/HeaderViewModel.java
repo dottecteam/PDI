@@ -190,20 +190,37 @@ public class HeaderViewModel {
             case "Notifications.fxml" -> {
                 buildHeaderStructure("Notificações", true, false, false, false);
             }
-            case "Settings.fxml" -> {
-                Button buttonAddSector = new Button("Adicionar Setor");
-                buttonAddSector.setOnMouseClicked(event2 -> {
-                    TemplateViewModel.switchScreen("AddSector.fxml");
-                    updateHeader("AddSector.fxml");
-                });
+            case "ManagementHub.fxml" -> { // NOVO HUB
+                buildHeaderStructure("Gerenciamento", true, false, false, showNotificationButton);
+            }
+            case "Settings.fxml" -> { // Gerenciamento de Setores (sub-página)
+                User currentUser = AuthController.getInstance().getLoggedUser();
 
-                buildHeaderStructure("Setor", false, false, false, showNotificationButton, buttonAddSector);
+                Button buttonAddSector = null;
+                // Restringe o botão de adicionar setor apenas para RH (mantido para a tela de setores)
+                if (currentUser != null && currentUser.getRole() == Role.hr_manager) {
+                    buttonAddSector = new Button("Adicionar Setor");
+                    buttonAddSector.setOnMouseClicked(event2 -> {
+                        TemplateViewModel.switchScreen("AddSector.fxml");
+                        updateHeader("AddSector.fxml");
+                    });
+                }
+
+                buildHeaderStructure("Setores", true, false, false, showNotificationButton, buttonAddSector);
             }
             case "AddSector.fxml" -> {
                 buildHeaderStructure("Adicionar Setor", true, false, false, showNotificationButton);
             }
-            case "UserManagement.fxml" -> {
-                buildHeaderStructure("Gerenciar Usuários", true, false, false, showNotificationButton);
+            case "UserManagementList.fxml" -> { // NOVO: Lista de Usuários
+                Button buttonAddUser = new Button("Adicionar Usuário");
+                buttonAddUser.setOnMouseClicked(event2 -> {
+                    TemplateViewModel.switchScreen("UserForm.fxml");
+                    updateHeader("UserForm.fxml");
+                });
+                buildHeaderStructure("Gerenciar Usuários", true, false, false, showNotificationButton, buttonAddUser);
+            }
+            case "UserForm.fxml" -> { // NOVO: Formulário de Usuário
+                buildHeaderStructure("Adicionar Usuário", true, false, false, showNotificationButton);
             }
             case "Profile.fxml" -> {
                 buildHeaderStructure("Perfil do usuário", true, false, false, showNotificationButton);

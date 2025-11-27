@@ -21,8 +21,8 @@ public class UserDAO {
     private static final String UPDATE_PASSWORD_SQL = "UPDATE users SET use_password_hash = ?, use_updated_at = NOW() WHERE use_id = ?";
     private static final String LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_password_hash = ? AND use_status = 'active' AND use_deleted_at IS NULL";
     private static final String FIND_BY_ROLE_SQL = "SELECT * FROM users WHERE use_role = ? AND use_status = 'active' AND use_deleted_at IS NULL";
-//    private static final String LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_password_hash = ? AND use_status = 'active' AND use_deleted_at IS NULL";
-private static final String FIND_BY_EMAIL_FOR_LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_status = 'active' AND use_deleted_at IS NULL";
+    //    private static final String LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_password_hash = ? AND use_status = 'active' AND use_deleted_at IS NULL";
+    private static final String FIND_BY_EMAIL_FOR_LOGIN_SQL = "SELECT * FROM users WHERE use_email = ? AND use_status = 'active' AND use_deleted_at IS NULL";
 
     public static void insert(User user) {
         try (Connection connection = Database.getConnection();
@@ -32,7 +32,13 @@ private static final String FIND_BY_EMAIL_FOR_LOGIN_SQL = "SELECT * FROM users W
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPasswordHash());
             stmt.setObject(4, user.getRole().name());
-            stmt.setInt(5, user.getDepartment().getId());
+
+
+            if (user.getDepartment() != null) {
+                stmt.setInt(5, user.getDepartment().getId());
+            } else {
+                stmt.setNull(5, Types.INTEGER);
+            }
 
             int rows = stmt.executeUpdate();
             System.out.println("Usuário inserido! Linhas afetadas: " + rows);
@@ -100,7 +106,13 @@ private static final String FIND_BY_EMAIL_FOR_LOGIN_SQL = "SELECT * FROM users W
             stmt.setString(3, user.getPasswordHash());
             stmt.setString(4, user.getRole().name());
             stmt.setString(5, user.getStatus().name());
-            stmt.setInt(6, user.getDepartment().getId());
+
+            if (user.getDepartment() != null) {
+                stmt.setInt(6, user.getDepartment().getId());
+            } else {
+                stmt.setNull(6, Types.INTEGER);
+            }
+
             stmt.setInt(7, user.getId());
 
             int rows = stmt.executeUpdate();
@@ -230,7 +242,9 @@ private static final String FIND_BY_EMAIL_FOR_LOGIN_SQL = "SELECT * FROM users W
 
         int departmentId = rs.getInt("department_id");
         if (departmentId > 0 && !rs.wasNull()) {
-            Department department = DepartmentDAO.findById(departmentId);
+            // CORREÇÃO: Usar findByIdIncludeDeleted para garantir que o setor apareça,
+            // mesmo que esteja inativo/soft-deleted, na lista de gerenciamento de usuários.
+            Department department = DepartmentDAO.findByIdIncludeDeleted(departmentId);
             user.setDepartment(department);
         } else {
             user.setDepartment(null);
