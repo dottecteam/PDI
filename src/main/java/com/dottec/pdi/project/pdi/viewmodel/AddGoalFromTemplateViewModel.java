@@ -26,6 +26,11 @@ public class AddGoalFromTemplateViewModel {
         loadData();
     }
 
+    private Collaborator collaborator;
+    public void setCollaborator(Collaborator collaborator) {
+        this.collaborator = collaborator;
+    }
+
     private void loadData() {
         List<GoalTemplate> allGoalTeplates = GoalTemplatesController.findAllGoalTemplates();
 
@@ -47,11 +52,18 @@ public class AddGoalFromTemplateViewModel {
         addButton.getStyleClass().add("basic-button");
         addButton.setScaleX(0.8);
         addButton.setScaleY(0.8);
+        addButton.setMinWidth(110);
 
         addButton.setOnAction(event -> {
             if (goalTemplate != null) {
-                addButton.setDisable(true);
-                addButton.setText("Adicionado");
+                TemplateViewModel.switchScreen("Goal.fxml", controller -> {
+                    if(controller instanceof GoalViewModel goalViewModel) {
+                        goalViewModel.setGoalViewModel(goalViewModel);
+                        goalViewModel.setCollaborator(collaborator);
+                        goalViewModel.setGoalTemplate(goalTemplate);
+                    }
+                });
+                HeaderViewModel.updateHeader("Goal.fxml");
             }
         });
         nameLabel.setText(goalTemplate.getGoa_tmp_name());

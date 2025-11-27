@@ -2,10 +2,9 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.ActivityController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
+import com.dottec.pdi.project.pdi.enums.ActivityStatus;
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
-import com.dottec.pdi.project.pdi.model.Activity;
-import com.dottec.pdi.project.pdi.model.Collaborator;
-import com.dottec.pdi.project.pdi.model.Goal;
+import com.dottec.pdi.project.pdi.model.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +41,11 @@ public class GoalViewModel {
     private Collaborator collaborator;
     public void setCollaborator(Collaborator collaborator){this.collaborator = collaborator;}
 
+    private GoalTemplate goalTemplate = null;
+    public void setGoalTemplate(GoalTemplate goalTemplate){
+        this.goalTemplate = goalTemplate;
+    }
+
     private boolean creatingGoalMode = false;
 
     @FXML
@@ -63,6 +67,21 @@ public class GoalViewModel {
         if(goal != null) {  //Update goal's name and description
             nameField.setText(goal.getName());
             descriptionField.setText(goal.getDescription());
+
+            if(goalTemplate != null){
+                nameField.setText(goalTemplate.getGoa_tmp_name());
+                descriptionField.setText(goalTemplate.getGoa_tmp_description());
+
+                for(ActivityTemplate activityTemplate : goalTemplate.getActivityTemplates()){
+                    Activity activity = new Activity();
+                    activity.setName(activityTemplate.getName());
+                    activity.setDescription(activityTemplate.getDescription());
+                    activity.setGoal(goal);
+                    activity.setStatus(ActivityStatus.in_progress);
+
+                    addActivity(activity);
+                }
+            }
         }
     }
 

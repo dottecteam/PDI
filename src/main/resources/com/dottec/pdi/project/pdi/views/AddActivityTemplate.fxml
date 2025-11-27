@@ -14,7 +14,7 @@
 
 <VBox alignment="CENTER" fillWidth="false" style="-fx-background-color: #F6F6F6;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.AddActivityTemplateViewModel">
    <children>
-      <VBox alignment="CENTER_RIGHT" spacing="30.0" style="-fx-background-color: #F6F6F6;">
+      <VBox alignment="CENTER_RIGHT" spacing="150.0" style="-fx-background-color: #F6F6F6;">
          <children>
             <VBox fx:id="formPane" maxWidth="735.0" prefWidth="735.0" spacing="10.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 20; -fx-border-radius: 20;">
                <VBox.margin>

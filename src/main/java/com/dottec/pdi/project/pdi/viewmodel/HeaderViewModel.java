@@ -77,13 +77,13 @@ public class HeaderViewModel{
             case "AddGoalFromTemplate.fxml", "Goal.fxml" -> {
                 buildHeaderStructure("Adicionar Meta", true, false, false);
             }
-            case "AddActivity.fxml" -> {
+            case "AddActivity.fxml", "AddActivityTemplate.fxml" -> {
                 buildHeaderStructure("Adicionar Atividade", true, false, false);
             }
             case "GoalTemplates.fxml" -> {
-                buildHeaderStructure("Modelos", false, true, true);
+                buildHeaderStructure("Modelos", false, false, false);
             }
-            case "TemplateGoals.fxml" -> {
+            case "TemplateGoal.fxml" -> {
                 buildHeaderStructure("Modelo", true, false, false);
             }
             default -> {
