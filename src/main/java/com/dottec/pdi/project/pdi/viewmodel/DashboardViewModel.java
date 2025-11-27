@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 
 import com.dottec.pdi.project.pdi.enums.*;
 import com.dottec.pdi.project.pdi.model.Department;
-import com.dottec.pdi.project.pdi.model.Goal;
 import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.model.User;
 
@@ -33,10 +32,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -45,47 +42,31 @@ import javafx.scene.input.MouseButton;
 
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.Callable;
 
 public class DashboardViewModel implements Initializable {
 
-    // --- FXML FIELDS ---
-    @FXML
-    private VBox rootVBox;
-    @FXML
-    private AnchorPane dashboardContentPane;
-
-    @FXML
-    private BarChart<String, Number> tagBarChart;
-    @FXML
-    private PieChart taskPieChart;
-    @FXML
-    private Label percentage;
-    @FXML
-    private LineChart monthsLineChart;
-    @FXML
-    private BarChart<Number, String> progressBarChart;
-    @FXML
-    private PieChart skillsDistributionPieChart;
-
-    @FXML
-    private AnchorPane widgetTagBarChart;
-    @FXML
-    private AnchorPane widgetTaskPieChart;
-    @FXML
-    private AnchorPane widgetMonthsLineChart;
-    @FXML
-    private AnchorPane widgetProgressBarChart;
-    @FXML
-    private AnchorPane widgetSkillsDistribution;
-
-    @FXML
-    private Button exportButton;
-
+    // Adicionado: Padrão Singleton simples para acesso pelo Header
     private static DashboardViewModel instance;
+
+    // --- FXML FIELDS ---
+    @FXML private VBox rootVBox; // Mantido para acesso ao Stage
+    @FXML private AnchorPane dashboardContentPane;
+
+    @FXML private BarChart<String, Number> tagBarChart;
+    @FXML private PieChart taskPieChart;
+    @FXML private Label percentage;
+    @FXML private LineChart monthsLineChart;
+    @FXML private BarChart<Number, String> progressBarChart;
+    @FXML private PieChart skillsDistributionPieChart;
+
+    @FXML private AnchorPane widgetTagBarChart;
+    @FXML private AnchorPane widgetTaskPieChart;
+    @FXML private AnchorPane widgetMonthsLineChart;
+    @FXML private AnchorPane widgetProgressBarChart;
+    @FXML private AnchorPane widgetSkillsDistribution;
+
 
     // --- DRAG & GRID FIELDS ---
     private double xOffset = 0;
@@ -116,6 +97,9 @@ public class DashboardViewModel implements Initializable {
     private List<Department> filteredDepartments = DepartmentController.findAllDepartments();
     private List<Tag> filteredTags = TagController.findAllTags();
     private List<TagType> filteredTagTypes = new ArrayList<>(Arrays.asList(TagType.values()));
+    // Lista de todos os departamentos (para o filtro do Gerente Geral/RH)
+    private List<Department> allDepartments = DepartmentController.findAllDepartments();
+
 
     private final String STATUS_CONCLUIDO = "completed";
     private final DashboardDAO tagDAO;
@@ -128,9 +112,8 @@ public class DashboardViewModel implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         instance = this;
-        setFilter();
+
         tagBarChart.setAnimated(false);
-        tagBarChart.setAnimated(false); //Deixar em 'false' para arrumar o nome das tags no grafico
         taskPieChart.setAnimated(false);
         taskPieChart.setLegendVisible(false);
         monthsLineChart.setAnimated(false);
@@ -149,6 +132,7 @@ public class DashboardViewModel implements Initializable {
         dashboardContentPane.heightProperty().addListener((obs, oldV, newV) -> recomputeGridAndReposition());
 
         Platform.runLater(() -> {
+            // Configura o layout inicial dos widgets
             registerWidget(widgetMonthsLineChart, 0, 0, 2, 1);
             registerWidget(widgetTagBarChart, 2, 0, 2, 1);
             registerWidget(widgetProgressBarChart, 0, 1, 2, 1);
@@ -159,7 +143,12 @@ public class DashboardViewModel implements Initializable {
             recomputeGridAndReposition();
         });
 
+        setFilter(); // Configura o menu de filtro
         loadData();
+    }
+
+    public static DashboardViewModel getInstance() {
+        return instance;
     }
 
     private void loadData() {
@@ -170,60 +159,120 @@ public class DashboardViewModel implements Initializable {
         }
 
         // Limpa os dados dos gráficos antes de recarregar
+        clearCharts();
+
+        boolean isDeptManager = loggedUser.getRole() == Role.department_manager;
+        boolean isGeneral = loggedUser.getRole() == Role.hr_manager || loggedUser.getRole() == Role.general_manager;
+
+        if (isDeptManager && loggedUser.getDepartment() != null) {
+            loadDepartmentData(loggedUser.getDepartment().getId(), loggedUser.getDepartment().getName());
+        } else if (isGeneral) {
+            loadGeneralData();
+        } else {
+            showAlert("Permissão necessária", "Você não tem permissão para visualizar este dashboard.");
+        }
+    }
+
+    /**
+     * NOVO: Carrega dados para Gerente Geral / RH (Visão Geral).
+     * Nota: A filtragem por setor só pode ser implementada nos gráficos globais (Tags/Skills)
+     * devido à estrutura atual do DashboardDAO.
+     */
+    private void loadGeneralData() {
+        // --- VISUAL SETUP / LABELS ---
+        tagBarChart.setTitle("Tags Mais Usadas (Geral)");
+        skillsDistributionPieChart.setTitle("Distribuição de Soft/Hard Skills (Geral)");
+
+        // Oculta gráficos que requerem agregação complexa (não suportada pelo DAO atual)
+        setWidgetVisibility(widgetTaskPieChart, false);
+        setWidgetVisibility(widgetMonthsLineChart, false);
+        setWidgetVisibility(widgetProgressBarChart, false);
+
+        // Garante que os widgets globais estejam visíveis
+        setWidgetVisibility(widgetTagBarChart, true);
+        setWidgetVisibility(widgetSkillsDistribution, true);
+
+        // Atualiza a label de porcentagem para refletir a simplificação
+        percentage.setText("Progresso Detalhado: N/A");
+
+        // --- LOAD DATA FOR GLOBAL CHARTS ---
+
+        // Load Tags (Bar Chart) - Global Available
+        Callable<List<DashboardTagFrequencyController>> tagsFetchingTask =
+                () -> DashboardDAO.getTopTags(filteredTags, filteredTagTypes);
+        loadBarChartData(tagsFetchingTask);
+
+        // Load Skills Distribution (Pie Chart) - Global Available
+        loadSkillsDistributionChartData(filteredTagTypes);
+
+        showAlert("Aviso", "Na visão Geral, a filtragem por Setor e a maioria dos gráficos detalhados não estão disponíveis, pois exigem agregação de dados não implementada no sistema.");
+    }
+
+    /**
+     * Carrega dados para Gerente de Setor (Visão Departamental).
+     */
+    private void loadDepartmentData(int departmentId, String departmentName) {
+        // --- VISUAL SETUP / LABELS ---
+        tagBarChart.setTitle("Tags Mais Usadas (Setor: " + departmentName + ")");
+        taskPieChart.setTitle("Relação de conclusão de metas");
+        monthsLineChart.setTitle("Metas criadas por mês");
+        progressBarChart.setTitle("Progresso de colaboradores");
+
+        // Garante que todos os widgets estejam visíveis para o gerente de setor
+        setWidgetVisibility(widgetTaskPieChart, true);
+        setWidgetVisibility(widgetMonthsLineChart, true);
+        setWidgetVisibility(widgetProgressBarChart, true);
+        setWidgetVisibility(widgetTagBarChart, true);
+        setWidgetVisibility(widgetSkillsDistribution, true);
+
+        // --- LOAD DATA FOR DEPARTMENT CHARTS ---
+
+        // Load Tags (Bar Chart)
+        Callable<List<DashboardTagFrequencyController>> tagsFetchingTask =
+                () -> DashboardDAO.getTopTagsDepartment(departmentId, filteredTags, filteredTagTypes);
+        loadBarChartData(tagsFetchingTask);
+
+        // Load Pie Chart (Task Status)
+        loadPieChartData(departmentId, filteredGoalStatuses);
+
+        // Load Line Chart (Monthly Goals)
+        loadLineChartData(departmentId, startDay, endDay);
+
+        // Load Progress Bar Chart (Bottom Collaborator Progress)
+        loadProgressChartData(departmentId, filteredGoalStatuses);
+
+        // Load Skills Distribution (Pie Chart)
+        loadSkillsDistributionChartData(filteredTagTypes);
+    }
+
+    // Método auxiliar para alternar a visibilidade
+    private void setWidgetVisibility(Node widget, boolean visible) {
+        if (widget == null) return;
+        widget.setVisible(visible);
+        widget.setManaged(visible);
+    }
+
+    // Método auxiliar para limpar todos os gráficos
+    private void clearCharts() {
         tagBarChart.getData().clear();
         taskPieChart.getData().clear();
         monthsLineChart.getData().clear();
         progressBarChart.getData().clear();
         skillsDistributionPieChart.getData().clear();
-        percentage.setText("Carregando...");
-
-
-        Callable<List<DashboardTagFrequencyController>> dataFetchingTask = null;
-        boolean isDeptManager = loggedUser.getRole() == Role.department_manager;
-
-        if (isDeptManager && loggedUser.getDepartment() != null) {
-            int departmentId = loggedUser.getDepartment().getId();
-
-            tagBarChart.setTitle("Tags Mais Usadas (Setor: " + loggedUser.getDepartment().getName() + ")");
-            // CHAMADA COM FILTROS: Tag, TagType
-            dataFetchingTask = () -> DashboardDAO.getTopTagsDepartment(departmentId, filteredTags, filteredTagTypes);
-
-            taskPieChart.setTitle("Relação de conclusão de tarefas");
-            monthsLineChart.setTitle("Progresso médio mensal de tarefas");
-            progressBarChart.setTitle("Objetivos com menor progresso");
-
-            // CHAMADAS COM FILTROS
-            loadPieChartData(departmentId, filteredGoalStatuses);
-            loadLineChartData(departmentId, startDay, endDay);
-            loadProgressChartData(departmentId, filteredGoalStatuses);
-            loadSkillsDistributionChartData(filteredTagTypes);
-        } else if (loggedUser.getRole() == Role.hr_manager || loggedUser.getRole() == Role.general_manager) {
-            tagBarChart.setTitle("Tags Mais Usadas (Geral)");
-            // CHAMADA COM FILTROS: Tag, TagType
-            dataFetchingTask = () -> DashboardDAO.getTopTags(filteredTags, filteredTagTypes);
-            loadSkillsDistributionChartData(filteredTagTypes);
-        } else if (isDeptManager) {
-            showAlert("Departamento não encontrado", "Erro: O gerente não possui um departamento.");
-            return;
-        } else {
-            showAlert("Permissão necessária", "Você não tem permissão para visualizar este dashboard.");
-            return;
-        }
-
-
-        if (dataFetchingTask != null) {
-            loadBarChartData(dataFetchingTask);
-        }
     }
+
 
     @FXML
     private void handleFilter() {
-        // Agora que loadData() aceita e passa os filtros, basta recarregar.
+        // Recarrega os dados com os filtros aplicados
         loadData();
     }
 
     private void setFilter() {
         FilterMenuViewModel filterMenu = new FilterMenuViewModel();
+        User loggedUser = AuthController.getInstance().getLoggedUser();
+        boolean filterByDepartment = loggedUser.getRole() == Role.general_manager || loggedUser.getRole() == Role.hr_manager;
+
 
         //Date based filter
         DatePicker startDayDatePicker = filterMenu.buildDatePicker();
@@ -238,43 +287,44 @@ public class DashboardViewModel implements Initializable {
                 filterMenu.addDatePickerLabel("De: ", startDayDatePicker),
                 filterMenu.addDatePickerLabel("À: ", endDayDatePicker));
 
-        //Department based filter
-        List<Node> departmentCheckBoxes = new ArrayList<>();
 
-        // Recarregar a lista de departamentos para a UI, garantindo que o estado de `filteredDepartments` seja o inicial
-        List<Department> allDepartments = DepartmentController.findAllDepartments();
-        filteredDepartments.clear();
-        allDepartments.forEach(d -> filteredDepartments.add(d));
+        // --- Filtro por Departamento (Apenas para Gerente Geral/RH) ---
+        if(filterByDepartment) {
+            List<Node> departmentCheckBoxes = new ArrayList<>();
+            // Recria a lista de departamentos para o filtro
+            filteredDepartments.clear();
+            allDepartments.forEach(d -> filteredDepartments.add(d));
 
-        allDepartments.sort(Comparator.comparing(Department::getName));
-        allDepartments.forEach(department -> {
-            CheckBox checkBox = new CheckBox(department.getName());
-            checkBox.setSelected(true);
-            checkBox.setOnAction(e -> {
-                if (checkBox.isSelected()) {
-                    if (!filteredDepartments.contains(department)) {
-                        filteredDepartments.add(department);
-                    }
-                } else {
-                    filteredDepartments.remove(department);
-                }
-            });
-            departmentCheckBoxes.add(checkBox);
-        });
-        filterMenu.addFilterField("Filtrar por departamento", departmentCheckBoxes);
+            allDepartments.stream()
+                    .sorted(Comparator.comparing(Department::getName))
+                    .forEach(department -> {
+                        CheckBox checkBox  = new CheckBox(department.getName());
+                        checkBox.setSelected(true);
+                        checkBox.setOnAction(e -> {
+                            if(checkBox.isSelected()){
+                                if(!filteredDepartments.contains(department)) {
+                                    filteredDepartments.add(department);
+                                }
+                            } else {
+                                filteredDepartments.remove(department);
+                            }
+                        });
+                        departmentCheckBoxes.add(checkBox);
+                    });
+            filterMenu.addFilterField("Filtrar por departamento", departmentCheckBoxes);
+        }
 
         //Goal status based filter
         List<Node> goalStatusCheckBoxes = new ArrayList<>();
-        // Recria a lista de status de gol para a UI, garantindo que o estado inicial esteja completo.
         filteredGoalStatuses.clear();
         Arrays.asList(GoalStatus.values()).forEach(s -> filteredGoalStatuses.add(s));
 
-        for (GoalStatus goalStatus : GoalStatus.values()) {
+        for(GoalStatus goalStatus : GoalStatus.values()){
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(true);
             checkBox.setOnAction(e -> {
-                if (checkBox.isSelected()) {
-                    if (!filteredGoalStatuses.contains(goalStatus)) {
+                if(checkBox.isSelected()) {
+                    if(!filteredGoalStatuses.contains(goalStatus)) {
                         filteredGoalStatuses.add(goalStatus);
                     }
                 } else {
@@ -291,51 +341,23 @@ public class DashboardViewModel implements Initializable {
         }
         filterMenu.addFilterField("Filtrar por status de meta", goalStatusCheckBoxes);
 
-        //Activity status based filter
-        List<Node> activityStatusCheckBoxes = new ArrayList<>();
-        // Recria a lista de status de atividade para a UI, garantindo que o estado inicial esteja completo.
-        filteredActivityStatuses.clear();
-        Arrays.asList(ActivityStatus.values()).forEach(s -> filteredActivityStatuses.add(s));
-
-        for (ActivityStatus activityStatus : ActivityStatus.values()) {
-            CheckBox checkBox = new CheckBox();
-            checkBox.setSelected(true);
-            checkBox.setOnAction(e -> {
-                if (checkBox.isSelected()) {
-                    if (!filteredActivityStatuses.contains(activityStatus)) {
-                        filteredActivityStatuses.add(activityStatus);
-                    }
-                } else {
-                    filteredActivityStatuses.remove(activityStatus);
-                }
-            });
-            switch (activityStatus.toString()) {
-                case "in_progress" -> checkBox.setText("Em progresso");
-                case "pending" -> checkBox.setText("Pendente");
-                case "completed" -> checkBox.setText("Completo");
-                case "canceled" -> checkBox.setText("Cancelado");
-            }
-            activityStatusCheckBoxes.add(checkBox);
-        }
-        filterMenu.addFilterField("Filtrar por status de atividade", activityStatusCheckBoxes);
 
         //Tag type based filter
         List<Node> tagTypesCheckBoxes = new ArrayList<>();
-        // Recria a lista de tipos de tag para a UI, garantindo que o estado inicial esteja completo.
         filteredTagTypes.clear();
         Arrays.asList(TagType.values()).forEach(t -> filteredTagTypes.add(t));
 
         filteredTagTypes.forEach(tagType -> {
-            CheckBox checkBox = new CheckBox();
+            CheckBox checkBox  = new CheckBox();
             checkBox.setSelected(true);
-            if (tagType.equals(TagType.SOFT)) {
+            if(tagType.equals(TagType.SOFT)){
                 checkBox.setText("Soft Skill");
-            } else if (tagType.equals(TagType.HARD)) {
+            } else if (tagType.equals(TagType.HARD)){
                 checkBox.setText("Hard Skill");
             }
             checkBox.setOnAction(e -> {
-                if (checkBox.isSelected()) {
-                    if (!filteredTagTypes.contains(tagType)) {
+                if(checkBox.isSelected()){
+                    if(!filteredTagTypes.contains(tagType)) {
                         filteredTagTypes.add(tagType);
                     }
                 } else {
@@ -349,25 +371,24 @@ public class DashboardViewModel implements Initializable {
         //Tag based filter
         List<Node> tagSoftCheckBoxes = new ArrayList<>();
         List<Node> tagHardCheckBoxes = new ArrayList<>();
-        // Recria a lista de tags para a UI, garantindo que o estado inicial esteja completo.
         filteredTags.clear();
         TagController.findAllTags().forEach(t -> filteredTags.add(t));
 
         List<Tag> allTags = TagController.findAllTags();
         allTags.sort(Comparator.comparing(Tag::getName));
         allTags.forEach(tag -> {
-            CheckBox checkBox = new CheckBox(tag.getName());
+            CheckBox checkBox  = new CheckBox(tag.getName());
             checkBox.setSelected(true);
             checkBox.setOnAction(e -> {
-                if (checkBox.isSelected()) {
-                    if (!filteredTags.contains(tag)) {
+                if(checkBox.isSelected()){
+                    if(!filteredTags.contains(tag)) {
                         filteredTags.add(tag);
                     }
                 } else {
                     filteredTags.remove(tag);
                 }
             });
-            if (tag.getType().equals(TagType.HARD)) {
+            if(tag.getType().equals(TagType.HARD)){
                 tagHardCheckBoxes.add(checkBox);
             } else {
                 tagSoftCheckBoxes.add(checkBox);
@@ -382,9 +403,6 @@ public class DashboardViewModel implements Initializable {
         filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
     }
 
-    public static DashboardViewModel getInstance() {
-        return instance;
-    }
 
     public void handleExportData(javafx.event.ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -407,12 +425,11 @@ public class DashboardViewModel implements Initializable {
             defaultBaseName = "relatorio_geral_pdi";
         }
 
-        // Obtém a Stage a partir de qualquer elemento de cena, como o rootVBox
         Stage stage = (Stage) rootVBox.getScene().getWindow();
 
         fileChooser.setInitialFileName(defaultBaseName + ".csv");
 
-        File file = fileChooser.showSaveDialog(stage); // Usa a Stage para mostrar a caixa de diálogo
+        File file = fileChooser.showSaveDialog(stage);
 
         if (file != null) {
             Path savePath = file.toPath();
@@ -468,8 +485,8 @@ public class DashboardViewModel implements Initializable {
 
         if (w <= 0 || h <= 0) return;
 
-        cols = Math.max(5, (int) Math.floor(w / MIN_CELL_SIZE)); // Definido mínimo de 5 colunas
-        rows = Math.max(3, (int) Math.floor(h / MIN_CELL_SIZE)); // Mantido mínimo de 3 linhas
+        cols = Math.max(5, (int) Math.floor(w / MIN_CELL_SIZE));
+        rows = Math.max(3, (int) Math.floor(h / MIN_CELL_SIZE));
 
         cols = Math.max(5, cols);
         rows = Math.max(3, rows);
@@ -847,13 +864,11 @@ public class DashboardViewModel implements Initializable {
 
     // --- MÉTODOS DE GRÁFICOS E AUXILIARES ---
 
-    // ASSINATURA ALTERADA: agora recebe o filtro de TagType
     private void loadSkillsDistributionChartData(List<TagType> tagTypes) {
         skillsDistributionPieChart.setTitle("Distribuição de Soft/Hard Skills");
         Task<Map<String, Object[]>> loadDataTask = new Task<>() {
             @Override
             protected Map<String, Object[]> call() throws Exception {
-                // CHAMADA ALTERADA
                 return DashboardDAO.getSkillsDistribution(tagTypes);
             }
         };
@@ -974,7 +989,6 @@ public class DashboardViewModel implements Initializable {
             int completedTasks = 0;
 
             // Mapeamento de cores para os status (inversão Concluído/Cancelado)
-            // Cores baseadas nos estilos do seu projeto: #01B8AA (Turquesa), #FD625E (Vermelho Coral), #F2C80F (Amarelo)
             Map<String, String> statusColors = new HashMap<>();
             statusColors.put("completed", "#FD625E"); // NOVO: Cor do Cancelado/Erro
             statusColors.put("canceled", "#01B8AA"); // NOVO: Cor do Concluído/Sucesso
@@ -1027,13 +1041,12 @@ public class DashboardViewModel implements Initializable {
         new Thread(loadDataTask).start();
     }
 
-    // ASSINATURA ALTERADA: agora recebe os filtros de data
+
     private void loadLineChartData(int departmentId, LocalDate startDate, LocalDate endDate) {
         monthsLineChart.getData().clear();
         Task<List<DashboardMonthlyData>> loadDataTask = new Task<>() {
             @Override
             protected List<DashboardMonthlyData> call() throws Exception {
-                // CHAMADA ALTERADA
                 return DashboardDAO.getMonthlyActivityCounts(departmentId, startDate, endDate);
             }
         };
@@ -1070,12 +1083,10 @@ public class DashboardViewModel implements Initializable {
         new Thread(loadDataTask).start();
     }
 
-    // ASSINATURA ALTERADA: agora recebe o filtro de GoalStatus
     private void loadProgressChartData(int departmentId, List<GoalStatus> statuses) {
         Task<List<DashboardProgressData>> loadDataTask = new Task<>() {
             @Override
             protected List<DashboardProgressData> call() throws Exception {
-                // CHAMADA ALTERADA
                 return DashboardDAO.getBottomCollaboratorProgress(departmentId, statuses);
             }
         };
