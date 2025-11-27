@@ -1,18 +1,20 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
-import com.dottec.pdi.project.pdi.controllers.GoalController;
+import com.dottec.pdi.project.pdi.controllers.ActivityController;
 import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.model.Activity;
+import com.dottec.pdi.project.pdi.model.Attachment;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import java.io.File;
 import java.time.LocalDate;
-
+import java.util.List;
 
 public class ActivityViewModel {
     @FXML private Button cancelButton;
@@ -25,6 +27,10 @@ public class ActivityViewModel {
     @FXML private DatePicker deadlineDatePicker;
     @FXML private GridPane titledPaneHeader;
     @FXML private TitledPane activityTitledPane;
+
+    // NOVOS FXML IDs
+    @FXML private Button uploadButton;
+    @FXML private VBox attachmentsVBox;
 
     private Activity activity;
     private boolean creatingGoalMode = false;
@@ -73,7 +79,36 @@ public class ActivityViewModel {
                 statusLabel.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
             }
         }
+
+        // NOVO: Exibe os anexos
+        if (!creatingGoalMode) {
+            displayAttachments(activity.getAttachments());
+        }
     }
+
+    // NOVO MÉTODO: Exibir anexos
+    private void displayAttachments(List<Attachment> attachments) {
+        attachmentsVBox.getChildren().clear();
+        if (attachments == null || attachments.isEmpty()) {
+            Label noAttachments = new Label("Nenhum anexo encontrado.");
+            noAttachments.setStyle("-fx-font-style: italic; -fx-text-fill: #808080;");
+            attachmentsVBox.getChildren().add(noAttachments);
+            return;
+        }
+
+        for (Attachment attachment : attachments) {
+            // Exibir apenas o nome do arquivo (simulado pela última parte do path)
+            String fullPath = attachment.getFilePath();
+            String fileName = fullPath.substring(fullPath.lastIndexOf('/') + 1);
+
+            Label fileLabel = new Label("🔗 " + fileName);
+            fileLabel.setStyle("-fx-text-fill: #4B0081; -fx-cursor: hand;");
+
+            attachmentsVBox.getChildren().add(fileLabel);
+        }
+    }
+    // FIM NOVO MÉTODO
+
 
     private void buttonVisible(Node button, Boolean visible){
         button.setVisible(visible);
@@ -173,5 +208,44 @@ public class ActivityViewModel {
             ActivityDAO.delete(activity);
         }
         TemplateViewModel.showSuccessMessage("Atividade excluída com sucesso!");
+    }
+
+    // NOVO MÉTODO: Fazer Upload de Arquivo
+    @FXML
+    private void handleUploadFile() {
+        if (creatingGoalMode || activity.getId() == 0) {
+            TemplateViewModel.showErrorMessage("Erro de Upload", "É necessário salvar a meta antes de anexar arquivos.");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Selecione o arquivo de comprovação");
+        // Filtro de arquivos
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Arquivos de Imagem", "*.jpg", "*.png", "*.jpeg"),
+                new FileChooser.ExtensionFilter("Documentos", "*.pdf", "*.doc", "*.docx"),
+                new FileChooser.ExtensionFilter("Todos os Arquivos", "*.*")
+        );
+
+        // Acessa o Stage a partir de um elemento de cena
+        Stage stage = (Stage) activityTitledPane.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            // Executa a lógica de upload no Controller
+            boolean success = ActivityController.saveAttachment(activity, selectedFile);
+
+            if (success) {
+                // Simulação de recarga/atualização do modelo local
+                Attachment newAttachment = new Attachment();
+                newAttachment.setFilePath("/uploads/activities/" + activity.getId() + "/" + selectedFile.getName());
+                activity.addAttachment(newAttachment);
+
+                displayAttachments(activity.getAttachments());
+                TemplateViewModel.showSuccessMessage("Upload de arquivo bem-sucedido!", "O arquivo " + selectedFile.getName() + " foi anexado.");
+            } else {
+                TemplateViewModel.showErrorMessage("Erro de Upload", "Falha ao salvar o anexo no banco de dados.");
+            }
+        }
     }
 }
