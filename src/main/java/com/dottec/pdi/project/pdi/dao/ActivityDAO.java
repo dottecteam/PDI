@@ -3,6 +3,7 @@ package com.dottec.pdi.project.pdi.dao;
 import com.dottec.pdi.project.pdi.config.Database;
 import com.dottec.pdi.project.pdi.enums.ActivityStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
+import com.dottec.pdi.project.pdi.model.Attachment;
 import com.dottec.pdi.project.pdi.model.Goal;
 
 import java.sql.*;
@@ -69,13 +70,16 @@ public class ActivityDAO {
         }
     }
 
-    public static Goal findById(int id) {
+    public static Activity findById(int id) {
         try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)){
             stmt.setInt(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToGoal(rs);
+                    Activity activity = mapResultSetToActivity(rs);
+                    List<Attachment> attachments = AttachmentDAO.findByActivityId(activity.getId());
+                    activity.setAttachments(attachments);
+                    return activity;
                 }
             }
         }

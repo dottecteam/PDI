@@ -20,6 +20,7 @@ public class Activity{
     private ActivityStatus status;
     private Goal goal;
     private List<Tag> tags = new ArrayList<>();
+    private List<Attachment> attachments = new ArrayList<>();
 
     public Activity(){}
     public Activity( int id , String name, String description, LocalDate deadline, LocalDateTime createdAt, LocalDateTime updateAt, ActivityStatus status, Goal goal, List<Tag> tags)
@@ -84,6 +85,12 @@ public class Activity{
     public List<Tag> getTags() {return tags;}
     public void setTags(List<Tag> tags) {this.tags = tags;}
 
+    public List<Attachment> getAttachments() { return attachments; }
+    public void setAttachments(List<Attachment> attachments) {this.attachments = attachments;}
+
+
+
+    public void addAttachment(Attachment attachment) {this.attachments.add(attachment);}
 
     public String getStatusMessage(){
         return this.status.name();
