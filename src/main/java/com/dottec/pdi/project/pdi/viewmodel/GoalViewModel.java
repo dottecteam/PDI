@@ -14,6 +14,7 @@ import com.dottec.pdi.project.pdi.model.Goal;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -26,16 +27,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class GoalViewModel {
-    @FXML private TextField nameField;
-    @FXML private TextField descriptionField;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField descriptionField;
 
-    @FXML private ImageView editButton;
-    @FXML private Button confirmEditButton;
-    @FXML private Button cancelEditButton;
+    @FXML
+    private ImageView editButton;
+    @FXML
+    private Button confirmEditButton;
+    @FXML
+    private Button cancelEditButton;
 
-    @FXML private VBox activitiesField;
+    @FXML
+    private VBox activitiesField;
 
     // --- Filtros ---
     private LocalDate startDay = LocalDate.now().minusDays(15);
@@ -43,49 +51,58 @@ public class GoalViewModel {
     private List<ActivityStatus> filteredStatuses = new ArrayList<>(Arrays.asList(ActivityStatus.values()));
 
     private GoalViewModel goalViewModel;
-    public void setGoalViewModel(GoalViewModel goalViewModel){
+
+    public void setGoalViewModel(GoalViewModel goalViewModel) {
         this.goalViewModel = goalViewModel;
     }
 
     private Goal goal;
+
     public void setGoal(Goal goal) {
         this.goal = goal;
     }
-    public Goal getGoal(){return goal;}
+
+    public Goal getGoal() {
+        return goal;
+    }
 
     private Collaborator collaborator;
-    public void setCollaborator(Collaborator collaborator){this.collaborator = collaborator;}
+
+    public void setCollaborator(Collaborator collaborator) {
+        this.collaborator = collaborator;
+    }
 
     private boolean creatingGoalMode = false;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
     }
 
-    public void refresh(){
-        if(goal == null){   //Create a new goal if the create goal button was pressed
+    public void refresh() {
+        if (goal == null) {   //Create a new goal if the create goal button was pressed
             enableCreationMode();
             updateFields();
         } else {    //Update the fields for the selected goal
             updateFields();
             setFilterMenu();
-            createAddActivityButton();
+            // Lógica de cabeçalho movida para Platform.runLater para garantir a UI pronta
+            Platform.runLater(this::configHeaderForExistingGoal);
             goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
             populateActivities();
         }
     }
 
-    private void setFilterMenu(){
+    private void setFilterMenu() {
         HeaderViewModel.setFilterButtonVisible(true);
         FilterMenuViewModel filterMenu = new FilterMenuViewModel();
 
         //status based filter
         List<Node> statuses = new ArrayList<>();
-        for(ActivityStatus activityStatus : ActivityStatus.values()){
+        for (ActivityStatus activityStatus : ActivityStatus.values()) {
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(true);
             checkBox.setOnAction(e -> {
-                if(!filteredStatuses.contains(activityStatus)) {
+                if (!filteredStatuses.contains(activityStatus)) {
                     filteredStatuses.add(activityStatus);
                 } else {
                     filteredStatuses.remove(activityStatus);
@@ -119,33 +136,81 @@ public class GoalViewModel {
         filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
     }
 
-    private void handleFilter(){
-        //TODO colocar aqui a função de filtragem
+    private String translateGoalStatus(String status) {
+        return switch (status.toLowerCase()) {
+            case "in_progress" -> "Em Progresso";
+            case "pending" -> "Pendente";
+            case "completed" -> "Concluída";
+            case "canceled" -> "Cancelada";
+            default -> status;
+        };
     }
 
-    private void updateFields(){
-        if(goal != null) {
-            nameField.setText(goal.getName());
-            descriptionField.setText(goal.getDescription());
+    private void configHeaderForExistingGoal() {
+        HeaderViewModel.clearButtons();
+
+        createAddActivityButton();
+
+        MenuButton statusMenu = new MenuButton(translateGoalStatus(goal.getStatus().name()));
+        statusMenu.getStyleClass().add("basic-button");
+
+        for (GoalStatus statusOption : GoalStatus.values()) {
+            if (statusOption != goal.getStatus()) {
+                MenuItem item = new MenuItem(translateGoalStatus(statusOption.name()));
+                item.setOnAction(e -> handleGoalStatusChange(statusOption));
+                statusMenu.getItems().add(item);
+            }
+        }
+        HeaderViewModel.addButton(statusMenu);
+
+        // Configurações gerais do Header
+        HeaderViewModel.setReturnButtonVisible(true);
+        HeaderViewModel.setLabel("Meta: " + goal.getName());
+    }
+
+
+    private void handleGoalStatusChange(GoalStatus newStatus) {
+        String statusText = translateGoalStatus(newStatus.name());
+        String confirmationMessage = "Confirmar mudança de status da meta '" + goal.getName() + "' para " + statusText + "?";
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, confirmationMessage);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            goal.setStatus(newStatus);
+            GoalController.updateGoal(goal);
+
+            TemplateViewModel.showSuccessMessage("Status da meta atualizado com sucesso para " + statusText + "!");
+
+            TemplateViewModel.goBack();
         }
     }
 
-    private void createGoal(){
-        Goal goal = new Goal();
-        goal.setName("");
-        goal.setDescription("");
-        goal.setStatus(GoalStatus.in_progress);
-        this.goal = goal;
+    private void handleDeleteGoal() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tem certeza que deseja excluir esta meta e todas as suas atividades?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            GoalController.deleteGoal(goal);
+            TemplateViewModel.showSuccessMessage("Meta excluída com sucesso!");
+
+            // Retorna para a lista de metas e força o refresh
+            TemplateViewModel.switchScreen("CollaboratorGoals.fxml", controller -> {
+                if (controller instanceof CollaboratorGoalsViewModel c) {
+                    c.setCollaborator(collaborator);
+                }
+            });
+        }
     }
 
-    private void createAddActivityButton(){
+    private void createAddActivityButton() {
         Button addActivity = new Button("Adicionar Atividade");
         addActivity.getStyleClass().add("basic-button");
         addActivity.setOnMouseClicked(mouseEvent -> {
             Activity activity = new Activity();
             activity.setGoal(this.goal);
             TemplateViewModel.switchScreen("AddActivity.fxml", controller -> {
-                if(controller instanceof AddActivityViewModel addActivityViewModel){
+                if (controller instanceof AddActivityViewModel addActivityViewModel) {
                     addActivityViewModel.setActivity(activity);
                     addActivityViewModel.setGoalViewModel(goalViewModel);
                     addActivityViewModel.setCreatingGoalMode(creatingGoalMode);
@@ -155,7 +220,7 @@ public class GoalViewModel {
         HeaderViewModel.addButton(addActivity);
     }
 
-    private void configHeader(){
+    private void configHeader() {
         HeaderViewModel.clear();
         HeaderViewModel.setLabel("Adicionar Meta");
         HeaderViewModel.setReturnButtonVisible(true);
@@ -174,7 +239,7 @@ public class GoalViewModel {
         HeaderViewModel.addButton(cancel);
     }
 
-    private void enableCreationMode(){  //Set the name, descripton and add actvities, then update the database
+    private void enableCreationMode() {  //Set the name, descripton and add actvities, then update the database
         updateFields();
         creatingGoalMode = true;
         createGoal();
@@ -191,20 +256,20 @@ public class GoalViewModel {
         editButton.setVisible(false);
     }
 
-    private void concludeGoalCreation(){
+    private void concludeGoalCreation() {
         goal.setName(nameField.getText());
         setDeadline();
         goal.setDescription(descriptionField.getText());
         GoalController.assignGoalToCollaborator(goal, collaborator);
         goal.setCollaborator(collaborator);
 
-        if(nameField.getText().isBlank()){
+        if (nameField.getText().isBlank()) {
             TemplateViewModel.showErrorMessage("Por favor, preencha o nome da meta.");
             return;
         }
 
         boolean saved = GoalController.saveGoal(goal);
-        if(!saved){
+        if (!saved) {
             TemplateViewModel.showErrorMessage("Não foi possível adicionar a meta.");
             return;
         }
@@ -214,32 +279,39 @@ public class GoalViewModel {
         disableCreationMode();
         creatingGoalMode = false;
         TemplateViewModel.showSuccessMessage("Meta criada com sucesso!");
+
+        // CORREÇÃO DE NAVEGAÇÃO: Volta para a lista de metas e força o refresh
+        TemplateViewModel.switchScreen("CollaboratorGoals.fxml", controller -> {
+            if (controller instanceof CollaboratorGoalsViewModel c) {
+                c.setCollaborator(collaborator);
+            }
+        });
     }
 
-    private void setDeadline(){
+    private void setDeadline() {
         goal.setDeadline(LocalDate.now().plusDays(1));
         goal.getActivities().forEach(activity -> {
-            if(activity.getDeadline().isAfter(goal.getDeadline())){
+            if (activity.getDeadline().isAfter(goal.getDeadline())) {
                 goal.setDeadline(activity.getDeadline());
             }
         });
     }
 
-    private void disableCreationMode(){
+    private void disableCreationMode() {
         disableEditingState();
         HeaderViewModel.clearButtons();
         HeaderViewModel.clearButtons();
         createAddActivityButton();
     }
 
-    public void addActivity(Activity activity){
+    public void addActivity(Activity activity) {
         if (!goal.getActivities().contains(activity)) {
             goal.addActivity(activity);
         }
         populateActivities();
     }
 
-    public void removeActivity(Activity activity){
+    public void removeActivity(Activity activity) {
         goal.getActivities().remove(activity);
         populateActivities();
     }
@@ -248,17 +320,17 @@ public class GoalViewModel {
         activitiesField.getChildren().clear();
         List<Activity> activities = goal.getActivities();
         activities.sort(Comparator.comparing(Activity::getStatus));
-        if(goal != null && goal.numberActivities() != 0) {
+        if (goal != null && goal.numberActivities() != 0) {
             activities.forEach(activity -> {
                 boolean statusOk = filteredStatuses.contains(activity.getStatus());
                 boolean startDayOk = activity.getDeadline().isAfter(startDay);
                 boolean endDayOk = activity.getDeadline().isBefore(endDay);
 
-                if(statusOk && startDayOk && endDayOk) {
-                    addActivity(activity);
+                if (statusOk && startDayOk && endDayOk) {
+                    loadActivityPane(activity);
                 }
             });
-        } else if(goal == null) {
+        } else if (goal == null) {
             System.out.println("Goal is null");
         } else {
             System.out.println("Goal has no activities");
@@ -266,14 +338,14 @@ public class GoalViewModel {
             label.getStyleClass().add("mid-label");
             activitiesField.getChildren().add(label);
         }
-        if(activitiesField.getChildren().isEmpty()) {
+        if (activitiesField.getChildren().isEmpty()) {
             Label label = new Label("Sem resultados a serem exibidos.");
             label.getStyleClass().add("mid-label");
             activitiesField.getChildren().add(label);
         }
     }
 
-    private void loadActivityPane(Activity activity){
+    private void loadActivityPane(Activity activity) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Activity.fxml"));
             Parent activityPane = loader.load();
@@ -340,5 +412,20 @@ public class GoalViewModel {
         editButton.setVisible(true);
         confirmEditButton.setVisible(false);
         cancelEditButton.setVisible(false);
+    }
+
+    private void updateFields() {
+        if (goal != null) {
+            nameField.setText(goal.getName());
+            descriptionField.setText(goal.getDescription());
+        }
+    }
+
+    private void createGoal() {
+        Goal goal = new Goal();
+        goal.setName("");
+        goal.setDescription("");
+        goal.setStatus(GoalStatus.in_progress);
+        this.goal = goal;
     }
 }

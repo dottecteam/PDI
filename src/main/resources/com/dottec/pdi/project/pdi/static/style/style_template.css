@@ -126,7 +126,7 @@
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-text-align: center;
-    -fx-text-fill: white;
+    -fx-text-fill: white !important;
     -fx-font-size: 20;
     -fx-cursor: hand;
     -fx-padding: 3 10;

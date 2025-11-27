@@ -58,6 +58,21 @@ public final class GoalController {
         }
     }
 
+    public static void deleteGoal(Goal goal) {
+        GoalDAO.delete(goal);
+
+        User loggedUser = AuthController.getInstance().getLoggedUser();
+        if (loggedUser != null) {
+            Log log = new Log();
+            log.setLogAction("delete_goal");
+            String details = String.format("{\"goal_id\": %d, \"goal_name\": \"%s\", \"collaborator_id\": %d, \"log_message\": \"Goal deleted\"}",
+                    goal.getId(), goal.getName(), goal.getCollaborator().getId());
+            log.setLogDetails(details);
+            log.setLogUserId(loggedUser.getId());
+            LogController.addLog(log);
+        }
+    }
+
     public static void assignGoalToCollaborator(Goal goal, Collaborator collaborator) {
         System.out.println("Associando meta '" + goal.getName() + "' ao colaborador '" + collaborator.getName() + "'");
         // Exemplo:

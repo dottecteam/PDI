@@ -27,6 +27,7 @@ import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.model.User;
 import com.dottec.pdi.project.pdi.model.Notification;
 import com.dottec.pdi.project.pdi.controllers.NotificationController;
+import javafx.scene.control.ButtonBase; // Importado para uso no novo método de construção
 
 public class HeaderViewModel {
     @FXML
@@ -146,19 +147,31 @@ public class HeaderViewModel {
                 if (currentUser != null) {
                     if (currentUser.getRole() == Role.department_manager) {
                         buildHeaderStructure("Dashboard - Setor " + currentUser.getDepartment().getName(), false, false, true, showNotificationButton, exportButton);
+                    } else {
+                        buildHeaderStructure("Dashboard", false, false, true, showNotificationButton, exportButton);
                     }
                 } else {
                     buildHeaderStructure("Dashboard", false, false, true, showNotificationButton, exportButton);
                 }
             }
             case "Collaborators.fxml" -> {
-                Button buttonAddCollaborator = new Button("Adicionar Colaborador");
-                buttonAddCollaborator.setOnMouseClicked(event2 -> {
-                    TemplateViewModel.switchScreen("RegisterCollaborator.fxml");
-                    updateHeader("RegisterCollaborator.fxml");
-                });
+                AuthController auth = AuthController.getInstance();
+                User currentUser = auth.getLoggedUser();
 
-                buildHeaderStructure("Colaboradores", false, true, true, showNotificationButton, buttonAddCollaborator);
+                // Corrigido: Botão "Adicionar Colaborador" visível apenas para HR e General Manager
+                if (currentUser != null && (currentUser.getRole() == Role.hr_manager || currentUser.getRole() == Role.general_manager)) {
+                    Button buttonAddCollaborator = new Button("Adicionar Colaborador");
+                    buttonAddCollaborator.setOnMouseClicked(event2 -> {
+                        TemplateViewModel.switchScreen("RegisterCollaborator.fxml");
+                        updateHeader("RegisterCollaborator.fxml");
+                    });
+
+                    // O botão é passado apenas se a verificação de função passar
+                    buildHeaderStructure("Colaboradores", false, true, true, showNotificationButton, buttonAddCollaborator);
+                } else {
+                    // Se o usuário é Gerente de Área ou Colaborador, o botão não é exibido
+                    buildHeaderStructure("Colaboradores", false, true, true, showNotificationButton);
+                }
             }
             case "RegisterCollaborator.fxml", "CollaboratorGoals.fxml", "AddGoalFromTemplate.fxml", "Goal.fxml",
                  "AddActivity.fxml" -> {
@@ -205,7 +218,7 @@ public class HeaderViewModel {
         headerLabel.setText(label);
         headerButtonsField.getChildren().clear();
 
-        if (headerItems == null) return;
+        if (headerItems == null) headerItems = new Node[0];
 
         setReturnButtonVisible(returnBtn);
         setFilterButtonVisible(filterButton);
@@ -216,6 +229,8 @@ public class HeaderViewModel {
             if (item instanceof Button btn) {
                 btn.getStyleClass().add("basic-button");
                 headerButtonsField.getChildren().add(btn);
+            } else {
+                headerButtonsField.getChildren().add(item);
             }
         });
     }
@@ -262,13 +277,28 @@ public class HeaderViewModel {
         instance.headerButtonsField.getChildren().removeFirst();
     }
 
-    public static void addButton(Button button) {
-        instance.headerButtonsField.getChildren().addLast(button);
+    // CORREÇÃO: Aceita Node (para incluir MenuButton e outros)
+    public static void addButton(Node node) {
+        // Aplica estilo básico se for um botão (ou MenuButton/ButtonBase)
+        if (node instanceof ButtonBase btn) {
+            if (!btn.getStyleClass().contains("basic-button") && !btn.getStyleClass().contains("cancel-button")) {
+                btn.getStyleClass().add("basic-button");
+            }
+        }
+        instance.headerButtonsField.getChildren().addLast(node);
     }
 
-    public static void addButton(int position, Button button) {
-        instance.headerButtonsField.getChildren().add(position, button);
+    // CORREÇÃO: Aceita Node (para incluir MenuButton e outros)
+    public static void addButton(int position, Node node) {
+        // Aplica estilo básico se for um botão (ou MenuButton/ButtonBase)
+        if (node instanceof ButtonBase btn) {
+            if (!btn.getStyleClass().contains("basic-button") && !btn.getStyleClass().contains("cancel-button")) {
+                btn.getStyleClass().add("basic-button");
+            }
+        }
+        instance.headerButtonsField.getChildren().add(position, node);
     }
+
 
     public static void clearButtons() {
         instance.headerButtonsField.getChildren().clear();

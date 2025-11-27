@@ -22,12 +22,17 @@ import java.util.List;
 
 public class RegisterCollaboratorViewModel {
     //fields
-    @FXML private TextField formAddCollaboratorName;
-    @FXML private TextField formAddCollaboratorEmail;
-    @FXML private TextField formAddCollaboratorCPF;
-    @FXML private ChoiceBox<Department> formAddCollaboratorDepartment;
+    @FXML
+    private TextField formAddCollaboratorName;
+    @FXML
+    private TextField formAddCollaboratorEmail;
+    @FXML
+    private TextField formAddCollaboratorCPF;
+    @FXML
+    private ChoiceBox<Department> formAddCollaboratorDepartment;
 
-    @FXML private VBox formPane;
+    @FXML
+    private VBox formPane;
 
     @FXML
     public void initialize() {
@@ -69,54 +74,52 @@ public class RegisterCollaboratorViewModel {
         });
     }
 
-    private void updateLabel(Node node, Label label){
-        if(node.isFocused() || FXUtils.isFilled(node)){
+    private void updateLabel(Node node, Label label) {
+        if (node.isFocused() || FXUtils.isFilled(node)) {
             label.getStyleClass().add("formInput-label-focused");
         } else {
             label.getStyleClass().remove("formInput-label-focused");
         }
     }
 
-    // Button Click
     @FXML
-    private void saveCollaborator(ActionEvent event){
-        if (!validateFields()){
+    private void saveCollaborator(ActionEvent event) {
+        if (!validateFields()) {
             TemplateViewModel.showErrorMessage("Erro de validação", "Por favor, preencha todos os campos obrigatórios corretamente.");
             return;
         }
 
-        // Obtém os dados dos campos do formulário
         String name = formAddCollaboratorName.getText();
         String email = formAddCollaboratorEmail.getText();
         String cpf = formAddCollaboratorCPF.getText();
-        Department selectedDepartment = formAddCollaboratorDepartment.getValue(); // Pega o objeto Department selecionado
+        Department selectedDepartment = formAddCollaboratorDepartment.getValue();
 
         try {
-            // Usa o controller para salvar o colaborador
+
             CollaboratorController.saveCollaborator(name, cpf, email, selectedDepartment);
+
             TemplateViewModel.showSuccessMessage("Colaborador cadastrado com sucesso.");
-            // Opcional: Limpar os campos após o sucesso
-            // clearFields();
+            TemplateViewModel.switchScreen("Collaborators.fxml");
         } catch (Exception e) {
             TemplateViewModel.showErrorMessage("Erro no Cadastro", "Ocorreu um erro ao salvar o colaborador: " + e.getMessage());
         }
     }
 
-    private boolean validateFields(){
-        if(!FieldValidator.validarCampo(formAddCollaboratorName.getText())) {
+    private boolean validateFields() {
+        if (!FieldValidator.validarCampo(formAddCollaboratorName.getText())) {
             System.out.println("Nome Inválido");
             return false;
         }
-        if(!FieldValidator.validarCampo(formAddCollaboratorCPF.getText()) || !FieldValidator.validarCPF(formAddCollaboratorCPF.getText())) {
+        if (!FieldValidator.validarCampo(formAddCollaboratorCPF.getText()) || !FieldValidator.validarCPF(formAddCollaboratorCPF.getText())) {
             System.out.println("CPF Inválido");
             return false;
         }
-        if(!FieldValidator.validarCampo(formAddCollaboratorEmail.getText()) || !FieldValidator.validarEmail(formAddCollaboratorEmail.getText())) {
+        if (!FieldValidator.validarCampo(formAddCollaboratorEmail.getText()) || !FieldValidator.validarEmail(formAddCollaboratorEmail.getText())) {
             System.out.println("Email Inválido");
             return false;
         }
         // Validação para o ChoiceBox de Departamento
-        if(formAddCollaboratorDepartment.getValue() == null) {
+        if (formAddCollaboratorDepartment.getValue() == null) {
             System.out.println("Departamento não selecionado");
             return false;
         }

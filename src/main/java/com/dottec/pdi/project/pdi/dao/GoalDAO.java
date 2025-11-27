@@ -22,7 +22,7 @@ public class GoalDAO {
 
     // ... (os métodos insert, delete, update, findById, readAll, deleteById continuam os mesmos) ...
     public static void insert(Goal goal) {
-        try(Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)){
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, goal.getName());
             stmt.setString(2, goal.getDescription());
             stmt.setString(3, goal.getStatus().name());
@@ -36,35 +36,37 @@ public class GoalDAO {
             if (rs.next()) {
                 goal.setId(rs.getInt(1));
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir meta: " + e.getMessage(), e);
         }
     }
 
-    public static void delete(Goal goal){
+    public static void delete(Goal goal) {
         GoalDAO.deleteById(goal.getId());
     }
 
     public static void update(Goal goal) {
-        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)){
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)) {
             stmt.setString(1, goal.getName());
             stmt.setString(2, goal.getDescription());
             stmt.setString(3, goal.getStatus().name());
-            stmt.setDate(4, Date.valueOf(goal.getDeadline()));
+            if (goal.getDeadline() != null) {
+                stmt.setDate(4, Date.valueOf(goal.getDeadline()));
+            } else {
+                stmt.setNull(4, java.sql.Types.DATE);
+            }
             stmt.setInt(5, goal.getCollaborator().getId());
             stmt.setInt(6, goal.getId());
 
             int rows = stmt.executeUpdate();
             System.out.println("Meta atualizada! Linhas afetadas: " + rows);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar meta: " + e.getMessage(), e);
         }
     }
 
     public static Goal findById(int id) {
-        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)){
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(FIND_BY_ID_SQL)) {
             stmt.setInt(1, id);
 
             try (ResultSet rs = stmt.executeQuery()) {
@@ -72,8 +74,7 @@ public class GoalDAO {
                     return mapResultSetToGoal(rs);
                 }
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar meta: " + e.getMessage(), e);
         }
         return null;
@@ -96,14 +97,13 @@ public class GoalDAO {
         return goals;
     }
 
-    public static void deleteById(int id){
-        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_SQL)){
+    public static void deleteById(int id) {
+        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(DELETE_SQL)) {
             stmt.setInt(1, id);
 
             int rows = stmt.executeUpdate();
             System.out.println("Meta deletada! Linhas: " + rows);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar meta: " + e.getMessage(), e);
         }
     }
@@ -139,7 +139,7 @@ public class GoalDAO {
         goal.setCreatedAt(rs.getTimestamp("goa_created_at").toLocalDateTime());
 
         Timestamp updatedAtTimestamp = rs.getTimestamp("goa_updated_at");
-        if(updatedAtTimestamp != null){
+        if (updatedAtTimestamp != null) {
             goal.setUpdatedAt(updatedAtTimestamp.toLocalDateTime());
         }
 

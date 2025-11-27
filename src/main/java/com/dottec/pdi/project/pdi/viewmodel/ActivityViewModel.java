@@ -7,11 +7,11 @@ import com.dottec.pdi.project.pdi.model.Activity;
 
 import com.dottec.pdi.project.pdi.model.Attachment;
 import com.dottec.pdi.project.pdi.model.Goal;
+import com.dottec.pdi.project.pdi.enums.ActivityStatus;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 
 import com.dottec.pdi.project.pdi.model.Tag;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
 import javafx.scene.Node;
@@ -31,9 +31,10 @@ import javafx.scene.layout.*;
 
 import java.time.LocalDate;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.awt.Desktop;
-import java.io.IOException;
+import java.util.Optional;
 
 public class ActivityViewModel {
     @FXML
@@ -48,8 +49,13 @@ public class ActivityViewModel {
     private TextField nameField;
     @FXML
     private TextField descriptionField;
+
+    // REMOVIDO: @FXML private Label statusLabel;
+
+    // NOVO: MenuButton para Status
     @FXML
-    private Label statusLabel;
+    private MenuButton statusMenu;
+
     @FXML
     private DatePicker deadlineDatePicker;
     @FXML
@@ -94,6 +100,13 @@ public class ActivityViewModel {
         buttonVisible(confirmButton, false);
         loadTagsMenu();
         titledPaneHeader.setMinWidth(activityTitledPane.getWidth());
+
+        // Configuração inicial do MenuButton de Status
+        if (statusMenu != null) {
+            statusMenu.getStyleClass().add("label-status");
+            statusMenu.setMouseTransparent(true); // Inicialmente não clicável
+            statusMenu.setFocusTraversable(false);
+        }
     }
 
     private void loadTagsMenu() {
@@ -116,32 +129,78 @@ public class ActivityViewModel {
         tagsMenuViewModel.setSelectedTags(activity.getTags());
         tagsMenuViewModel.refresh();
 
-        switch (activity.getStatus()) {
-            case completed -> {
-                statusLabel.setText("Completo");
-                statusLabel.setStyle("-fx-background-color: #6D00A1; -fx-text-fill: white");
-            }
-            case in_progress -> {
-                statusLabel.setText("Em progresso");
-                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
-            }
-            case canceled -> {
-                statusLabel.setText("Cancelado");
-                statusLabel.setStyle("-fx-background-color: #E6CCEF; -fx-text-fill: #5c5c5c");
-            }
-            case pending -> {
-                statusLabel.setText("Pendente");
-                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;");
-            }
-            default -> {
-                statusLabel.setText("Desconhecido");
-                statusLabel.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
-            }
+        // Lógica de Status
+        if (statusMenu != null) {
+            updateStatusDisplay(activity.getStatus().name());
 
+            statusMenu.getItems().clear();
+            statusMenu.setText(translateActivityStatus(activity.getStatus().name()));
+
+            for (ActivityStatus statusOption : ActivityStatus.values()) {
+                if (statusOption != activity.getStatus()) {
+                    MenuItem item = new MenuItem(translateActivityStatus(statusOption.name()));
+                    item.setOnAction(e -> handleActivityStatusChange(statusOption));
+                    statusMenu.getItems().add(item);
+                }
+            }
         }
 
         if (!creatingGoalMode) {
             displayAttachments(activity.getAttachments());
+        }
+    }
+
+    // NOVO MÉTODO: Lógica de mudança de status da atividade
+    private void handleActivityStatusChange(ActivityStatus newStatus) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Confirmar mudança de status para " + translateActivityStatus(newStatus.name()) + "?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            activity.setStatus(newStatus);
+
+            if (!creatingGoalMode) {
+                ActivityController.updateActivity(activity);
+                TemplateViewModel.showSuccessMessage("Status da atividade atualizado!");
+            } else {
+                TemplateViewModel.showSuccessMessage("Status da atividade alterado (será salvo com a meta).");
+            }
+
+            // Força o GoalViewModel a recarregar as atividades
+            if (goalViewModel != null) {
+                goalViewModel.populateActivities();
+            }
+
+            updateStatusDisplay(newStatus.name());
+        }
+    }
+
+    // NOVO MÉTODO: Tradução de Status de Atividade
+    private String translateActivityStatus(String status) {
+        return switch (status.toLowerCase()) {
+            case "completed" -> "Completo";
+            case "in_progress" -> "Em progresso";
+            case "pending" -> "Pendente";
+            case "canceled" -> "Cancelado";
+            default -> status;
+        };
+    }
+
+    // NOVO MÉTODO: Atualiza cor e texto do status do MenuButton
+    private void updateStatusDisplay(String status) {
+        String colorStyle = "";
+        String text = translateActivityStatus(status);
+
+        switch (status.toLowerCase()) {
+            case "completed" -> colorStyle = "-fx-background-color: #6D00A1; -fx-text-fill: white";
+            case "in_progress" -> colorStyle = "-fx-background-color: #AF69CD; -fx-text-fill: white;";
+            case "canceled" -> colorStyle = "-fx-background-color: #E6CCEF; -fx-text-fill: #5c5c5c";
+            case "pending" -> colorStyle = "-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;";
+            default -> colorStyle = "-fx-background-color: grey; -fx-text-fill: white;";
+        }
+
+        if (statusMenu != null) {
+            statusMenu.setText(text);
+            statusMenu.setStyle(colorStyle);
         }
     }
 
@@ -258,6 +317,11 @@ public class ActivityViewModel {
         deadlineDatePicker.getStyleClass().remove("label-not-editable");
         deadlineDatePicker.getStyleClass().add("label-editable");
         deadlineDatePicker.setMouseTransparent(false);
+
+        // Habilita o MenuButton de Status
+        if (statusMenu != null) {
+            statusMenu.setMouseTransparent(false);
+        }
     }
 
     @FXML
@@ -284,7 +348,7 @@ public class ActivityViewModel {
         activity.setDeadline(deadlineDatePicker.getValue());
 
         if (!creatingGoalMode) {
-            ActivityDAO.update(activity);
+            ActivityController.updateActivity(activity);
             Goal goal = activity.getGoal();
             if(goal.getDeadline() == null) {
                 goal.setDeadline(activity.getDeadline());
@@ -293,6 +357,11 @@ public class ActivityViewModel {
                 goal.setDeadline(activity.getDeadline());
                 GoalController.updateGoal(goal);
             }
+        }
+
+        // Força a atualização do GoalViewModel para refletir a mudança no prazo/nome da Atividade
+        if (goalViewModel != null) {
+            goalViewModel.populateActivities();
         }
 
         TemplateViewModel.showSuccessMessage("Meta atualizada com sucesso!");
@@ -313,6 +382,11 @@ public class ActivityViewModel {
         deadlineDatePicker.getStyleClass().remove("label-editable");
         deadlineDatePicker.getStyleClass().add("label-not-editable");
         deadlineDatePicker.setMouseTransparent(true);
+
+        // Desabilita o MenuButton de Status
+        if (statusMenu != null) {
+            statusMenu.setMouseTransparent(true);
+        }
 
         buttonVisible(editButton, true);
         buttonVisible(deleteButton, true);

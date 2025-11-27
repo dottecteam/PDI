@@ -1,15 +1,14 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
-import com.dottec.pdi.project.pdi.controllers.CollaboratorController;
-import com.dottec.pdi.project.pdi.controllers.CollaboratorStatusData;
+import com.dottec.pdi.project.pdi.controllers.*;
 import com.dottec.pdi.project.pdi.dao.CollaboratorDAO;
-import com.dottec.pdi.project.pdi.controllers.DepartmentController;
-import com.dottec.pdi.project.pdi.controllers.GoalController;
 import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
+import com.dottec.pdi.project.pdi.enums.Role;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department;
 import com.dottec.pdi.project.pdi.model.Goal;
+import com.dottec.pdi.project.pdi.model.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,24 +29,30 @@ import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CollaboratorGoalsViewModel implements Initializable {
     private Collaborator collaborator;
+    private static CollaboratorGoalsViewModel instance; // Para Singleton para refresh
 
-    @FXML private VBox collaboratorGoalsMainVBox;
+    @FXML
+    private VBox collaboratorGoalsMainVBox;
 
     // --- FXML Campos de Informação do Colaborador ---
-    @FXML private TextField nameField;
-    @FXML private TextField cpfField;
-    @FXML private TextField emailField;
-    @FXML private ChoiceBox<Department> departmentField;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField cpfField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private ChoiceBox<Department> departmentField;
 
     // --- Filtros ---
     private LocalDate startDay = LocalDate.now().minusDays(15);
@@ -55,50 +60,110 @@ public class CollaboratorGoalsViewModel implements Initializable {
     private List<GoalStatus> filteredStatuses = new ArrayList<>(Arrays.asList(GoalStatus.values()));
 
     // --- FXML Controles de Edição ---
-    @FXML private ImageView editButton;
-    @FXML private Button confirmEditButton;
-    @FXML private Button cancelEditButton;
+    @FXML
+    private ImageView editButton;
+    @FXML
+    private Button confirmEditButton;
+    @FXML
+    private Button cancelEditButton;
 
     // --- FXML Container para Metas ---
-    @FXML private VBox goalsVBox;
+    @FXML
+    private VBox goalsVBox;
 
     // --- FXML Para o gráfico individual ---
-    @FXML private PieChart statusPieChart;
-    @FXML private Label percentageLabel;
+    @FXML
+    private PieChart statusPieChart;
+    @FXML
+    private Label percentageLabel;
     private final String STATUS_CONCLUIDO = "completed";
 
     // Método chamado pelo JavaFX após o FXML ser carregado
     @FXML
     private void initialize() {
+        instance = this; // Define a instância para o Singleton
         // Inicia com os botões de ação escondidos
         confirmEditButton.setVisible(false);
         cancelEditButton.setVisible(false);
     }
+
     //Override do gráfico
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         statusPieChart.setAnimated(false);
     }
 
+    // Método estático para recarregar esta tela
+    public static void refreshGoalsList() {
+        if (instance != null && instance.collaborator != null) {
+            instance.loadAndDisplayGoals();
+            instance.loadData(instance.collaborator.getId()); // Recarrega o gráfico também
+        }
+    }
+
+
     // Este é o método principal para carregar os dados na tela
     public void setCollaborator(Collaborator collaborator) {
-        setFilter();
         this.collaborator = collaborator;
-        if(collaborator.getStatus() == CollaboratorStatus.active){
+
+        // Configurações de UI
+        setFilter();
+        HeaderViewModel.setFilterButtonVisible(true);
+        HeaderViewModel.setReturnButtonVisible(true);
+        HeaderViewModel.setSearchBarVisible(false);
+        HeaderViewModel.setLabel("PDI do Colaborador: " + collaborator.getName());
+
+        if (collaborator.getStatus() == CollaboratorStatus.active) {
             updateCollaboratorFields();
             loadAndDisplayGoals();
             populateDepartments();
 
             loadData(collaborator.getId());
-            createAddGoalButton();
+            configHeaderButtons(); // Atualiza os botões do cabeçalho
         } else {
             updateCollaboratorFields();
             editButton.setOpacity(0.3);
             collaboratorGoalsMainVBox.setDisable(true);
+            configHeaderButtons(); // Apenas o botão de retorno deve ser exibido, mas a lógica de exclusão é tratada aqui.
         }
     }
 
-    private void createAddGoalButton(){
+    private void configHeaderButtons() {
+        HeaderViewModel.clearButtons();
+
+        createAddGoalButton();
+
+        User loggedUser = AuthController.getInstance().getLoggedUser();
+        if (loggedUser != null && (loggedUser.getRole() == Role.hr_manager || loggedUser.getRole() == Role.general_manager)) {
+            MenuButton statusMenu = new MenuButton(translateCollaboratorStatus(collaborator.getStatus().name()));
+            statusMenu.getStyleClass().add("basic-button");
+
+            // Adiciona as opções de status
+            for (CollaboratorStatus statusOption : CollaboratorStatus.values()) {
+                if (statusOption != collaborator.getStatus()) {
+                    MenuItem item = new MenuItem(translateCollaboratorStatus(statusOption.name()));
+                    item.setOnAction(e -> handleCollaboratorStatusChange(statusOption));
+                    statusMenu.getItems().add(item);
+                }
+            }
+            HeaderViewModel.addButton(statusMenu);
+        }
+    }
+
+    // NOVO: Lógica de exclusão do colaborador
+    private void handleDeleteCollaborator() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tem certeza que deseja INATIVAR o colaborador " + collaborator.getName() + "? Esta ação não pode ser desfeita.");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            CollaboratorController.deleteCollaboratorById(collaborator.getId());
+            TemplateViewModel.showSuccessMessage("Colaborador inativado com sucesso!");
+            TemplateViewModel.goBack(); // Volta para a lista de colaboradores
+        }
+    }
+
+
+    private void createAddGoalButton() {
         Button buttonAddGoal = new Button("Adicionar Meta");
         buttonAddGoal.getStyleClass().add("basic-button");
         MenuItem goalFromTemplateButton = new MenuItem("Templates");
@@ -113,7 +178,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
         emptyGoalButton.setOnAction(ft -> {
             TemplateViewModel.switchScreen("Goal.fxml", controller -> {
-                if(controller instanceof GoalViewModel goalViewModel) {
+                if (controller instanceof GoalViewModel goalViewModel) {
                     goalViewModel.setGoalViewModel(goalViewModel);
                     goalViewModel.setCollaborator(collaborator);
                     goalViewModel.refresh();
@@ -130,16 +195,16 @@ public class CollaboratorGoalsViewModel implements Initializable {
         HeaderViewModel.addButton(buttonAddGoal);
     }
 
-    private void setFilter(){
+    private void setFilter() {
         FilterMenuViewModel filterMenu = new FilterMenuViewModel();
 
         //status based filter
         List<Node> statuses = new ArrayList<>();
-        for(GoalStatus goalStatus : GoalStatus.values()){
+        for (GoalStatus goalStatus : GoalStatus.values()) {
             CheckBox checkBox = new CheckBox();
             checkBox.setSelected(true);
             checkBox.setOnAction(e -> {
-                if(!filteredStatuses.contains(goalStatus)) {
+                if (!filteredStatuses.contains(goalStatus)) {
                     filteredStatuses.add(goalStatus);
                 } else {
                     filteredStatuses.remove(goalStatus);
@@ -167,14 +232,10 @@ public class CollaboratorGoalsViewModel implements Initializable {
                 filterMenu.addDatePickerLabel("De: ", startDayDatePicker),
                 filterMenu.addDatePickerLabel("À: ", endDayDatePicker));
 
-        filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> handleFilter());
+        filterMenu.getConfirmFilterButton().setOnMouseClicked(e -> loadAndDisplayGoals());
 
         Button filterButton = HeaderViewModel.getController().getFilterButton();
         filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
-    }
-
-    private void handleFilter(){
-        //TODO colocar aqui a função de filtragem
     }
 
     // Atualiza os campos de texto com as informações do colaborador
@@ -206,32 +267,37 @@ public class CollaboratorGoalsViewModel implements Initializable {
             label.setStyle("-fx-font-size: 16;");
             goalsVBox.getChildren().add(label);
             return;
-        } else if (goalsVBox.getChildren().isEmpty()){
+        }
+
+        boolean foundFilteredGoals = false;
+
+        for (Goal goal : goals) {
+            boolean statusOk = filteredStatuses.contains(goal.getStatus());
+            boolean startDayOk = true;
+            boolean endDayOk = true;
+
+            if (goal.getDeadline() != null) {
+                // Ajuste de filtro: isAfter/isBefore é exclusivo. Para incluir o dia,
+                // deve-se usar isAfter(date.minusDays(1)) e isBefore(date.plusDays(1))
+                // No contexto do filtro, assumiremos que isAfter/isBefore são suficientes.
+                startDayOk = !startDay.isAfter(goal.getDeadline()); // Prazo é depois ou igual ao início
+                endDayOk = !endDay.isBefore(goal.getDeadline());   // Prazo é antes ou igual ao fim
+            }
+
+            if (statusOk && startDayOk && endDayOk) {
+                buildGoalCard(goal);
+                foundFilteredGoals = true;
+            }
+        }
+
+        if (!foundFilteredGoals) {
             Label label = new Label("Sem resultados a serem exibidos.");
             label.setStyle("-fx-font-size: 16;");
             goalsVBox.getChildren().add(label);
         }
-
-        for (Goal goal : goals) {
-            if(goal.getDeadline() == null){
-                buildGoalCard(goal);
-            }
-        }
-
-        for (Goal goal : goals) {
-            if(goal.getDeadline() != null){
-                boolean statusOk = filteredStatuses.contains(goal.getStatus());
-                boolean startDayOk = goal.getDeadline().isAfter(startDay);
-                boolean endDayOk = goal.getDeadline().isBefore(endDay);
-
-                if(statusOk && startDayOk && endDayOk) {
-                    buildGoalCard(goal);
-                }
-            }
-        }
     }
 
-    private void buildGoalCard(Goal goal){
+    private void buildGoalCard(Goal goal) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         HBox goalCard = new HBox();
@@ -280,15 +346,15 @@ public class CollaboratorGoalsViewModel implements Initializable {
         HBox.setHgrow(goalName, Priority.ALWAYS);
         goalName.setMaxWidth(Double.MAX_VALUE);
 
-            goalCard.setOnMouseClicked(mouseEvent -> {
-                TemplateViewModel.switchScreen("Goal.fxml", controller -> {
-                    if(controller instanceof GoalViewModel goalViewModel){
-                        goalViewModel.setGoal(goal);
-                        goalViewModel.setGoalViewModel(goalViewModel);
-                        goalViewModel.refresh();
-                    }
-                });
+        goalCard.setOnMouseClicked(mouseEvent -> {
+            TemplateViewModel.switchScreen("Goal.fxml", controller -> {
+                if (controller instanceof GoalViewModel goalViewModel) {
+                    goalViewModel.setGoal(goal);
+                    goalViewModel.setGoalViewModel(goalViewModel);
+                    goalViewModel.refresh();
+                }
             });
+        });
 
         goalsVBox.getChildren().add(goalCard);
     }
@@ -422,7 +488,6 @@ public class CollaboratorGoalsViewModel implements Initializable {
                         String color = "#9032BB"; // Cor padrão
 
 
-
                         switch (status.toLowerCase()) {
                             case "completed":
                                 color = "#01B8AA";
@@ -474,5 +539,45 @@ public class CollaboratorGoalsViewModel implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private void handleCollaboratorStatusChange(CollaboratorStatus newStatus) {
+        String statusText = translateCollaboratorStatus(newStatus.name());
+        String confirmationMessage = "Confirmar mudança de status do colaborador " + collaborator.getName() + " para " + statusText + "?";
+
+        if (newStatus == CollaboratorStatus.inactive) {
+            confirmationMessage += " ATENÇÃO: O status 'Inativo' fará com que o colaborador seja logicamente excluído (soft-delete).";
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, confirmationMessage);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // O CollaboratorController.updateCollaborator usa o DAO que atualiza o status
+            collaborator.setStatus(newStatus);
+            CollaboratorController.updateCollaborator(collaborator); // Persiste o novo status no banco
+
+            // Se for inativar, chamo a função que faz o soft delete.
+            if (newStatus == CollaboratorStatus.inactive) {
+                CollaboratorController.deleteCollaboratorById(collaborator.getId());
+            }
+
+            TemplateViewModel.showSuccessMessage("Status do colaborador atualizado com sucesso para " + statusText + "!");
+
+            // Força a atualização visual (campos, botões) e a lista de metas
+            updateCollaboratorFields();
+            configHeaderButtons();
+            loadAndDisplayGoals();
+        }
+    }
+
+    // NOVO MÉTODO: Tradução de Status de Colaborador
+    private String translateCollaboratorStatus(String status) {
+        return switch (status.toLowerCase()) {
+            case "active" -> "Ativo";
+            case "on_leave" -> "Afastado";
+            case "inactive" -> "Inativo";
+            default -> status;
+        };
     }
 }

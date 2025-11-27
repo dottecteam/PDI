@@ -21,7 +21,7 @@ public class CollaboratorDAO {
         LEFT JOIN departments d ON c.department_id = d.dep_id
         """;
 
-    private static final String SELECT_ALL_SQL = BASE_SELECT_SQL + " WHERE c.col_deleted_at IS NULL";
+    private static final String SELECT_ALL_SQL = BASE_SELECT_SQL;
     private static final String FIND_BY_ID_SQL = BASE_SELECT_SQL + " WHERE c.col_id = ? AND c.col_deleted_at IS NULL";
     private static final String FIND_BY_DEPARTMENT_ID_SQL = BASE_SELECT_SQL + " WHERE c.department_id = ? AND c.col_deleted_at IS NULL";
 
