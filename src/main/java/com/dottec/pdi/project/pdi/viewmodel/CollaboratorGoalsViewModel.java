@@ -172,7 +172,11 @@ public class CollaboratorGoalsViewModel implements Initializable {
         emptyGoalButton.getStyleClass().add("basic-button");
 
         goalFromTemplateButton.setOnAction(ft -> {
-            TemplateViewModel.switchScreen("AddGoalFromTemplate.fxml");
+            TemplateViewModel.switchScreen("AddGoalFromTemplate.fxml", controller -> {
+                if(controller instanceof AddGoalFromTemplateViewModel addGoalFromTemplateViewModel){
+                    addGoalFromTemplateViewModel.setCollaborator(collaborator);
+                }
+            });
             HeaderViewModel.updateHeader("AddGoalFromTemplate.fxml");
         });
 

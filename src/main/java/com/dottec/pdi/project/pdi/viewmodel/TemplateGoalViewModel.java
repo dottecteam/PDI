@@ -178,7 +178,7 @@ public class TemplateGoalViewModel {
             System.out.println("GoalTemplate is null");
         } else {
             System.out.println("GoalTemplate has no activityTemplates");
-            Label label = new Label("Adicione Atividades.");
+            Label label = new Label("Este modelo ainda não possui atividades.");
             label.getStyleClass().add("mid-label");
             activityTemplatesField.getChildren().add(label);
         }
