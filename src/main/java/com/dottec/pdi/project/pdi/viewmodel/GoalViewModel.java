@@ -171,6 +171,7 @@ public class GoalViewModel {
             }
         }
     }
+
     private void configHeaderForExistingGoal() {
         HeaderViewModel.clearButtons();
 
@@ -438,13 +439,6 @@ public class GoalViewModel {
         editButton.setVisible(true);
         confirmEditButton.setVisible(false);
         cancelEditButton.setVisible(false);
-    }
-
-    private void updateFields() {
-        if (goal != null) {
-            nameField.setText(goal.getName());
-            descriptionField.setText(goal.getDescription());
-        }
     }
 
     private void createGoal() {

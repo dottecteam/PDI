@@ -4,6 +4,7 @@ import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.controllers.NotificationCreationController;
 import com.dottec.pdi.project.pdi.dao.UserDAO;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.utils.PasswordUtil;
 import javafx.animation.Animation;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -158,6 +159,8 @@ public class LoginViewModel implements Initializable {
     public void handleLogin() {
         String email = emailField.getText().trim();
         String password = passwordField.getText().trim();
+
+        System.out.println(PasswordUtil.hashPassword(password));
 
         if (email.isEmpty() || password.isEmpty()) {
             showAlert("Campos obrigatórios", "Por favor, preencha todos os campos.");

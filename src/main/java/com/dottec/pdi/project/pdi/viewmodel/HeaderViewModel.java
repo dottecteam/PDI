@@ -221,11 +221,10 @@ public class HeaderViewModel {
             }
             case "UserForm.fxml" -> { // NOVO: Formulário de Usuário
                 buildHeaderStructure("Adicionar Usuário", true, false, false, showNotificationButton);
-            case "AddActivity.fxml", "AddActivityTemplate.fxml" -> {
-                buildHeaderStructure("Adicionar Atividade", true, false, false);
             }
             case "Profile.fxml" -> {
                 buildHeaderStructure("Perfil do usuário", true, false, false, showNotificationButton);
+            }
             case "AddActivityTemplate.fxml" -> {
                 buildHeaderStructure("Adicionar Atividade", true, false, false, false);
             }
