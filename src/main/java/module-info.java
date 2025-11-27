@@ -6,6 +6,7 @@ module com.dottec.pdi.project.pdi {
     requires javafx.controls;
     requires javafx.base;
     requires jbcrypt;
+    requires java.desktop;
 
     opens com.dottec.pdi.project.pdi to javafx.fxml;
     opens com.dottec.pdi.project.pdi.controllers;
