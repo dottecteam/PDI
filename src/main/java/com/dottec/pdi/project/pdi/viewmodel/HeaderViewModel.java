@@ -226,12 +226,17 @@ public class HeaderViewModel {
             }
             case "Profile.fxml" -> {
                 buildHeaderStructure("Perfil do usuário", true, false, false, showNotificationButton);
+            case "AddActivityTemplate.fxml" -> {
+                buildHeaderStructure("Adicionar Atividade", true, false, false, false);
+            }
+            case "UserManagement.fxml" -> {
+                buildHeaderStructure("Gerenciar Usuários", true, false, false, false);
             }
             case "GoalTemplates.fxml" -> {
-                buildHeaderStructure("Modelos", false, false, false);
+                buildHeaderStructure("Modelos", false, false, false, false);
             }
             case "TemplateGoal.fxml" -> {
-                buildHeaderStructure("Modelo", true, false, false);
+                buildHeaderStructure("Modelo", true, false, false, false);
             }
             default -> {
                 buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false, showNotificationButton);
@@ -261,7 +266,8 @@ public class HeaderViewModel {
     }
 
 
-    public static void setNotificationButtonVisible(Boolean visible) {
+
+        public static void setNotificationButtonVisible(Boolean visible) {
         instance.notificationButton.setVisible(visible);
         instance.notificationButton.setManaged(visible);
     }

@@ -9,7 +9,6 @@ module com.dottec.pdi.project.pdi {
     requires org.apache.poi.ooxml;
     requires org.apache.poi.poi;
     requires java.desktop;
-    requires mysql.connector.j;
     requires animatefx;
     requires java.compiler;
 
