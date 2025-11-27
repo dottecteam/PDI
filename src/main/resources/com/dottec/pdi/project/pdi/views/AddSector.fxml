@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.AddSectorViewModel">
+
+    <stylesheets>
+        <URL value="@../static/style/style_AddSector.css" />
+    </stylesheets>
+
+    <children>
+        <VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+            </padding>
+            <children>
+
+                <!-- ÁREA DO CONTEÚDO CENTRALIZADO -->
+                <StackPane VBox.vgrow="ALWAYS">
+                    <children>
+                        <!-- O CARD DO FORMULÁRIO -->
+                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="20.0" styleClass="form-card">
+                            <children>
+
+                                <!-- Campo Nome -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label styleClass="input-label" text="Nome" />
+                                        <TextField fx:id="txtNome" promptText="Digite o nome..." />
+                                    </children>
+                                </VBox>
+
+                                <!-- Campo Gerente (ComboBox) -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label styleClass="input-label" text="Gerente" />
+                                        <ComboBox fx:id="cbGerente" maxWidth="1.7976931348623157E308" promptText="Gerente do Setor" />
+                                    </children>
+                                </VBox>
+
+                                <!-- Campo Contato (ou Status, dependendo do seu modelo) -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label styleClass="input-label" text="Contato (Opcional)" />
+                                        <TextField fx:id="txtContato" promptText="Digite o contato..." />
+                                    </children>
+                                </VBox>
+
+                                <!-- Botão Salvar (Alinhado à direita) -->
+                                <HBox alignment="CENTER_RIGHT">
+                                    <children>
+                                        <Button mnemonicParsing="false" onAction="#salvarSetor" styleClass="button-save" text="Adicionar Setor">
+                                            <padding>
+                                                <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                                            </padding>
+                                        </Button>
+                                    </children>
+                                </HBox>
+
+                            </children>
+                        </VBox>
+                    </children>
+                </StackPane>
+
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

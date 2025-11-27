@@ -8,6 +8,11 @@ module com.dottec.pdi.project.pdi {
     requires jbcrypt;
     requires mysql.connector.j;
     requires java.compiler;
+    requires org.apache.poi.ooxml;
+    requires org.apache.poi.poi;
+    requires java.desktop;
+    requires mysql.connector.j;
+    requires animatefx;
 
     opens com.dottec.pdi.project.pdi to javafx.fxml;
     opens com.dottec.pdi.project.pdi.controllers;
@@ -17,5 +22,6 @@ module com.dottec.pdi.project.pdi {
     exports com.dottec.pdi.project.pdi.controllers;
     exports com.dottec.pdi.project.pdi.utils;
     exports com.dottec.pdi.project.pdi.viewmodel;
+    exports com.dottec.pdi.project.pdi.model;
     opens com.dottec.pdi.project.pdi.utils to javafx.fxml;
 }

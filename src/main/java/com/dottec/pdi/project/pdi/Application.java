@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
+import javafx.scene.image.Image;
 
 
 import java.io.IOException;
@@ -25,6 +26,9 @@ public class Application extends javafx.application.Application {
 
         // Verificar se está correto o local de adição dessa linha de código
         scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_GoalTemplates.css").toExternalForm());
+
+        Image applicationIcon = new Image(getClass().getResourceAsStream("/com/dottec/pdi/project/pdi/static/img/logo.png"));
+        stage.getIcons().add(applicationIcon);
 
         stage.setTitle("PDI");
         stage.setScene(scene);

@@ -21,3 +21,15 @@
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
+
+.notification-badge {
+    -fx-background-color: #E02F2F;
+    -fx-background-radius: 50%;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-min-width: 15px;
+    -fx-min-height: 15px;
+    -fx-padding: 0 4px;
+    -fx-alignment: center;
+}

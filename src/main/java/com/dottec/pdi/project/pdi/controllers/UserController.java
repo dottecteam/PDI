@@ -2,10 +2,13 @@ package com.dottec.pdi.project.pdi.controllers;
 
 import com.dottec.pdi.project.pdi.dao.UserDAO;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.model.Log;
+
 import java.util.List;
 
 public class UserController {
-    private UserController() {}
+    private UserController() {
+    }
 
     public static boolean addUser(User user) {
         if (UserDAO.findById(user.getId()) != null) {
@@ -15,6 +18,18 @@ public class UserController {
 
         try {
             UserDAO.insert(user);
+
+            User loggedUser = AuthController.getInstance().getLoggedUser();
+            if (loggedUser != null) {
+                Log log = new Log();
+                log.setLogAction("create_user");
+                String details = String.format("{\"user_name\": \"%s\", \"user_email\": \"%s\", \"log_message\": \"User created\"}",
+                        user.getName(), user.getEmail());
+                log.setLogDetails(details);
+                log.setLogUserId(loggedUser.getId());
+                LogController.addLog(log);
+            }
+
             return true;
         } catch (Exception e) {
             System.err.println("User insert failed. Error: " + e.getMessage());
@@ -31,6 +46,18 @@ public class UserController {
 
         try {
             UserDAO.softDelete(user);
+
+            User loggedUser = AuthController.getInstance().getLoggedUser();
+            if (loggedUser != null) {
+                Log log = new Log();
+                log.setLogAction("inactivate_user");
+                String details = String.format("{\"user_id\": %d, \"user_name\": \"%s\", \"log_message\": \"User inactivated\"}",
+                        user.getId(), user.getName());
+                log.setLogDetails(details);
+                log.setLogUserId(loggedUser.getId());
+                LogController.addLog(log);
+            }
+
             return true;
         } catch (Exception e) {
             System.err.println("User soft delete failed for ID " + id + ". Error: " + e.getMessage());
@@ -46,6 +73,18 @@ public class UserController {
 
         try {
             UserDAO.update(user);
+
+            User loggedUser = AuthController.getInstance().getLoggedUser();
+            if (loggedUser != null) {
+                Log log = new Log();
+                log.setLogAction("update_user");
+                String details = String.format("{\"user_id\": %d, \"user_name\": \"%s\", \"log_message\": \"User data updated\"}",
+                        user.getId(), user.getName());
+                log.setLogDetails(details);
+                log.setLogUserId(loggedUser.getId());
+                LogController.addLog(log);
+            }
+
             return true;
         } catch (Exception e) {
             System.err.println("User update failed for ID " + user.getId() + ". Error: " + e.getMessage());

@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.SettingsViewModel" stylesheets="@../static/style/style_template.css">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.SettingsViewModel">
 
-   <children>
-      <Text fill="#9032bb" layoutX="68.0" layoutY="234.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="484.6708984375">
-         <font>
-            <Font size="96.0" />
-         </font>
-      </Text>
-      <AnchorPane layoutX="429.0" onMouseClicked="#goToTeste" layoutY="19.0" prefHeight="111.0" prefWidth="124.0" style="-fx-background-color: red;" styleClass="hBox"/>
-   </children>
+    <!-- Importando o CSS -->
+    <stylesheets>
+        <!-- O caminho '../' volta uma pasta para sair de 'views' e entrar em 'static' -->
+        <URL value="@../static/style/style_Settings.css" />
+    </stylesheets>
+
+    <children>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+            </padding>
+            <children>
+                <!-- ÁREA DA LISTA -->
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent;" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="vboxSectorsList" spacing="15.0">
+                            <padding>
+                                <Insets bottom="10.0" left="5.0" right="15.0" top="5.0" />
+                            </padding>
+                            <!-- Os cards serão injetados aqui via Java -->
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>

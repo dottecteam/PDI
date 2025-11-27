@@ -39,3 +39,5 @@ build/
 
 ###Enviroment Variables###
 .env
+
+uploads/
