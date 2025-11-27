@@ -164,33 +164,34 @@ public class UserDAO {
 
 
     public static User login(String email, String password) {
+        // 1. Encontra o usuário pelo email (ativo e não deletado)
         User user = null;
 
         try (Connection conn = Database.getConnection();
+             // Usa FIND_BY_EMAIL_FOR_LOGIN_SQL (que já checa use_status e use_deleted_at)
              PreparedStatement stmt = conn.prepareStatement(FIND_BY_EMAIL_FOR_LOGIN_SQL)) {
 
             stmt.setString(1, email);
 
             try (ResultSet rs = stmt.executeQuery()) {
-                // Se encontrou um usuário, reutiliza o método mapUser para criar o objeto
                 if (rs.next()) {
-                    return mapUser(rs);
+                    user = mapUser(rs); // Mapeia o usuário do banco (inclui o hash)
                 }
             }
         } catch (SQLException e) {
-            // Mantém o padrão de tratamento de erro da classe DAO
-            throw new RuntimeException("Erro ao autenticar usuário: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao buscar usuário para login: " + e.getMessage(), e);
         }
 
+        // 2. Verifica se o usuário foi encontrado e se a senha corresponde ao hash BCrypt
         if (user != null) {
-            if (password.hashCode() == user.getPasswordHash().hashCode()) {
-                return user;
-            } else {
-                return null; // Senha incorreta
+            // Usa o PasswordHasher para verificar a senha contra o hash armazenado
+            // O password.hashCode() é removido.
+            if (com.dottec.pdi.project.pdi.utils.PasswordHasher.verify(password, user.getPasswordHash())) {
+                return user; // Sucesso na autenticação
             }
         }
 
-        // Retorna null se o login falhar (credenciais incorretas ou usuário inativo)
+        // Retorna null se o usuário não for encontrado, ou se a senha falhar na verificação BCrypt
         return null;
     }
 
