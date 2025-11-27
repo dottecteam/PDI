@@ -6,6 +6,10 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0, 0, 2);
 }
 
+.activity-pane:hover {
+    -fx-background-color: #D6D6D6;
+}
+
 .activity-pane:expanded, .activity-pane:hover {
     -fx-border-color: #4B0081;
 }

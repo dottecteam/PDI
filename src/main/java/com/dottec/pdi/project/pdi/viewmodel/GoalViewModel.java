@@ -279,6 +279,7 @@ public class GoalViewModel {
         disableCreationMode();
         creatingGoalMode = false;
         TemplateViewModel.showSuccessMessage("Meta criada com sucesso!");
+        HeaderViewModel.updateHeader("Goal.fxml");
 
         // CORREÇÃO DE NAVEGAÇÃO: Volta para a lista de metas e força o refresh
         TemplateViewModel.switchScreen("CollaboratorGoals.fxml", controller -> {

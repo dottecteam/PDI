@@ -25,7 +25,7 @@ public class Application extends javafx.application.Application {
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
 
         // Verificar se está correto o local de adição dessa linha de código
-        scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_AddGoal.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_GoalTemplates.css").toExternalForm());
 
         Image applicationIcon = new Image(getClass().getResourceAsStream("/com/dottec/pdi/project/pdi/static/img/logo.png"));
         stage.getIcons().add(applicationIcon);

@@ -11,6 +11,7 @@ module com.dottec.pdi.project.pdi {
     requires java.desktop;
     requires mysql.connector.j;
     requires animatefx;
+    requires java.compiler;
 
     opens com.dottec.pdi.project.pdi to javafx.fxml;
     opens com.dottec.pdi.project.pdi.controllers;

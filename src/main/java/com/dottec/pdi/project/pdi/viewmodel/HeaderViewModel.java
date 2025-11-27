@@ -225,6 +225,12 @@ public class HeaderViewModel {
             case "Profile.fxml" -> {
                 buildHeaderStructure("Perfil do usuário", true, false, false, showNotificationButton);
             }
+            case "GoalTemplates.fxml" -> {
+                buildHeaderStructure("Modelos", false, true, true);
+            }
+            case "TemplateGoals.fxml" -> {
+                buildHeaderStructure("Modelo", true, false, false);
+            }
             default -> {
                 buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false, showNotificationButton);
             }
