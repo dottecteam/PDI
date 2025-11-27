@@ -22,11 +22,11 @@ public class UserManagementViewModel {
     @FXML private Pane userCard;
 
     @FXML void initialize() {
-        assert btnDelete != null : "fx:id="btnDelete" was not injected: check your FXML file 'UserManagement.fxml'.";
-        assert btnEdit != null : "fx:id="btnEdit" was not injected: check your FXML file 'UserManagement.fxml'.";
-        assert emailField != null : "fx:id="emailField" was not injected: check your FXML file 'UserManagement.fxml'.";
-        assert nameField != null : "fx:id="nameField" was not injected: check your FXML file 'UserManagement.fxml'.";
-        assert userPhoto != null : "fx:id="userPhoto" was not injected: check your FXML file 'UserManagement.fxml'.";
+        assert btnDelete != null : "fx:id=\"btnDelete\" was not injected: check your FXML file 'UserManagement.fxml'.";
+        assert btnEdit != null : "fx:id=\"btnEdit\" was not injected: check your FXML file 'UserManagement.fxml'.";
+        assert emailField != null : "fx:id=\"emailField\" was not injected: check your FXML file 'UserManagement.fxml'.";
+        assert nameField != null : "fx:id=\"nameField\" was not injected: check your FXML file 'UserManagement.fxml'.";
+        assert userPhoto != null : "fx:id=\"userPhoto\" was not injected: check your FXML file 'UserManagement.fxml'.";
 
     }
 
