@@ -128,18 +128,36 @@ public class HeaderViewModel {
                 buildHeaderStructure("Colaboradores", false, true, true, showNotificationButton, buttonAddCollaborator);
             }
             case "RegisterCollaborator.fxml", "CollaboratorGoals.fxml", "AddGoalFromTemplate.fxml", "Goal.fxml",
-                 "AddActivity.fxml", "Notifications.fxml" -> {
+                 "AddActivity.fxml" -> {
                 buildHeaderStructure(
                         switch (page) {
                             case "RegisterCollaborator.fxml" -> "Adicionar Colaborador";
                             case "CollaboratorGoals.fxml" -> "PDI do Colaborador";
                             case "AddGoalFromTemplate.fxml", "Goal.fxml" -> "Adicionar Meta";
                             case "AddActivity.fxml" -> "Adicionar Atividade";
-                            case "Notifications.fxml" -> "Notificações";
                             default -> "Plano de Desenvolvimento Individual";
                         },
-                        true, false, false, false
+                        true, false, false, showNotificationButton
                 );
+            }
+
+            case "Notifications.fxml" ->{
+                buildHeaderStructure("Notificações", true, false, false, false);
+            }
+                case "Settings.fxml" -> {
+                Button buttonAddSector = new Button("Adicionar Setor");
+                buttonAddSector.setOnMouseClicked(event2 -> {
+                    TemplateViewModel.switchScreen("AddSector.fxml");
+                    updateHeader("AddSector.fxml");
+                });
+
+                buildHeaderStructure("Setor", false, false, false, showNotificationButton, buttonAddSector);
+            }
+            case "AddSector.fxml" -> {
+                buildHeaderStructure("Adicionar Setor", true, false, false, showNotificationButton);
+            }
+            case "UserManagement.fxml" -> {
+                buildHeaderStructure("Gerenciar Usuários", true, false, false, showNotificationButton);
             }
             default -> {
                 buildHeaderStructure("Plano de Desenvolvimento Individual", false, false, false, showNotificationButton);

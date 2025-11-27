@@ -2,7 +2,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.ActivityController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
-import com.dottec.pdi.project.pdi.dao.ActivityDAO; // Import adicionado para buscar atividade completa
+import com.dottec.pdi.project.pdi.dao.ActivityDAO;
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Collaborator;
@@ -47,18 +47,18 @@ public class GoalViewModel {
 
     @FXML
     private void initialize(){
-        Platform.runLater(() -> {
-            if(goal == null){
-                enableCreationMode();
-                updateFields();
-            } else {
-                updateFields();
-                createAddActivityButton();
+    }
 
-                goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
-                populateActivities();
-            }
-        });
+    public void refresh(){
+        if(goal == null){   //Create a new goal if the create goal button was pressed
+            enableCreationMode();
+            updateFields();
+        } else {    //Update the fields for the selected goal
+            updateFields();
+            createAddActivityButton();
+            goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
+            populateActivities();
+        }
     }
 
     private void updateFields(){
@@ -112,7 +112,8 @@ public class GoalViewModel {
         HeaderViewModel.addButton(cancel);
     }
 
-    private void enableCreationMode(){
+    private void enableCreationMode(){  //Set the name, descripton and add actvities, then update the database
+        updateFields();
         creatingGoalMode = true;
         createGoal();
         Platform.runLater(this::configHeader);

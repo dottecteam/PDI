@@ -60,6 +60,19 @@
     -fx-cursor: hand;
 }
 
+.x-button {
+    -fx-background-image: url("../img/xButton.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 25;
+    -fx-pref-height: 25;
+}
+
+.x-button:hover {
+    -fx-background-image: url("../img/xButtonHover.png");
+    -fx-cursor: hand;
+}
 
 /*header*/
 .header-label{
@@ -358,41 +371,14 @@
     -fx-padding: 2;
 }
 
-.tag {
-    -fx-background-color: #AF69CD;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-text-align: center;
-    -fx-text-fill: white;
-    -fx-font-size: 16;
-    -fx-cursor: hand;
-    -fx-padding: 0 20 0 10;
-}
-
-.tag .box, .tag .box:selected, .tag .box:focused {
-    -fx-background-color: red;
-}
-
-.tag .box:selected {
-    -fx-background-color: red;
-}
-
-
-.tag .mark {
-    -fx-shape: "M0,0 H5 V5 H0 Z";
+.separator {
     -fx-background-color: transparent;
-    -fx-scale-x: 0;
-    -fx-scale-y: 0;
-    -fx-opacity: 0;
-    -fx-translate-x: 1;
-    -fx-translate-y: 1;
 }
 
-.tag .mark:selected {
-    -fx-background-color: white;
-    -fx-opacity: 1;
-    -fx-scale-x: 1;
-    -fx-scale-y: 1;
+.separator .line {
+    -fx-border-color: #4B0081;
+    -fx-border-width: 1;
+    -fx-border-radius: 1;
 }
 
 .label-status {

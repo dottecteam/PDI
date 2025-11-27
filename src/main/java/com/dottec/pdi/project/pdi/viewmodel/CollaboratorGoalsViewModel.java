@@ -104,6 +104,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
                 if(controller instanceof GoalViewModel goalViewModel) {
                     goalViewModel.setGoalViewModel(goalViewModel);
                     goalViewModel.setCollaborator(collaborator);
+                    goalViewModel.refresh();
                 }
             });
             HeaderViewModel.updateHeader("Goal.fxml");
@@ -201,6 +202,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
                     if(controller instanceof GoalViewModel goalViewModel){
                         goalViewModel.setGoal(goal);
                         goalViewModel.setGoalViewModel(goalViewModel);
+                        goalViewModel.refresh();
                     }
                 });
             });
@@ -282,6 +284,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
         editButton.setVisible(true);
         confirmEditButton.setVisible(false);
         cancelEditButton.setVisible(false);
+        cancelEditButton.setManaged(false);
     }
 
     //Carrega dados para o gráfico
@@ -380,14 +383,5 @@ public class CollaboratorGoalsViewModel implements Initializable {
         });
 
         new Thread(loadDataTask).start();
-    }
-
-
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

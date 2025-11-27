@@ -1,0 +1,58 @@
+.root {
+    -fx-background-color: #f6f6f6;
+}
+
+/* O Card Branco Central */
+.form-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-padding: 30;
+    -fx-min-width: 500;
+    -fx-max-width: 600;
+}
+
+/* Títulos dos Inputs (Nome, Gerente, Contato) */
+.input-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+    -fx-font-family: "System";
+}
+
+/* Campos de Texto e ComboBox */
+.text-field, .combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #5D2E8E;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused, .combo-box:focused {
+    -fx-border-width: 2;
+    -fx-border-color: #A569BD;
+}
+
+/* Botão Roxo de Salvar */
+.button-save {
+    -fx-background-color: #A569BD;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.button-save:hover {
+    -fx-background-color: #8E44AD;
+}
+
+/* Botão Voltar (Seta) */
+.button-back {
+    -fx-background-color: transparent;
+    -fx-text-fill: #5D2E8E;
+    -fx-font-size: 24px;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+}

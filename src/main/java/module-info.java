@@ -9,6 +9,7 @@ module com.dottec.pdi.project.pdi {
     requires org.apache.poi.ooxml;
     requires org.apache.poi.poi;
     requires java.desktop;
+    requires mysql.connector.j;
 
     opens com.dottec.pdi.project.pdi to javafx.fxml;
     opens com.dottec.pdi.project.pdi.controllers;

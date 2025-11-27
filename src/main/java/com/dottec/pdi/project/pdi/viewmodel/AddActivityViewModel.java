@@ -7,21 +7,25 @@ import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
-public class AddActivityViewModel {
+public class AddActivityViewModel extends VBox {
     @FXML private TextField formAddActivityName;
     @FXML private TextField formAddActivityDescription;
-    @FXML private ChoiceBox<Tag> formAddActivityTags;
     @FXML private DatePicker formAddDeadline;
     @FXML private Button confirmButton;
 
     @FXML private VBox formPane;
+
+    private TagsMenuViewModel tagsMenuViewModel;
 
     private Activity activity;
     public void setActivity(Activity activity) {
@@ -37,6 +41,7 @@ public class AddActivityViewModel {
     public void setCreatingGoalMode(boolean creatingGoalMode){this.creatingGoalMode=creatingGoalMode;}
 
     @FXML private void initialize(){
+        loadTagsMenu();
         formAddActivityName.clear();
         formAddDeadline.setEditable(false);
         formAddDeadline.getEditor().setMouseTransparent(true);
@@ -62,8 +67,8 @@ public class AddActivityViewModel {
     private void updateActivity(){
         activity.setName(formAddActivityName.getText());
         activity.setDescription(formAddActivityDescription.getText());
-        activity.setTags(formAddActivityTags.getItems());
         activity.setDeadline(formAddDeadline.getValue());
+        activity.setTags(tagsMenuViewModel.getSelectedTags());
         activity.setStatus(ActivityStatus.in_progress);
     }
 
@@ -91,5 +96,16 @@ public class AddActivityViewModel {
     @FXML
     void handleCancel(ActionEvent actionEvent){
         TemplateViewModel.goBack();
+    }
+
+    private void loadTagsMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/TagsMenu.fxml"));
+            Parent root = loader.load();
+            tagsMenuViewModel = loader.getController();
+            formPane.getChildren().add(3, root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

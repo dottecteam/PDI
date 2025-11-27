@@ -1,0 +1,46 @@
+/* Fundo geral da tela */
+.root {
+    -fx-background-color: #f6f6f6;
+}
+
+/* O Card do Setor (HBox) */
+.hbox-sector {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-min-height: 80;
+    -fx-padding: 15 20 15 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 2;
+}
+
+/* Efeito Hover (passar o mouse) - Fica Roxo igual ao Colaborador */
+.hbox-sector:hover {
+    -fx-background-color: #E6CCEF;
+    -fx-border-color: #4B0081;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+}
+
+/* Texto do Nome do Setor */
+.label-sector-name {
+    -fx-font-size: 18px;
+    -fx-text-fill: #333333;
+    -fx-background-color: transparent;
+}
+
+/* Muda a cor do texto quando passa o mouse no card */
+.hbox-sector:hover .label-sector-name {
+    -fx-text-fill: #4B0081;
+}
+
+/* Botões de Ícone (Editar/Excluir) */
+.button-icon {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.button-icon:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(93, 46, 142, 0.4), 5, 0, 0, 0);
+}

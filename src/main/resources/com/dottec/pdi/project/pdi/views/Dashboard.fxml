@@ -1,78 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.geometry.Insets?>
 
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-
-<VBox alignment="CENTER" spacing="20" stylesheets="@/com/dottec/pdi/project/pdi/static/style/style_Dashboard.css"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.dottec.pdi.project.pdi.viewmodel.DashboardViewModel">
+<?import javafx.scene.image.Image?>
+<VBox fx:id="rootVBox" alignment="TOP_LEFT" prefHeight="900.0" prefWidth="1200.0" spacing="20"
+      stylesheets="@/com/dottec/pdi/project/pdi/static/style/style_Dashboard.css" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.DashboardViewModel">
 
     <padding>
         <Insets bottom="20" left="20" right="20" top="20"/>
     </padding>
-    <children>
-        <BorderPane prefHeight="200.0" prefWidth="200.0">
-            <bottom>
 
-                <BarChart fx:id="tagBarChart" prefHeight="201.0" prefWidth="321.0" styleClass="ChartTags-Title"
+    <children>
+        <AnchorPane fx:id="dashboardContentPane" VBox.vgrow="ALWAYS">
+
+            <AnchorPane fx:id="widgetMonthsLineChart" prefHeight="350.0" prefWidth="600.0" styleClass="widget-container"
+                        AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <LineChart fx:id="monthsLineChart" prefHeight="350.0" prefWidth="600.0" styleClass="ChartTags-Title"
+                           title="."
+                           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                           AnchorPane.topAnchor="0.0">
+                    <xAxis>
+                        <CategoryAxis label="Mês"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Metas Criadas"/>
+                    </yAxis>
+                </LineChart>
+            </AnchorPane>
+
+            <AnchorPane fx:id="widgetTaskPieChart" prefHeight="250.0" prefWidth="300.0" styleClass="widget-container"
+                        AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="0.0">
+                <PieChart fx:id="taskPieChart"
+                          styleClass="ChartTags-Title" title="."
+                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+                          AnchorPane.bottomAnchor="40.0"/>
+                <Label fx:id="percentage" layoutX="14.0" layoutY="320.0" styleClass="Special-Text" text="Label"
+                       AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="315.0"/>
+            </AnchorPane>
+
+            <AnchorPane fx:id="widgetProgressBarChart" prefHeight="250.0" prefWidth="600.0"
+                        styleClass="widget-container" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="360.0">
+                <BarChart fx:id="progressBarChart" prefHeight="250.0" prefWidth="600.0" styleClass="ChartTags-Title"
                           title="."
-                          BorderPane.alignment="CENTER">
+                          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                          AnchorPane.topAnchor="0.0">
+                    <xAxis>
+                        <NumberAxis label="Progresso (%)" side="BOTTOM"/>
+                    </xAxis>
+                    <yAxis>
+                        <CategoryAxis label="Colaborador" side="LEFT"/>
+                    </yAxis>
+                </BarChart>
+            </AnchorPane>
+
+            <AnchorPane fx:id="widgetTagBarChart" prefHeight="250.0" prefWidth="600.0" styleClass="widget-container"
+                        AnchorPane.leftAnchor="610.0" AnchorPane.topAnchor="360.0">
+
+                <BarChart fx:id="tagBarChart" prefHeight="250.0" prefWidth="300.0" styleClass="ChartTags-Title"
+                          title="." AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <xAxis>
                         <CategoryAxis label="Tag"/>
                     </xAxis>
                     <yAxis>
-
                         <NumberAxis label="Frequência"/>
                     </yAxis>
                 </BarChart>
-            </bottom>
-            <left>
-                <VBox prefHeight="35.0" prefWidth="736.0" BorderPane.alignment="CENTER">
-                    <children>
+            </AnchorPane>
 
-                        <LineChart fx:id="monthsLineChart" prefHeight="377.0" prefWidth="736.0"
-                                   styleClass="ChartTags-Title" title=".">
-                            <xAxis>
-                                <CategoryAxis label="Mês"/>
-                            </xAxis>
+            <AnchorPane fx:id="widgetSkillsDistribution" prefHeight="250.0" prefWidth="300.0"
+                        styleClass="widget-container" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="620.0">
 
-                            <yAxis>
-                                <NumberAxis label="Metas Criadas"/>
-                            </yAxis>
-                        </LineChart>
-                        <BarChart fx:id="progressBarChart" styleClass="ChartTags-Title" title=".">
+                <PieChart fx:id="skillsDistributionPieChart" prefHeight="250.0" prefWidth="300.0"
+                          styleClass="ChartTags-Title" title="Distribuição de Skills" AnchorPane.bottomAnchor="0.0"
+                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            </AnchorPane>
 
-                            <xAxis>
-                                <NumberAxis label="Progresso (%)" side="BOTTOM"/>
-                            </xAxis>
-                            <yAxis>
-                                <CategoryAxis label="Colaborador" side="LEFT"/>
+        </AnchorPane>
 
-                            </yAxis>
-                        </BarChart>
-                    </children>
-                </VBox>
-            </left>
-            <right>
-                <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-
-                    <children>
-                        <PieChart fx:id="taskPieChart" styleClass="ChartTags-Title" title="."
-                        />
-                        <Label fx:id="percentage" layoutX="233.0" layoutY="365.0" styleClass="Special-Text"
-                               text="Label"/>
-
-                    </children>
-                </AnchorPane>
-            </right>
-        </BorderPane>
-
-        <AnchorPane prefHeight="50.0" prefWidth="50.0" >
+        <AnchorPane prefHeight="50.0" prefWidth="50.0">
             <children>
                 <Button fx:id="exportButton" onAction="#handleExportData"
                         contentDisplay="RIGHT" styleClass="basic-button" text="Exportar Dados"
@@ -88,5 +105,4 @@
             </children>
         </AnchorPane>
     </children>
-
 </VBox>

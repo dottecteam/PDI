@@ -13,107 +13,203 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<TitledPane fx:id="activityTitledPane" alignment="CENTER_RIGHT" expanded="false" nodeOrientation="RIGHT_TO_LEFT" style="-fx-background-color: #F6F6F6;"
-            styleClass="activity-pane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.ActivityViewModel">
-    <content>
-        <VBox nodeOrientation="LEFT_TO_RIGHT" spacing="40.0">
-            <children>
-                <GridPane>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="0.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <Label contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-text-fill: #4B0081;"
-                               text="Descrição:" />
-                        <TextField fx:id="descriptionField" alignment="TOP_LEFT" editable="false" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="33.0" styleClass="label-not-editable" text="Descrição" GridPane.columnIndex="1" />
-                    </children>
-                </GridPane>
-                <GridPane>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="0.0" />
-                        <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <Label alignment="BOTTOM_LEFT" contentDisplay="RIGHT" graphicTextGap="10.0" nodeOrientation="LEFT_TO_RIGHT" style="-fx-text-fill: #4B0081;"
-                               text="Prazo:">
-                            <padding>
-                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-                            </padding>
-                            <graphic>
-                                <DatePicker id="activity-date-picker" fx:id="deadlineDatePicker" nodeOrientation="LEFT_TO_RIGHT" styleClass="label-not-editable" translateX="-7.0" />
-                            </graphic>
-                        </Label>
-                        <ButtonBar buttonMinWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" GridPane.columnIndex="1">
-                            <buttons>
-                                <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="cancel-button" text="Cancelar" />
-                                <Button fx:id="confirmButton" mnemonicParsing="false" styleClass="basic-button" text="Confirmar" />
-                                <ImageView fx:id="editButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#handleEnableEditing" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../static/img/edit.png" />
-                                    </image>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </ImageView>
-                                <ImageView fx:id="deleteButton" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#handleEnableDelete" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../static/img/trash.png" />
-                                    </image>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </ImageView>
-                            </buttons>
-                            <GridPane.margin>
-                                <Insets />
-                            </GridPane.margin>
-                        </ButtonBar>
-                    </children>
-                </GridPane>
-                <VBox spacing="10.0" style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 10 0;">
-                    <children>
-                        <Label style="-fx-text-fill: #4B0081; -fx-font-weight: bold;" text="Anexos de Comprovação" />
-                        <Button fx:id="uploadButton" mnemonicParsing="false" onAction="#handleUploadFile" styleClass="basic-button" text="Fazer Upload de Arquivo" />
-                        <VBox fx:id="attachmentsVBox" spacing="5.0" />
-                    </children>
-                </VBox>
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="25.0" right="10.0" top="20.0" />
-            </padding>
-        </VBox>
-    </content>
+<TitledPane fx:id="activityTitledPane"
+            alignment="CENTER_RIGHT"
+            expanded="false"
+            maxHeight="1.7976931348623157E308"
+            nodeOrientation="RIGHT_TO_LEFT"
+            style="-fx-background-color: #F6F6F6;"
+            styleClass="activity-pane"
+            xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.dottec.pdi.project.pdi.viewmodel.ActivityViewModel">
+
+    <!-- ===========================
+              HEADER (GRIDPANE)
+         =========================== -->
     <graphic>
-        <GridPane fx:id="titledPaneHeader" hgap="15.0" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT">
+        <GridPane fx:id="titledPaneHeader" hgap="15.0"
+                  maxWidth="1.7976931348623157E308"
+                  nodeOrientation="LEFT_TO_RIGHT">
+
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
-                <ColumnConstraints hgrow="SOMETIMES" percentWidth="0.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308"/>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="0.0"/>
             </columnConstraints>
+
             <rowConstraints>
-                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
             </rowConstraints>
+
             <children>
-                <TextField fx:id="nameField" editable="false" maxWidth="1.7976931348623157E308" mouseTransparent="true" nodeOrientation="LEFT_TO_RIGHT" prefWidth="500.0" style="-fx-text-fill: #4B0081;
--fx-font-size: 16;" styleClass="label-not-editable" text="Nome" GridPane.vgrow="ALWAYS" />
-                <Label fx:id="statusLabel" mouseTransparent="true" styleClass="label-status" text="Label" GridPane.columnIndex="1" />
+                <TextField fx:id="nameField"
+                           editable="false"
+                           maxWidth="1.7976931348623157E308"
+                           mouseTransparent="true"
+                           nodeOrientation="LEFT_TO_RIGHT"
+                           prefWidth="500.0"
+                           style="-fx-text-fill: #4B0081; -fx-font-size: 16;"
+                           styleClass="label-not-editable"
+                           text="Nome"
+                           GridPane.vgrow="ALWAYS"/>
+
+                <Label fx:id="statusLabel"
+                       mouseTransparent="true"
+                       styleClass="label-status"
+                       text="Label"
+                       GridPane.columnIndex="1"/>
             </children>
+
         </GridPane>
     </graphic>
+
+    <!-- ===========================
+                 BODY
+         Combinação do HEAD + past-sprint
+         =========================== -->
+    <content>
+        <VBox fx:id="activityBody"
+              minHeight="-Infinity"
+              nodeOrientation="LEFT_TO_RIGHT"
+              spacing="25.0">
+
+            <padding>
+                <Insets bottom="20.0" left="25.0" right="25.0" top="20.0"/>
+            </padding>
+
+            <!-- DESCRIÇÃO -->
+            <GridPane hgap="15.0" vgap="15.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" percentWidth="0.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES"/>
+                </columnConstraints>
+
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+
+                <children>
+                    <Label contentDisplay="RIGHT"
+                           style="-fx-text-fill: #4B0081;"
+                           text="Descrição:"/>
+
+                    <TextField fx:id="descriptionField"
+                               alignment="TOP_LEFT"
+                               editable="false"
+                               maxWidth="1.7976931348623157E308"
+                               prefHeight="33.0"
+                               nodeOrientation="LEFT_TO_RIGHT"
+                               styleClass="label-not-editable"
+                               GridPane.columnIndex="1"/>
+                </children>
+            </GridPane>
+
+            <!-- PRAZO + BOTÕES -->
+            <GridPane>
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="0.0"/>
+                    <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+
+                <children>
+                    <Label alignment="BOTTOM_LEFT"
+                           contentDisplay="RIGHT"
+                           graphicTextGap="25.0"
+                           style="-fx-text-fill: #4B0081;"
+                           text="Prazo:">
+
+                        <padding>
+                            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                        </padding>
+
+                        <graphic>
+                            <DatePicker id="activity-date-picker"
+                                        fx:id="deadlineDatePicker"
+                                        nodeOrientation="LEFT_TO_RIGHT"
+                                        styleClass="label-not-editable"
+                                        translateX="-7.0"/>
+
+                        </graphic>
+
+                    </Label>
+
+                    <ButtonBar buttonMinWidth="0.0" GridPane.columnIndex="1">
+                        <buttons>
+                            <Button fx:id="cancelButton"
+                                    mnemonicParsing="false"
+                                    styleClass="cancel-button"
+                                    text="Cancelar"/>
+
+                            <Button fx:id="confirmButton"
+                                    mnemonicParsing="false"
+                                    styleClass="basic-button"
+                                    text="Confirmar"/>
+
+                            <ImageView fx:id="editButton"
+                                       fitHeight="30.0" fitWidth="30.0"
+                                       onMouseClicked="#handleEnableEditing"
+                                       pickOnBounds="true" preserveRatio="true">
+
+                                <image>
+                                    <Image url="@../static/img/edit.png"/>
+                                </image>
+
+                                <cursor>
+                                    <Cursor fx:constant="HAND"/>
+                                </cursor>
+                            </ImageView>
+
+                            <ImageView fx:id="deleteButton"
+                                       fitHeight="35.0" fitWidth="35.0"
+                                       onMouseClicked="#handleEnableDelete"
+                                       pickOnBounds="true" preserveRatio="true">
+
+                                <image>
+                                    <Image url="@../static/img/trash.png"/>
+                                </image>
+
+                                <cursor>
+                                    <Cursor fx:constant="HAND"/>
+                                </cursor>
+                            </ImageView>
+
+                        </buttons>
+                    </ButtonBar>
+
+                </children>
+            </GridPane>
+
+            <!-- ANEXOS (somente no HEAD → mantido) -->
+            <VBox spacing="10.0"
+                  style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 10 0;">
+                <children>
+                    <Label style="-fx-text-fill: #4B0081; -fx-font-weight: bold;"
+                           text="Anexos de Comprovação"/>
+
+                    <Button fx:id="uploadButton"
+                            mnemonicParsing="false"
+                            onAction="#handleUploadFile"
+                            styleClass="basic-button"
+                            text="Fazer Upload de Arquivo"/>
+
+                    <VBox fx:id="attachmentsVBox" spacing="5.0"/>
+                </children>
+            </VBox>
+
+        </VBox>
+    </content>
+
     <stylesheets>
-        <URL value="@../static/style/style_template.css" />
-        <URL value="@../static/style/style_Activity.css" />
+        <URL value="@../static/style/style_template.css"/>
+        <URL value="@../static/style/style_Activity.css"/>
     </stylesheets>
+
 </TitledPane>
