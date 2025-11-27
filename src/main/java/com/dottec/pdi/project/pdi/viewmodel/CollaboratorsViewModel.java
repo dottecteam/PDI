@@ -8,10 +8,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+
+import animatefx.animation.*;
+
+import javafx.scene.control.ProgressIndicator;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
+import javafx.concurrent.Task;
 
 public class CollaboratorsViewModel {
     @FXML private VBox mainVBox;
@@ -19,7 +27,61 @@ public class CollaboratorsViewModel {
     @FXML
     public void initialize() {
         loadAndDisplayCollaborators();
+
+        this.header = HeaderViewModel.getController();
+
+        //Configura o listener para a barra de pesquisa
+        this.setupSearchListener();
+
+        loadAndDisplayCollaborators();
     }
+
+    private void setupSearchListener() {
+        // Adiciona o listener na propriedade de texto exposta pelo Header
+        header.getSearchText().addListener((observable, oldValue, newValue) -> {
+            pause.setOnFinished(event -> performSearch(newValue));
+            pause.playFromStart();
+        });
+    }
+
+    private void performSearch(String query) {
+        //Se a busca estiver vazia, carrega todos os colaboradores
+        if (query == null || query.trim().isEmpty()) {
+            loadAndDisplayCollaborators();
+            return;
+        }
+
+        mainVBox.getChildren().clear();
+        ProgressIndicator pi = new ProgressIndicator();
+        mainVBox.getChildren().add(pi);
+        mainVBox.setAlignment(Pos.CENTER);
+
+
+        Task<List<Collaborator>> searchTask = new Task<>() {
+            @Override
+            protected List<Collaborator> call() throws Exception {
+                return CollaboratorController.searchCollaborators(query);
+            }
+        };
+
+        searchTask.setOnSucceeded(e -> {
+            List<Collaborator> results = searchTask.getValue();
+            listCollaborators(results);
+        });
+
+        searchTask.setOnFailed(e -> {
+            // Lidar com erros
+            mainVBox.getChildren().clear();
+            mainVBox.getChildren().add(new Label("Erro ao buscar dados."));
+            mainVBox.setAlignment(Pos.CENTER);
+            searchTask.getException().printStackTrace();
+        });
+
+        new Thread(searchTask).start();
+    }
+
+    private final PauseTransition pause = new PauseTransition(Duration.millis(350));
+    private HeaderViewModel header;
 
     private void loadAndDisplayCollaborators() {
         // Usando o Controller estático (padrão que definimos)
@@ -36,6 +98,12 @@ public class CollaboratorsViewModel {
             stackPane.getStyleClass().add("stackpane-collaborator");
             stackPane.setId(String.valueOf(collaborator.getId()));
             stackPane.setOnMouseClicked(event -> openCollaboratorPage(collaborator));
+
+            AnchorPane card = new AnchorPane();
+            new animatefx.animation.FadeIn(card).play();
+            card.setOnMouseEntered(e -> new animatefx.animation.Pulse(card).play());
+
+
 
             // --- 1. Label Nome ---
             Label name = new Label(collaborator.getName());

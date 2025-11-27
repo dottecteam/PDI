@@ -4,6 +4,7 @@ import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.controllers.NotificationCreationController;
 import com.dottec.pdi.project.pdi.dao.UserDAO;
 import com.dottec.pdi.project.pdi.model.User;
+import javafx.animation.Animation;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +26,8 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import animatefx.animation.*;
 
 
 public class LoginViewModel implements Initializable {
@@ -70,6 +73,20 @@ public class LoginViewModel implements Initializable {
             updatePolygonPoints();
             handleResponsiveLayout(newWidth.doubleValue());
         });
+
+
+        Pulse animacaoLogin = new Pulse(imageView);
+        animacaoLogin.setCycleCount(Animation.INDEFINITE);
+        animacaoLogin.setSpeed(0.2);
+        animacaoLogin.play();
+
+
+        logar.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(logar);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
     }
 
     private void updatePolygonPoints() {

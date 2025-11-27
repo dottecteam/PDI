@@ -1,6 +1,8 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.enums.Role;
+import com.dottec.pdi.project.pdi.model.Collaborator;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -12,7 +14,12 @@ import javafx.scene.layout.StackPane;
 import java.util.Arrays;
 import java.util.List;
 
+
 import javafx.application.Platform;
+
+import javafx.beans.property.StringProperty;
+import javafx.scene.control.TextField;
+
 
 import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.model.User;
@@ -205,7 +212,12 @@ public class HeaderViewModel {
         instance.filterButton.setManaged(visible);
     }
 
-    public static void setLabel(String label) {
+
+    public StringProperty getSearchText(){
+        return searchBar.textProperty();
+    }
+
+    public static void setLabel(String label){
         instance.headerLabel.setText(label);
     }
 
@@ -232,6 +244,7 @@ public class HeaderViewModel {
     public static void clearButtons() {
         instance.headerButtonsField.getChildren().clear();
     }
+
 
     public static void clear() {
         clearButtons();

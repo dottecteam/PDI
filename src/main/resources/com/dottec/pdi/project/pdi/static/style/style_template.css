@@ -83,19 +83,12 @@
 #leftMenu {
     -fx-background-color: A066CB;
     -fx-background-radius: 0 25 25 0;
-    -fx-transition: -fx-pref-width 0.6s ease-out;
 }
 
-#leftMenu:hover{
-    -fx-pref-width: 325;
-}
 
 .menuLabel {
-    -fx-opacity: 0;
     -fx-pick-on-bounds: false;
-    -fx-transition: -fx-opacity 0.2s ease-in-out;
     -fx-font-size: 20px;
-    -fx-max-width: 0;
 }
 
 .hBox{
@@ -106,13 +99,10 @@
     -fx-background-color: #9032BB;
     -fx-background-radius: 100;
     -fx-cursor: hand;
-    -fx-pref-width: 325;
 }
 
 #leftMenu:hover .menuLabel{
-    -fx-opacity: 1;
     -fx-cursor: hand;
-    -fx-max-width: 325;
     -fx-padding: 0 0 0 15;
 }
 

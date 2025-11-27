@@ -1,6 +1,10 @@
 package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.utils.FXUtils;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,42 +18,71 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.function.Consumer;
+
+import animatefx.animation.*;
 
 public class TemplateViewModel implements Initializable {
 
     //Declara os ID's criados
 
     //AnchorPane
-    @FXML private AnchorPane leftMenu;
-    @FXML private AnchorPane menuDashboard;
-    @FXML private AnchorPane menuCollaborators;
-    @FXML private AnchorPane menuGoalTemplates;
-    @FXML private AnchorPane menuSettings;
-    @FXML private AnchorPane menuProfile;
-    @FXML private AnchorPane AnchorMainPane;
+    @FXML
+    private AnchorPane leftMenu;
+    @FXML
+    private AnchorPane menuDashboard;
+    @FXML
+    private AnchorPane menuCollaborators;
+    @FXML
+    private AnchorPane menuGoalTemplates;
+    @FXML
+    private AnchorPane menuSettings;
+    @FXML
+    private AnchorPane menuProfile;
+    @FXML
+    private AnchorPane AnchorMainPane;
 
     //Label
-    @FXML private Label labelArrow;
-    @FXML private Label labelCollaborator;
-    @FXML private Label labelSector;
-    @FXML private Label labelSettings;
-    @FXML private Label labelProfile;
+    @FXML
+    private Label labelArrow;
+    @FXML
+    private Label labelCollaborator;
+    @FXML
+    private Label labelSector;
+    @FXML
+    private Label labelSettings;
+    @FXML
+    private Label labelProfile;
 
     //StackPane
-    @FXML private StackPane mainStackPane;
+    @FXML
+    private StackPane mainStackPane;
 
     //BorderPane
-    @FXML private BorderPane mainPane;
-    @FXML private BorderPane tmpCenter;
+    @FXML
+    private BorderPane mainPane;
+    @FXML
+    private BorderPane tmpCenter;
 
     //ImageView
-    @FXML private ImageView menuLogo;
+    @FXML
+    private ImageView menuLogo;
 
     //Define a página que inicializa com o projeto
     private final String mainPage = "Dashboard.fxml";
+
+    //Variaveis para a transição do menu lateral
+    private static final double LARGURA_EXPANDIDA = 250.00; //325 ou 300
+    private static final double LARGURA_RECOLHIDA = 00.0; //ou 70
+    private static final Duration DURACAO_ANIMACAO = Duration.millis(150);
+    private final List<Timeline> listaAnimacoesExpandir = new ArrayList<>();
+    private final List<Timeline> listaAnimacoesRecolher = new ArrayList<>();
 
     private final Stack<Node> pageStack = new Stack<>();
     private final Stack<Node> headerStack = new Stack<>();
@@ -60,11 +93,85 @@ public class TemplateViewModel implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         carregarPagina(mainPage);
         instance = this;
+
+        menuDashboard.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuDashboard);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        menuCollaborators.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuCollaborators);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        menuGoalTemplates.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuGoalTemplates);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        menuSettings.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuSettings);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        menuProfile.setOnMouseEntered(e -> {
+            Pulse animacao = new Pulse(menuProfile);
+            animacao.setCycleCount(1);
+            animacao.play();
+        });
+
+        Platform.runLater(() -> {
+            for (Node node : leftMenu.lookupAll(".menuLabel")) { //Pega a classe dos itens do menu
+                if (node instanceof Region) {
+                    configurarAnimacaoParaNode((Region) node);
+                }
+            }
+            configurarGatilhosDoMenuPrincipal();
+        });
+    }
+
+
+    private void configurarAnimacaoParaNode(Region node) {
+        node.setPrefWidth(LARGURA_RECOLHIDA);
+        node.setOpacity(0.0);
+
+        Timeline expandir = new Timeline(
+                new KeyFrame(DURACAO_ANIMACAO,
+                        new KeyValue(node.prefWidthProperty(), LARGURA_EXPANDIDA),
+                        new KeyValue(node.opacityProperty(), 1.0)
+                )
+        );
+
+        Timeline recolher = new Timeline(
+                new KeyFrame(DURACAO_ANIMACAO,
+                        new KeyValue(node.prefWidthProperty(), LARGURA_RECOLHIDA),
+                        new KeyValue(node.opacityProperty(), 0.0)
+                )
+        );
+
+        listaAnimacoesExpandir.add(expandir);
+        listaAnimacoesRecolher.add(recolher);
+    }
+
+    private void configurarGatilhosDoMenuPrincipal() {
+
+        leftMenu.setOnMouseEntered(event -> {
+            listaAnimacoesRecolher.forEach(Timeline::stop);
+            listaAnimacoesExpandir.forEach(Timeline::play);
+        });
+
+        leftMenu.setOnMouseExited(event -> {
+            listaAnimacoesExpandir.forEach(Timeline::stop);
+            listaAnimacoesRecolher.forEach(Timeline::play);
+        });
     }
 
 
     //Define os métodos que "chamam" as páginas para a tela
-
     @FXML
     void goToMain(MouseEvent event){
         carregarPagina(mainPage);
