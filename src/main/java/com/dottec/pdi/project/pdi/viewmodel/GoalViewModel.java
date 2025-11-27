@@ -2,6 +2,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.ActivityController;
 import com.dottec.pdi.project.pdi.controllers.GoalController;
+import com.dottec.pdi.project.pdi.dao.ActivityDAO; // Import adicionado para buscar atividade completa
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Collaborator;
@@ -47,12 +48,13 @@ public class GoalViewModel {
     @FXML
     private void initialize(){
         Platform.runLater(() -> {
-            if(goal == null){   //Create a new goal if the create goal button was pressed
+            if(goal == null){
                 enableCreationMode();
                 updateFields();
-            } else {    //Update the fields for the selected goal
+            } else {
                 updateFields();
                 createAddActivityButton();
+
                 goal.setActivities(ActivityController.findActivitiesByGoalId(goal.getId()));
                 populateActivities();
             }
@@ -60,13 +62,13 @@ public class GoalViewModel {
     }
 
     private void updateFields(){
-        if(goal != null) {  //Update goal's name and description
+        if(goal != null) {
             nameField.setText(goal.getName());
             descriptionField.setText(goal.getDescription());
         }
     }
 
-    private void createGoal(){  //Create a new goal
+    private void createGoal(){
         Goal goal = new Goal();
         goal.setName("");
         goal.setDescription("");
@@ -78,8 +80,8 @@ public class GoalViewModel {
         Button addActivity = new Button("Adicionar Atividade");
         addActivity.getStyleClass().add("basic-button");
         addActivity.setOnMouseClicked(mouseEvent -> {
-            Activity activity = new Activity(); //Create a new activity
-            activity.setGoal(this.goal);    //Set this as the activity's goal
+            Activity activity = new Activity();
+            activity.setGoal(this.goal);
             TemplateViewModel.switchScreen("AddActivity.fxml", controller -> {
                 if(controller instanceof AddActivityViewModel addActivityViewModel){
                     addActivityViewModel.setActivity(activity);
@@ -110,12 +112,11 @@ public class GoalViewModel {
         HeaderViewModel.addButton(cancel);
     }
 
-    private void enableCreationMode(){  //Set the name, descripton and add actvities, then update the database
+    private void enableCreationMode(){
         creatingGoalMode = true;
-        createGoal(); //Create a new goal
+        createGoal();
         Platform.runLater(this::configHeader);
 
-        //Enter editable mode
         nameField.setEditable(true);
         nameField.getStyleClass().remove("label-not-editable");
         nameField.getStyleClass().add("label-editable");
@@ -169,21 +170,10 @@ public class GoalViewModel {
     }
 
     public void addActivity(Activity activity){
-        try {   //Load the activity template for each activity
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Activity.fxml"));
-            Parent activityPane = loader.load();
-            activityPane.maxWidth(activitiesField.getWidth());
-
-            ActivityViewModel controller = loader.getController();
-            controller.setActivity(activity);
-            controller.updateFields();
-            controller.setCreatingGoalMode(creatingGoalMode);
-            controller.setGoalViewModel(goalViewModel);
-
-            activitiesField.getChildren().add(activityPane);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (!goal.getActivities().contains(activity)) {
+            goal.addActivity(activity);
         }
+        populateActivities();
     }
 
     public void removeActivity(Activity activity){
@@ -194,19 +184,50 @@ public class GoalViewModel {
     public void populateActivities() {
         activitiesField.getChildren().clear();
         if(goal != null && goal.numberActivities() != 0) {
-            goal.getActivities().forEach(this::addActivity);
+            goal.getActivities().forEach(activity -> {
+                if (creatingGoalMode) {
+
+                    loadActivityPane(activity);
+                } else {
+
+                    Activity fullActivity = ActivityDAO.findById(activity.getId());
+                    if (fullActivity != null) {
+                        loadActivityPane(fullActivity);
+                    } else {
+                        System.err.println("Aviso: Atividade com ID " + activity.getId() + " não encontrada no banco.");
+                    }
+                }
+            });
         } else if(goal == null) {
             System.out.println("Goal is null");
         } else {
             System.out.println("Goal has no activities");
-            Label label = new Label("Este colaborador ainda não possui metas.");
+            Label label = new Label("Esta meta ainda não possui atividades.");
             label.getStyleClass().add("mid-label");
             activitiesField.getChildren().add(label);
         }
     }
 
+    private void loadActivityPane(Activity activity){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Activity.fxml"));
+            Parent activityPane = loader.load();
+            activityPane.maxWidth(activitiesField.getWidth());
+
+            ActivityViewModel controller = loader.getController();
+            controller.setActivity(activity);
+            controller.updateFields();
+            controller.setCreatingGoalMode(creatingGoalMode);
+            controller.setGoalViewModel(this.goalViewModel);
+
+            activitiesField.getChildren().add(activityPane);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @FXML
-    private void handleEnableEditing() {    //Enable editing mode for name and description
+    private void handleEnableEditing() {
         nameField.setEditable(true);
         nameField.getStyleClass().remove("label-not-editable");
         nameField.getStyleClass().add("label-editable");
@@ -235,7 +256,7 @@ public class GoalViewModel {
 
         goal.setName(nameField.getText());
         goal.setDescription(descriptionField.getText());
-        GoalController.updateGoal(goal);    //Update database
+        GoalController.updateGoal(goal);
 
         TemplateViewModel.showSuccessMessage("Meta atualizada com sucesso!");
 

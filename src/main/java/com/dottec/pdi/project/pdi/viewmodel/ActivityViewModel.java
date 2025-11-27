@@ -78,15 +78,14 @@ public class ActivityViewModel {
                 statusLabel.setText("Desconhecido");
                 statusLabel.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
             }
+
         }
 
-        // NOVO: Exibe os anexos
         if (!creatingGoalMode) {
             displayAttachments(activity.getAttachments());
         }
     }
 
-    // NOVO MÉTODO: Exibir anexos
     private void displayAttachments(List<Attachment> attachments) {
         attachmentsVBox.getChildren().clear();
         if (attachments == null || attachments.isEmpty()) {
@@ -97,7 +96,7 @@ public class ActivityViewModel {
         }
 
         for (Attachment attachment : attachments) {
-            // Exibir apenas o nome do arquivo (simulado pela última parte do path)
+
             String fullPath = attachment.getFilePath();
             String fileName = fullPath.substring(fullPath.lastIndexOf('/') + 1);
 
@@ -107,7 +106,6 @@ public class ActivityViewModel {
             attachmentsVBox.getChildren().add(fileLabel);
         }
     }
-    // FIM NOVO MÉTODO
 
 
     private void buttonVisible(Node button, Boolean visible){
@@ -210,7 +208,6 @@ public class ActivityViewModel {
         TemplateViewModel.showSuccessMessage("Atividade excluída com sucesso!");
     }
 
-    // NOVO MÉTODO: Fazer Upload de Arquivo
     @FXML
     private void handleUploadFile() {
         if (creatingGoalMode || activity.getId() == 0) {
@@ -220,23 +217,22 @@ public class ActivityViewModel {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecione o arquivo de comprovação");
-        // Filtro de arquivos
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Arquivos de Imagem", "*.jpg", "*.png", "*.jpeg"),
                 new FileChooser.ExtensionFilter("Documentos", "*.pdf", "*.doc", "*.docx"),
                 new FileChooser.ExtensionFilter("Todos os Arquivos", "*.*")
         );
 
-        // Acessa o Stage a partir de um elemento de cena
+
         Stage stage = (Stage) activityTitledPane.getScene().getWindow();
         File selectedFile = fileChooser.showOpenDialog(stage);
 
         if (selectedFile != null) {
-            // Executa a lógica de upload no Controller
+
             boolean success = ActivityController.saveAttachment(activity, selectedFile);
 
             if (success) {
-                // Simulação de recarga/atualização do modelo local
+
                 Attachment newAttachment = new Attachment();
                 newAttachment.setFilePath("/uploads/activities/" + activity.getId() + "/" + selectedFile.getName());
                 activity.addAttachment(newAttachment);
