@@ -140,16 +140,6 @@ public class GoalViewModel {
         filterButton.setOnMouseClicked(e -> filterMenu.show(filterButton));
     }
 
-    private String translateGoalStatus(String status) {
-        return switch (status.toLowerCase()) {
-            case "in_progress" -> "Em Progresso";
-            case "pending" -> "Pendente";
-            case "completed" -> "Concluída";
-            case "canceled" -> "Cancelada";
-            default -> status;
-        };
-    }
-
     private void updateFields(){
         if(goal != null) {  //Update goal's name and description
             nameField.setText(goal.getName());
@@ -177,56 +167,9 @@ public class GoalViewModel {
 
         createAddActivityButton();
 
-        MenuButton statusMenu = new MenuButton(translateGoalStatus(goal.getStatus().name()));
-        statusMenu.getStyleClass().add("basic-button");
-
-        for (GoalStatus statusOption : GoalStatus.values()) {
-            if (statusOption != goal.getStatus()) {
-                MenuItem item = new MenuItem(translateGoalStatus(statusOption.name()));
-                item.setOnAction(e -> handleGoalStatusChange(statusOption));
-                statusMenu.getItems().add(item);
-            }
-        }
-        HeaderViewModel.addButton(statusMenu);
-
         // Configurações gerais do Header
         HeaderViewModel.setReturnButtonVisible(true);
         HeaderViewModel.setLabel("Meta: " + goal.getName());
-    }
-
-
-    private void handleGoalStatusChange(GoalStatus newStatus) {
-        String statusText = translateGoalStatus(newStatus.name());
-        String confirmationMessage = "Confirmar mudança de status da meta '" + goal.getName() + "' para " + statusText + "?";
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, confirmationMessage);
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            goal.setStatus(newStatus);
-            GoalController.updateGoal(goal);
-
-            TemplateViewModel.showSuccessMessage("Status da meta atualizado com sucesso para " + statusText + "!");
-
-            TemplateViewModel.goBack();
-        }
-    }
-
-    private void handleDeleteGoal() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tem certeza que deseja excluir esta meta e todas as suas atividades?");
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            GoalController.deleteGoal(goal);
-            TemplateViewModel.showSuccessMessage("Meta excluída com sucesso!");
-
-            // Retorna para a lista de metas e força o refresh
-            TemplateViewModel.switchScreen("CollaboratorGoals.fxml", controller -> {
-                if (controller instanceof CollaboratorGoalsViewModel c) {
-                    c.setCollaborator(collaborator);
-                }
-            });
-        }
     }
 
     private void createAddActivityButton() {
@@ -391,7 +334,7 @@ public class GoalViewModel {
     }
 
     @FXML
-    private void handleEnableEditing() {
+    public void handleEnableEditing() {
         nameField.setEditable(true);
         nameField.getStyleClass().remove("label-not-editable");
         nameField.getStyleClass().add("label-editable");

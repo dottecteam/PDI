@@ -2,9 +2,12 @@ package com.dottec.pdi.project.pdi.utils;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -41,9 +44,10 @@ public class FXUtils {
     }
 
     public static void buildMessageBox(StackPane mainStackPane, String message, String headerMessage){
-        buildMessageBox(false, mainStackPane, message, headerMessage);
-    };
-    public static void buildMessageBox(Boolean error, StackPane mainStackPane, String message, String headerMessage){
+        buildMessageBox(false, mainStackPane, message, headerMessage, true);
+    }
+
+    public static void buildMessageBox(Boolean error, StackPane mainStackPane, String message, String headerMessage, boolean autoClose, Node... nodes){
         StackPane stackPane = new StackPane();
         stackPane.getStyleClass().addAll("message");
 
@@ -74,17 +78,42 @@ public class FXUtils {
         label.setMaxWidth(500);
         label.setStyle("-fx-padding: 10");
 
-        vbox.getChildren().addAll(header, label);
+        for(Node node : nodes){
+            if(node instanceof Button){
+                node.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> mainStackPane.getChildren().remove(stackPane));
+            }
+        }
+
+        HBox nodesField = new HBox(nodes);
+        nodesField.setSpacing(10);
+        nodesField.setStyle("-fx-padding: 10;");
+        nodesField.setAlignment(Pos.CENTER_RIGHT);
+
+        vbox.getChildren().addAll(header, label, nodesField);
         stackPane.getChildren().add(vbox);
 
         mainStackPane.getChildren().addLast(stackPane);
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(4));
-        delay.setOnFinished(e -> mainStackPane.getChildren().remove(stackPane));
-        delay.play();
+        if(autoClose){
+            PauseTransition delay = new PauseTransition(Duration.seconds(3));
+            delay.setOnFinished(e -> mainStackPane.getChildren().remove(stackPane));
+            delay.play();
+        }
 
-        mainStackPane.setOnMouseClicked(mouseEvent -> {
-            mainStackPane.getChildren().remove(stackPane);
+        mainStackPane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if(!mainStackPane.getChildren().contains(stackPane)) return;
+            if (!stackPane.contains(stackPane.screenToLocal(e.getScreenX(), e.getScreenY()))) {
+                mainStackPane.getChildren().remove(stackPane);
+            }
         });
+    }
+
+    public static Button buildConfirmationMessageBox(StackPane mainStackPane, String message, String headerMessage){
+        Button confirm = new Button("Confirmar");
+        confirm.getStyleClass().add("basic-button");
+
+        buildMessageBox(false, mainStackPane, message, headerMessage, false, confirm);
+
+        return confirm;
     }
 }

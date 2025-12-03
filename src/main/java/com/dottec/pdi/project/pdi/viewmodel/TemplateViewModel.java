@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
@@ -328,11 +329,18 @@ public class TemplateViewModel implements Initializable {
     }
 
     public static void showErrorMessage(String message) {
-        FXUtils.buildMessageBox(true, instance.mainStackPane, message, "Erro!");
+        FXUtils.buildMessageBox(true, instance.mainStackPane, message, "Erro!", true);
     }
 
     public static void showErrorMessage(String headerMessage, String message) {
-        FXUtils.buildMessageBox(true, instance.mainStackPane, message, headerMessage);
+        FXUtils.buildMessageBox(true, instance.mainStackPane, message, headerMessage, true);
     }
 
+    public static Button showConfirmationMessage(String headerMessage, String message) {
+        return FXUtils.buildConfirmationMessageBox(instance.mainStackPane, message, headerMessage);
+    }
+
+    public static Button showConfirmationMessage(String message) {
+        return FXUtils.buildConfirmationMessageBox(instance.mainStackPane, message, "Confirmar?");
+    }
 }

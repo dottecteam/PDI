@@ -469,8 +469,8 @@
 }
 
 .context-menu-buttons {
-    -fx-background-color: #F6F6F6;
-    -fx-padding: 15 5;
+    -fx-background-color: white;
+    -fx-padding: 6;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 5);

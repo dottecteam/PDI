@@ -306,14 +306,7 @@ public class CollaboratorsViewModel {
         String statusText = translateCollaboratorStatus(newStatus.name());
         String confirmationMessage = "Confirmar mudança de status do colaborador " + collaborator.getName() + " para " + statusText + "?";
 
-        if (newStatus == CollaboratorStatus.inactive) {
-            confirmationMessage += " ATENÇÃO: O status 'Inativo' fará com que o colaborador seja logicamente excluído (soft-delete).";
-        }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, confirmationMessage);
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        TemplateViewModel.showConfirmationMessage(confirmationMessage).setOnMouseClicked(e -> {
             // O CollaboratorController.updateCollaborator usa o DAO que atualiza o status
             collaborator.setStatus(newStatus);
             CollaboratorController.updateCollaborator(collaborator); // Persiste o novo status no banco
@@ -325,7 +318,7 @@ public class CollaboratorsViewModel {
 
             TemplateViewModel.showSuccessMessage("Status do colaborador atualizado com sucesso para " + statusText + "!");
             listCollaborators();
-        }
+        });
     }
 
     // NOVO MÉTODO: Tradução de Status de Colaborador

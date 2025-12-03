@@ -18,7 +18,7 @@
     -fx-border-radius: 10;
     -fx-border-width: 2;
     -fx-background-radius: 10;
-    -fx-padding: 10;
+    -fx-padding: 10 15;
 }
 
 .goal-card:hover{

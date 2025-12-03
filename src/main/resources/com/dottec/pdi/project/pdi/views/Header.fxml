@@ -13,81 +13,69 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="header" alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="737.0" BorderPane.alignment="BOTTOM_LEFT"
-      xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.dottec.pdi.project.pdi.viewmodel.HeaderViewModel">
+<HBox fx:id="header" alignment="BOTTOM_LEFT" prefHeight="90.0" prefWidth="737.0" BorderPane.alignment="BOTTOM_LEFT" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.HeaderViewModel">
     <children>
 
-        <Button fx:id="returnButton" mnemonicParsing="false" styleClass="return-button"/>
+        <Button fx:id="returnButton" mnemonicParsing="false" styleClass="return-button" />
 
-        <HBox fx:id="headerHBox" alignment="BOTTOM_LEFT" maxHeight="70.0" prefHeight="70.0" spacing="10.0"
-              style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0;" HBox.hgrow="ALWAYS">
+        <HBox fx:id="headerHBox" alignment="BOTTOM_LEFT" maxHeight="70.0" prefHeight="70.0" spacing="10.0" style="-fx-border-color: #4B0081; -fx-border-width: 0 0 2 0;" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets bottom="5.0" right="10.0" top="5.0"/>
+                <Insets bottom="5.0" right="10.0" top="5.0" />
             </padding>
 
             <children>
-                <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" styleClass="header-label"
-                       text="Plano de Desenvolvimento Individual" textAlignment="CENTER" textFill="#4b0081">
+                <Label fx:id="headerLabel" alignment="BOTTOM_LEFT" styleClass="header-label" text="Plano de Desenvolvimento Individual" textAlignment="CENTER" textFill="#4b0081">
                     <font>
-                        <Font size="32.0"/>
+                        <Font size="32.0" />
                     </font>
                     <padding>
-                        <Insets bottom="-10.0" top="-10.0"/>
+                        <Insets bottom="-10.0" top="-10.0" />
                     </padding>
                 </Label>
 
-                <HBox alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0"
-                      spacing="10.0" HBox.hgrow="ALWAYS">
+                <HBox alignment="BOTTOM_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <HBox fx:id="headerButtonsField" alignment="BOTTOM_CENTER" nodeOrientation="LEFT_TO_RIGHT"
-                              spacing="8.0"/>
+                        <HBox fx:id="headerButtonsField" alignment="BOTTOM_CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="8.0" />
                         <ButtonBar buttonMinWidth="0.0" maxHeight="33.0" nodeOrientation="LEFT_TO_RIGHT">
                             <buttons>
-                                <StackPane fx:id="searchBarStackPane" alignment="BOTTOM_CENTER"
-                                           nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0">
+                                <StackPane fx:id="searchBarStackPane" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0">
                                     <children>
-                                        <TextField fx:id="searchBar" minHeight="33.0" nodeOrientation="LEFT_TO_RIGHT"
-                                                   styleClass="search-bar">
+                                        <TextField fx:id="searchBar" minHeight="33.0" nodeOrientation="LEFT_TO_RIGHT" styleClass="search-bar">
                                             <font>
-                                                <Font name="Poppins Regular" size="16.0"/>
+                                                <Font name="Poppins Regular" size="16.0" />
                                             </font>
                                             <padding>
-                                                <Insets left="8.0" right="35.0"/>
+                                                <Insets left="8.0" right="35.0" />
                                             </padding>
                                         </TextField>
-                                        <ImageView fitHeight="25.0" fitWidth="25.0" mouseTransparent="true"
-                                                   pickOnBounds="true" preserveRatio="true"
-                                                   StackPane.alignment="BOTTOM_LEFT">
+                                        <ImageView fitHeight="25.0" fitWidth="25.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_LEFT">
                                             <image>
-                                                <Image url="@../static/img/Search.png"/>
+                                                <Image url="@../static/img/Search.png" />
                                             </image>
                                             <StackPane.margin>
-                                                <Insets bottom="4.0" left="8.0"/>
+                                                <Insets bottom="4.0" left="8.0" />
                                             </StackPane.margin>
                                         </ImageView>
                                     </children>
                                 </StackPane>
 
-                                <Button fx:id="filterButton" maxWidth="70.0" mnemonicParsing="false" prefHeight="33.0"
-                                        styleClass="filter-button" text="Filtrar"/>
+                                <Button fx:id="filterButton" maxWidth="70.0" mnemonicParsing="false" prefHeight="33.0" styleClass="filter-button" text="Filtrar" />
 
-                                <StackPane alignment="BOTTOM_CENTER"
-                                           nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" maxWidth="55.0">
+                                <StackPane alignment="BOTTOM_CENTER" maxWidth="55.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="33.0">
                                     <children>
-                                        <Button fx:id="notificationButton" mnemonicParsing="false"
-                                                onMouseClicked="#goToNotifications" styleClass="basic-button" text="🔔"
-                                                maxWidth="40.0" prefHeight="33.0"/>
+                                        <Button fx:id="notificationButton" maxWidth="40.0" mnemonicParsing="false" onMouseClicked="#goToNotifications" prefHeight="33.0" styleClass="basic-button" text="🔔">
+                                 <StackPane.margin>
+                                    <Insets bottom="-4.0" />
+                                 </StackPane.margin></Button>
 
-                                        <Label fx:id="notificationBadge" text="•" visible="false"
-                                               styleClass="notification-badge" StackPane.alignment="TOP_RIGHT">
+                                        <Label fx:id="notificationBadge" styleClass="notification-badge" text="•" visible="false" StackPane.alignment="TOP_RIGHT">
                                             <StackPane.margin>
-                                                <Insets right="-5.0" top="-5.0"/>
+                                                <Insets right="-5.0" top="-5.0" />
                                             </StackPane.margin>
                                         </Label>
                                     </children>
                                     <HBox.margin>
-                                        <Insets bottom="4.0"/>
+                                        <Insets bottom="4.0" />
                                     </HBox.margin>
                                 </StackPane>
 
@@ -99,10 +87,10 @@
         </HBox>
     </children>
     <padding>
-        <Insets bottom="20.0" left="40.0" right="40.0"/>
+        <Insets bottom="20.0" left="40.0" right="40.0" />
     </padding>
     <stylesheets>
-        <URL value="@../static/style/style_template.css"/>
-        <URL value="@../static/style/style_header.css"/>
+        <URL value="@../static/style/style_template.css" />
+        <URL value="@../static/style/style_header.css" />
     </stylesheets>
 </HBox>

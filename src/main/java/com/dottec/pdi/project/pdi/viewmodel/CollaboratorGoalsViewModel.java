@@ -20,6 +20,7 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -41,18 +42,13 @@ public class CollaboratorGoalsViewModel implements Initializable {
     private Collaborator collaborator;
     private static CollaboratorGoalsViewModel instance; // Para Singleton para refresh
 
-    @FXML
-    private VBox collaboratorGoalsMainVBox;
+    @FXML private VBox collaboratorGoalsMainVBox;
 
     // --- FXML Campos de Informação do Colaborador ---
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextField cpfField;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private ChoiceBox<Department> departmentField;
+    @FXML private TextField nameField;
+    @FXML private TextField cpfField;
+    @FXML private TextField emailField;
+    @FXML private ChoiceBox<Department> departmentField;
 
     // --- Filtros ---
     private LocalDate startDay = LocalDate.now().minusDays(15);
@@ -60,22 +56,16 @@ public class CollaboratorGoalsViewModel implements Initializable {
     private List<GoalStatus> filteredStatuses = new ArrayList<>(Arrays.asList(GoalStatus.values()));
 
     // --- FXML Controles de Edição ---
-    @FXML
-    private ImageView editButton;
-    @FXML
-    private Button confirmEditButton;
-    @FXML
-    private Button cancelEditButton;
+    @FXML private ImageView editButton;
+    @FXML private Button confirmEditButton;
+    @FXML private Button cancelEditButton;
 
     // --- FXML Container para Metas ---
-    @FXML
-    private VBox goalsVBox;
+    @FXML private VBox goalsVBox;
 
     // --- FXML Para o gráfico individual ---
-    @FXML
-    private PieChart statusPieChart;
-    @FXML
-    private Label percentageLabel;
+    @FXML private PieChart statusPieChart;
+    @FXML private Label percentageLabel;
     private final String STATUS_CONCLUIDO = "completed";
 
     // Método chamado pelo JavaFX após o FXML ser carregado
@@ -295,8 +285,15 @@ public class CollaboratorGoalsViewModel implements Initializable {
                 statusLabel.setStyle("-fx-background-color: #6D00A1; -fx-text-fill: white");
             }
             case in_progress -> {
-                statusLabel.setText("Em progresso");
-                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
+                if(goal.getDeadline().isBefore(LocalDate.now())){
+                    goal.setStatus(GoalStatus.pending);
+                    GoalController.updateGoal(goal);
+                    statusLabel.setText("Pendente");
+                    statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
+                } else {
+                    statusLabel.setText("Em progresso");
+                    statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
+                }
             }
             case canceled -> {
                 statusLabel.setText("Cancelado");
@@ -304,7 +301,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
             }
             case pending -> {
                 statusLabel.setText("Pendente");
-                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;");
+                statusLabel.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
             }
             default -> {
                 statusLabel.setText("Desconhecido");
@@ -312,10 +309,21 @@ public class CollaboratorGoalsViewModel implements Initializable {
             }
         }
 
-        goalCard.getChildren().addAll(goalName, goalDeadline, statusLabel);
+        ImageView im = new ImageView(new Image(getClass().getResource("/com/dottec/pdi/project/pdi/static/img/three-dots.png").toExternalForm()));
+        im.setFitHeight(20);
+        im.setFitWidth(5);
+        Button threeDotsButton = new Button();
+        threeDotsButton.setGraphic(im);
+        threeDotsButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 6;");
+        threeDotsButton.setOnMouseClicked(e -> createOptionsMenu(goal, threeDotsButton));
+
+        VBox labels = new VBox(goalName, goalDeadline);
+        labels.setSpacing(3);
+
+        goalCard.getChildren().addAll(labels, statusLabel, threeDotsButton);
         goalCard.setAlignment(Pos.CENTER_LEFT);
-        goalCard.setSpacing(0);
-        HBox.setHgrow(goalName, Priority.ALWAYS);
+        goalCard.setSpacing(10);
+        HBox.setHgrow(labels, Priority.ALWAYS);
         goalName.setMaxWidth(Double.MAX_VALUE);
 
         goalCard.setOnMouseClicked(mouseEvent -> {
@@ -502,5 +510,72 @@ public class CollaboratorGoalsViewModel implements Initializable {
         });
 
         new Thread(loadDataTask).start();
+    }
+
+    private void createOptionsMenu(Goal goal, Button button){
+        MenuItem edit = new MenuItem("Editar");
+
+        ContextMenu cm = new ContextMenu();
+        cm.getStyleClass().add("context-menu-buttons");
+
+        if(goal.getStatus().equals(GoalStatus.in_progress)){
+            cm.getItems().add(edit);
+        }
+
+        for(GoalStatus goalStatus : GoalStatus.values()){
+            if(goalStatus.equals(GoalStatus.pending)) continue;
+
+            String status = goalStatus.toString();
+            String text = switch (status.toLowerCase()) {
+                case "in_progress" -> "Em Progresso";
+                case "completed" -> "Concluir";
+                case "canceled" -> "Cancelar";
+                default -> status;
+            };
+            MenuItem menuItem = new MenuItem(text);
+            menuItem.setOnAction(e -> handleGoalStatusChange(goalStatus, goal));
+
+            if(!goal.getStatus().equals(goalStatus)){
+                cm.getItems().addAll(menuItem);
+            }
+        }
+
+        edit.setOnAction(e -> {
+            TemplateViewModel.switchScreen("Goal.fxml", controller -> {
+                if (controller instanceof GoalViewModel goalViewModel) {
+                    goalViewModel.setGoal(goal);
+                    goalViewModel.setGoalViewModel(goalViewModel);
+                    goalViewModel.refresh();
+                    goalViewModel.handleEnableEditing();
+                }
+            });
+        });
+
+        cm.show(button, Side.LEFT, 20, 40);
+    }
+
+    private void handleGoalStatusChange(GoalStatus newStatus, Goal goal) {
+        String statusText = translateGoalStatus(newStatus.name());
+        String confirmationMessage = "Confirmar mudança de status da meta '" + goal.getName() + "' para " + statusText + "?";
+
+        TemplateViewModel.showConfirmationMessage(confirmationMessage).setOnMouseClicked(e -> {
+            goal.setStatus(newStatus);
+            GoalController.updateGoal(goal);
+
+            TemplateViewModel.showSuccessMessage("Status da meta atualizado com sucesso para " + statusText + "!");
+
+            refreshGoalsList();
+        });
+
+    }
+
+    private String translateGoalStatus(String status) {
+        return switch (status.toLowerCase()) {
+            case "in_progress" -> "Em Progresso";
+            case "pending" -> "Pendente";
+            case "completed" -> "Concluída";
+            case "canceled" -> "Cancelada";
+            default -> status;
+        };
     }
 }
