@@ -183,7 +183,7 @@ public class LoginViewModel implements Initializable {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                FXUtils.showErrorMessage("Falha ao carregar o painel: " + e.getMessage());
+                FXUtils.showErrorMessage("Falha ao carregar o painel");
             }
         } else {
             FXUtils.showErrorMessage("Login inválido", "Email ou senha incorretos.");

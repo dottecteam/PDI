@@ -1,6 +1,7 @@
 package com.dottec.pdi.project.pdi.utils;
 
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -117,11 +118,13 @@ public class FXUtils {
             delay.play();
         }
 
-        instance.mainStackPane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-            if(!instance.mainStackPane.getChildren().contains(stackPane)) return;
-            if (!stackPane.contains(stackPane.screenToLocal(e.getScreenX(), e.getScreenY()))) {
-                instance.mainStackPane.getChildren().remove(stackPane);
-            }
+        Platform.runLater(() -> {
+            instance.mainStackPane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                if(!instance.mainStackPane.getChildren().contains(stackPane)) return;
+                if (!stackPane.contains(stackPane.screenToLocal(e.getScreenX(), e.getScreenY()))) {
+                    instance.mainStackPane.getChildren().remove(stackPane);
+                }
+            });
         });
     }
 

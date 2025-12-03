@@ -155,7 +155,7 @@ public class DashboardViewModel implements Initializable {
     private void loadData() {
         User loggedUser = AuthController.getInstance().getLoggedUser();
         if (loggedUser == null) {
-            showAlert("Usuário não encontrado", "Erro: Nenhum usuário está logado.");
+            FXUtils.showErrorMessage("Usuário não encontrado", "Erro: Nenhum usuário está logado.");
             return;
         }
 
@@ -170,7 +170,7 @@ public class DashboardViewModel implements Initializable {
         } else if (isGeneral) {
             loadGeneralData();
         } else {
-            showAlert("Permissão necessária", "Você não tem permissão para visualizar este dashboard.");
+            FXUtils.showErrorMessage("Permissão necessária", "Você não tem permissão para visualizar este dashboard.");
         }
     }
 
@@ -206,7 +206,7 @@ public class DashboardViewModel implements Initializable {
         // Load Skills Distribution (Pie Chart) - Global Available
         loadSkillsDistributionChartData(filteredTagTypes);
 
-        showAlert("Aviso", "Na visão Geral, a filtragem por Setor e a maioria dos gráficos detalhados não estão disponíveis, pois exigem agregação de dados não implementada no sistema.");
+        FXUtils.showErrorMessage("Aviso", "Na visão Geral, a filtragem por Setor e a maioria dos gráficos detalhados não estão disponíveis, pois exigem agregação de dados não implementada no sistema.");
     }
 
     /**
@@ -922,7 +922,7 @@ public class DashboardViewModel implements Initializable {
         loadDataTask.setOnSucceeded(event -> {
             List<DashboardTagFrequencyController> dataFromDB = loadDataTask.getValue();
             if (dataFromDB == null || dataFromDB.isEmpty()) {
-                showAlert("Sem Dados", "Nenhuma tag encontrada para esta visualização.");
+                FXUtils.showErrorMessage("Sem Dados", "Nenhuma tag encontrada para esta visualização.");
                 return;
             }
 
@@ -980,7 +980,7 @@ public class DashboardViewModel implements Initializable {
             List<DashboardStatusData> dataFromDB = loadDataTask.getValue();
 
             if (dataFromDB == null || dataFromDB.isEmpty()) {
-                showAlert("Sem Metas", "Nenhuma meta (goal) encontrada para este setor.");
+                FXUtils.showErrorMessage("Sem Metas", "Nenhuma meta (goal) encontrada para este setor.");
                 percentage.setText("Nenhuma meta encontrada.");
                 return;
             }
@@ -1116,15 +1116,6 @@ public class DashboardViewModel implements Initializable {
         });
         new Thread(loadDataTask).start();
     }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
 
     // ---------- HELPERS / CLASSES ----------
 

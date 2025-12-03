@@ -73,25 +73,23 @@ public class UserManagementViewModel {
                 ? "Tem certeza que deseja INATIVAR o usuário " + userToDelete.getName() + "?"
                 : "Tem certeza que deseja REATIVAR o usuário " + userToDelete.getName() + "?";
 
-        Platform.runLater(() -> {
-            FXUtils.showConfirmationMessage(contentMsg).setOnMouseClicked(e -> {
-                boolean success = false;
+        FXUtils.showConfirmationMessage(contentMsg).setOnMouseClicked(e -> {
+            boolean success = false;
 
-                if (userToDelete.getStatus().name().equals("active")) {
-                    success = UserController.inactivateUser(userToDelete.getId()); // Inativa (soft delete)
-                } else {
-                    // Reativa o usuário
-                    userToDelete.setStatus(com.dottec.pdi.project.pdi.enums.UserStatus.active);
-                    success = UserController.updateUser(userToDelete);
-                }
+            if (userToDelete.getStatus().name().equals("active")) {
+                success = UserController.inactivateUser(userToDelete.getId()); // Inativa (soft delete)
+            } else {
+                // Reativa o usuário
+                userToDelete.setStatus(com.dottec.pdi.project.pdi.enums.UserStatus.active);
+                success = UserController.updateUser(userToDelete);
+            }
 
-                if (success) {
-                    FXUtils.showSuccessMessage("Sucesso", "Usuário " + statusMsg + " com sucesso.");
-                    loadUsers(); // Recarrega a lista
-                } else {
-                    FXUtils.showErrorMessage("Erro", "Falha ao " + statusMsg + " o usuário.");
-                }
-            });
+            if (success) {
+                FXUtils.showSuccessMessage("Sucesso", "Usuário " + statusMsg + " com sucesso.");
+                loadUsers(); // Recarrega a lista
+            } else {
+                FXUtils.showErrorMessage("Erro", "Falha ao " + statusMsg + " o usuário.");
+            }
         });
     }
 }
