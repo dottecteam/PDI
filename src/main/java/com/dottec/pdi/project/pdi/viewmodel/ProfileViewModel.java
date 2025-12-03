@@ -8,6 +8,7 @@ import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.enums.UserStatus;
 import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import com.dottec.pdi.project.pdi.utils.PasswordHasher;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -87,15 +88,10 @@ public class ProfileViewModel implements Initializable {
 
     @FXML
     public void logout(MouseEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deseja mesmo sair?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        FXUtils.showConfirmationMessage("Deseja mesmo sair?").setOnMouseClicked(e -> {
             AuthController.getInstance().logout();
             switchToLoginScene((Node) event.getSource());
-        } else {
-            event.consume();
-        }
-
+        });
     }
 
     public void setUser(User user) {
@@ -229,18 +225,18 @@ public class ProfileViewModel implements Initializable {
             String confirmedPass = confirmNewPassword.getText();
 
             if (newPass.isEmpty() || currentPass.isEmpty() || confirmedPass.isEmpty()) {
-                TemplateViewModel.showErrorMessage("Erro de Validação", "Todos os campos de senha são obrigatórios.");
+                FXUtils.showErrorMessage("Erro de Validação", "Todos os campos de senha são obrigatórios.");
                 return;
             }
 
             if (!newPass.equals(confirmedPass)) {
-                TemplateViewModel.showErrorMessage("Erro de Validação", "A nova senha e a confirmação não coincidem.");
+                FXUtils.showErrorMessage("Erro de Validação", "A nova senha e a confirmação não coincidem.");
                 return;
             }
 
             // Requisito de complexidade (opcional, aqui apenas verifica se tem um tamanho mínimo)
             if (newPass.length() < 6) {
-                TemplateViewModel.showErrorMessage("Erro de Validação", "A nova senha deve ter pelo menos 6 caracteres.");
+                FXUtils.showErrorMessage("Erro de Validação", "A nova senha deve ter pelo menos 6 caracteres.");
                 return;
             }
 
@@ -253,7 +249,7 @@ public class ProfileViewModel implements Initializable {
     private void performPasswordUpdate(String currentPassword, String newPassword) {
         User loggedUser = AuthController.getInstance().getLoggedUser();
         if (loggedUser == null) {
-            TemplateViewModel.showErrorMessage("Erro", "Usuário não autenticado.");
+            FXUtils.showErrorMessage("Erro", "Usuário não autenticado.");
             return;
         }
 
@@ -265,7 +261,7 @@ public class ProfileViewModel implements Initializable {
         if (!PasswordHasher.verify(currentPassword, storedHash)) {
             // Se o projeto usa a implementação do LoginViewModel original para simulação de hashcode (NÃO RECOMENDADO, mas presente em alguns arquivos):
             // if (currentPassword.hashCode() != storedHash.hashCode()) {
-            TemplateViewModel.showErrorMessage("Erro de Segurança", "A senha atual está incorreta.");
+            FXUtils.showErrorMessage("Erro de Segurança", "A senha atual está incorreta.");
             return;
         }
 
@@ -279,9 +275,9 @@ public class ProfileViewModel implements Initializable {
             // 4. Atualizar o objeto do usuário logado em memória
             loggedUser.setPasswordHash(newPasswordHash);
 
-            TemplateViewModel.showSuccessMessage("Sucesso", "Senha alterada com sucesso!");
+            FXUtils.showSuccessMessage("Sucesso", "Senha alterada com sucesso!");
         } catch (Exception e) {
-            TemplateViewModel.showErrorMessage("Erro no Banco de Dados", "Falha ao atualizar a senha: " + e.getMessage());
+            FXUtils.showErrorMessage("Erro no Banco de Dados", "Falha ao atualizar a senha: " + e.getMessage());
         }
     }
 }

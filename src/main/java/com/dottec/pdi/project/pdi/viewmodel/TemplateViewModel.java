@@ -64,14 +64,6 @@ public class TemplateViewModel implements Initializable {
     @FXML
     private Label labelProfile;
 
-    //StackPane
-    @FXML
-    private StackPane mainStackPane;
-
-    public static StackPane getMainStackPane() {
-        return instance.mainStackPane;
-    }
-
     //BorderPane
     @FXML
     private BorderPane mainPane;
@@ -205,7 +197,7 @@ public class TemplateViewModel implements Initializable {
         if (AuthController.getInstance().getLoggedUser().getRole() == Role.hr_manager) {
             carregarPagina("ManagementHub.fxml"); // O Hub de Gerenciamento
         } else {
-            TemplateViewModel.showErrorMessage("Acesso Negado", "Apenas Gerentes de RH podem acessar as configurações de gerenciamento.");
+            FXUtils.showErrorMessage("Acesso Negado", "Apenas Gerentes de RH podem acessar as configurações de gerenciamento.");
         }
     }
 
@@ -314,33 +306,5 @@ public class TemplateViewModel implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void showMessage(String headerMessage, String message) {
-        FXUtils.buildMessageBox(instance.mainStackPane, message, headerMessage);
-    }
-
-    public static void showSuccessMessage(String message) {
-        FXUtils.buildMessageBox(instance.mainStackPane, message, "Sucesso!");
-    }
-
-    public static void showSuccessMessage(String headerMessage, String message) {
-        FXUtils.buildMessageBox(instance.mainStackPane, message, headerMessage);
-    }
-
-    public static void showErrorMessage(String message) {
-        FXUtils.buildMessageBox(true, instance.mainStackPane, message, "Erro!", true);
-    }
-
-    public static void showErrorMessage(String headerMessage, String message) {
-        FXUtils.buildMessageBox(true, instance.mainStackPane, message, headerMessage, true);
-    }
-
-    public static Button showConfirmationMessage(String headerMessage, String message) {
-        return FXUtils.buildConfirmationMessageBox(instance.mainStackPane, message, headerMessage);
-    }
-
-    public static Button showConfirmationMessage(String message) {
-        return FXUtils.buildConfirmationMessageBox(instance.mainStackPane, message, "Tem certeza?");
     }
 }

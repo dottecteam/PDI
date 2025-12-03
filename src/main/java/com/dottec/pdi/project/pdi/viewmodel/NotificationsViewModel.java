@@ -4,6 +4,7 @@ import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.controllers.NotificationController;
 import com.dottec.pdi.project.pdi.model.Notification;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,7 +37,7 @@ public class NotificationsViewModel {
     private void loadNotifications() {
         User user = AuthController.getInstance().getLoggedUser();
         if (user == null) {
-            TemplateViewModel.showErrorMessage("Erro", "Nenhum usuário logado para carregar notificações.");
+            FXUtils.showErrorMessage("Erro", "Nenhum usuário logado para carregar notificações.");
             return;
         }
 

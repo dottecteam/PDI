@@ -65,13 +65,13 @@ public class AddActivityTemplateViewModel {
             updateActivityTemplate();
             activityTemplate.getGoalTemplate().addActivityTemplate(activityTemplate);  //Add the activity to the goal's list
             templateGoalViewModel.addActivityTemplate(activityTemplate);
-            TemplateViewModel.showSuccessMessage("Atividade adicionada com sucesso!");
+            FXUtils.showSuccessMessage("Atividade adicionada com sucesso!");
             TemplateViewModel.goBack();
         } else {
             updateActivityTemplate();
             if(templateGoalViewModel !=null) templateGoalViewModel.addActivityTemplate(activityTemplate);
             ActivityTemplateController.saveActivityTemplate(activityTemplate);
-            TemplateViewModel.showSuccessMessage("Atividade adicionada com sucesso!");
+            FXUtils.showSuccessMessage("Atividade adicionada com sucesso!");
             TemplateViewModel.goBack();
         }
     }

@@ -2,6 +2,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.controllers.GoalTemplatesController;
 import com.dottec.pdi.project.pdi.model.*;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -124,19 +125,19 @@ public class TemplateGoalViewModel {
         goalTemplate.setGoa_tmp_description(descriptionField.getText());
 
         if(nameField.getText().isBlank()){
-            TemplateViewModel.showErrorMessage("Por favor, preencha o nome do modelo.");
+            FXUtils.showErrorMessage("Por favor, preencha o nome do modelo.");
             return;
         }
 
         boolean saved = GoalTemplatesController.addGoalTemplate(goalTemplate);
         if(!saved){
-            TemplateViewModel.showErrorMessage("Não foi possível adicionar o modelo.");
+            FXUtils.showErrorMessage("Não foi possível adicionar o modelo.");
             return;
         }
 
         disableCreationMode();
         creatingGoalTemplateMode = false;
-        TemplateViewModel.showSuccessMessage("Modelo Meta criada com sucesso!");
+        FXUtils.showSuccessMessage("Modelo Meta criada com sucesso!");
         HeaderViewModel.updateHeader("TemplateGoal.fxml");
     }
 
@@ -208,7 +209,7 @@ public class TemplateGoalViewModel {
     @FXML
     private void handleConfirmEdit() {
         if (nameField.getText().trim().isEmpty()) {
-            TemplateViewModel.showErrorMessage("O nome não pode estar vazio.");
+            FXUtils.showErrorMessage("O nome não pode estar vazio.");
             return;
         }
 
@@ -216,7 +217,7 @@ public class TemplateGoalViewModel {
         goalTemplate.setGoa_tmp_description(descriptionField.getText());
         GoalTemplatesController.updateGoalTemplate(goalTemplate);
 
-        TemplateViewModel.showSuccessMessage("Meta Modelo atualizada com sucesso!");
+        FXUtils.showSuccessMessage("Meta Modelo atualizada com sucesso!");
 
         disableEditingState();
     }

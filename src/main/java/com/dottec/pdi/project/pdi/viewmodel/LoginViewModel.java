@@ -4,6 +4,7 @@ import com.dottec.pdi.project.pdi.controllers.AuthController;
 import com.dottec.pdi.project.pdi.controllers.NotificationCreationController;
 import com.dottec.pdi.project.pdi.dao.UserDAO;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import com.dottec.pdi.project.pdi.utils.PasswordUtil;
 import javafx.animation.Animation;
 import javafx.collections.ObservableList;
@@ -163,7 +164,7 @@ public class LoginViewModel implements Initializable {
         System.out.println(PasswordUtil.hashPassword(password));
 
         if (email.isEmpty() || password.isEmpty()) {
-            showAlert("Campos obrigatórios", "Por favor, preencha todos os campos.");
+            FXUtils.showErrorMessage("Campos obrigatórios", "Por favor, preencha todos os campos.");
             return;
         }
 
@@ -174,31 +175,18 @@ public class LoginViewModel implements Initializable {
             NotificationCreationController.createExpirationNotifications(user);
             try {
                 Stage currentStage = (Stage) emailField.getScene().getWindow();
-                currentStage.close();
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/Template.fxml"));
                 Parent root = loader.load();
 
-                Stage stage = new Stage();
-                stage.setTitle("PDI");
-                stage.setScene(new Scene(root));
-                stage.setMaximized(true);
-                stage.show();
+                FXUtils.switchPage(root);
 
             } catch (Exception e) {
                 e.printStackTrace();
-                showAlert("Erro", "Falha ao carregar o painel: " + e.getMessage());
+                FXUtils.showErrorMessage("Falha ao carregar o painel: " + e.getMessage());
             }
         } else {
-            showAlert("Login inválido", "Email ou senha incorretos.");
+            FXUtils.showErrorMessage("Login inválido", "Email ou senha incorretos.");
         }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

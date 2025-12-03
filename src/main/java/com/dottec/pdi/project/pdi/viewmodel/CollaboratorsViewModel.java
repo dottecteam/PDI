@@ -7,6 +7,7 @@ import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.enums.CollaboratorStatus;
 import com.dottec.pdi.project.pdi.model.Department;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -306,7 +307,7 @@ public class CollaboratorsViewModel {
         String statusText = translateCollaboratorStatus(newStatus.name());
         String confirmationMessage = "Confirmar mudança de status do colaborador " + collaborator.getName() + " para " + statusText + "?";
 
-        TemplateViewModel.showConfirmationMessage(confirmationMessage).setOnMouseClicked(e -> {
+        FXUtils.showConfirmationMessage(confirmationMessage).setOnMouseClicked(e -> {
             // O CollaboratorController.updateCollaborator usa o DAO que atualiza o status
             collaborator.setStatus(newStatus);
             CollaboratorController.updateCollaborator(collaborator); // Persiste o novo status no banco
@@ -316,7 +317,7 @@ public class CollaboratorsViewModel {
                 CollaboratorController.deleteCollaboratorById(collaborator.getId());
             }
 
-            TemplateViewModel.showSuccessMessage("Status do colaborador atualizado com sucesso para " + statusText + "!");
+            FXUtils.showSuccessMessage("Status do colaborador atualizado com sucesso para " + statusText + "!");
             listCollaborators();
         });
     }

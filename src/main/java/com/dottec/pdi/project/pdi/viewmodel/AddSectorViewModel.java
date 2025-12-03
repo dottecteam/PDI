@@ -7,6 +7,7 @@ import com.dottec.pdi.project.pdi.enums.DepartmentStatus;
 import com.dottec.pdi.project.pdi.enums.Role;
 import com.dottec.pdi.project.pdi.model.Department;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -67,7 +68,7 @@ public class AddSectorViewModel implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            TemplateViewModel.showErrorMessage("Erro ao carregar gerentes", e.getMessage());
+            FXUtils.showErrorMessage("Erro ao carregar gerentes", e.getMessage());
         }
     }
 
@@ -83,7 +84,7 @@ public class AddSectorViewModel implements Initializable {
         // String contato = txtContato.getText(); // O Department Model/DAO não suporta o campo contato
 
         if (nome == null || nome.trim().isEmpty()) {
-            TemplateViewModel.showErrorMessage("Erro", "O nome do setor é obrigatório.");
+            FXUtils.showErrorMessage("Erro", "O nome do setor é obrigatório.");
             return;
         }
 
@@ -106,14 +107,14 @@ public class AddSectorViewModel implements Initializable {
             }
 
             // Feedback de sucesso
-            TemplateViewModel.showSuccessMessage("Sucesso", "Setor cadastrado com sucesso!");
+            FXUtils.showSuccessMessage("Sucesso", "Setor cadastrado com sucesso!");
 
             // Retorna para a tela de listagem
             TemplateViewModel.switchScreen("Settings.fxml");
 
         } catch (Exception e) {
             e.printStackTrace();
-            TemplateViewModel.showErrorMessage("Erro ao salvar", e.getMessage());
+            FXUtils.showErrorMessage("Erro ao salvar", e.getMessage());
         }
     }
 }

@@ -11,6 +11,7 @@ import com.dottec.pdi.project.pdi.model.Department;
 import com.dottec.pdi.project.pdi.model.Tag;
 import com.dottec.pdi.project.pdi.model.User;
 
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -456,12 +457,12 @@ public class DashboardViewModel implements Initializable {
                     }
                 }
 
-                TemplateViewModel.showSuccessMessage("Exportação Concluída",
+                FXUtils.showSuccessMessage("Exportação Concluída",
                         "O relatório foi salvo em:\n" + pathString);
 
             } catch (Exception e) {
                 e.printStackTrace();
-                TemplateViewModel.showErrorMessage("Erro na Exportação",
+                FXUtils.showErrorMessage("Erro na Exportação",
                         "Falha ao salvar o arquivo:\n" + e.getMessage());
             }
         }

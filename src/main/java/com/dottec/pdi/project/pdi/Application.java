@@ -1,8 +1,10 @@
 package com.dottec.pdi.project.pdi;
 
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
@@ -11,6 +13,7 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Stack;
 
 import static java.util.Locale.*;
 
@@ -19,13 +22,19 @@ public class Application extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         setDefault(new Locale("pt", "BR"));
 
+        FXUtils fxUtils = new FXUtils();
+        StackPane mainStackPane = fxUtils.getMainStackPane();
+
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/Login.fxml"));
         Parent root = fxmlLoader.load();
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
+
+        mainStackPane.getChildren().add(root);
+
+        Scene scene = new Scene(mainStackPane, screenBounds.getWidth(), screenBounds.getHeight());
 
         // Verificar se está correto o local de adição dessa linha de código
-        scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_GoalTemplates.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/com/dottec/pdi/project/pdi/static/style/style_template.css").toExternalForm());
 
         Image applicationIcon = new Image(getClass().getResourceAsStream("/com/dottec/pdi/project/pdi/static/img/logo.png"));
         stage.getIcons().add(applicationIcon);

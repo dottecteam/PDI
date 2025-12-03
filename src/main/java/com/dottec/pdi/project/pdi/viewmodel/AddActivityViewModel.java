@@ -77,20 +77,20 @@ public class AddActivityViewModel extends VBox {
     @FXML
     void handleConfirm(ActionEvent actionEvent){
         if(formAddDeadline.getValue()==null || formAddActivityName.getText().isBlank()){
-            TemplateViewModel.showErrorMessage("Por favor, preencha os campos obrigatórios.");
+            FXUtils.showErrorMessage("Por favor, preencha os campos obrigatórios.");
         } else if(formAddDeadline.getValue().isBefore(LocalDate.now())) {
-            TemplateViewModel.showErrorMessage("O prazo deve ser uma data futura.");
+            FXUtils.showErrorMessage("O prazo deve ser uma data futura.");
         } else if (creatingGoalMode){
             updateActivity();
             activity.getGoal().addActivity(activity);  //Add the activity to the goal's list
             goalViewModel.addActivity(activity);
-            TemplateViewModel.showSuccessMessage("Atividade adicionada com sucesso!");
+            FXUtils.showSuccessMessage("Atividade adicionada com sucesso!");
             TemplateViewModel.goBack();
         } else {
             updateActivity();
             if(goalViewModel!=null) goalViewModel.addActivity(activity);
             ActivityController.saveActivity(activity);
-            TemplateViewModel.showSuccessMessage("Atividade adicionada com sucesso!");
+            FXUtils.showSuccessMessage("Atividade adicionada com sucesso!");
             TemplateViewModel.goBack();
             Goal goal = goalViewModel.getGoal();
             if(goal.getDeadline()== null) {

@@ -10,6 +10,7 @@ import com.dottec.pdi.project.pdi.enums.ActivityStatus;
 import com.dottec.pdi.project.pdi.enums.ActivityStatus;
 import com.dottec.pdi.project.pdi.enums.GoalStatus;
 import com.dottec.pdi.project.pdi.model.*;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -233,13 +234,13 @@ public class GoalViewModel {
         goal.setCollaborator(collaborator);
 
         if (nameField.getText().isBlank()) {
-            TemplateViewModel.showErrorMessage("Por favor, preencha o nome da meta.");
+            FXUtils.showErrorMessage("Por favor, preencha o nome da meta.");
             return;
         }
 
         boolean saved = GoalController.saveGoal(goal);
         if (!saved) {
-            TemplateViewModel.showErrorMessage("Não foi possível adicionar a meta.");
+            FXUtils.showErrorMessage("Não foi possível adicionar a meta.");
             return;
         }
 
@@ -247,7 +248,7 @@ public class GoalViewModel {
 
         disableCreationMode();
         creatingGoalMode = false;
-        TemplateViewModel.showSuccessMessage("Meta criada com sucesso!");
+        FXUtils.showSuccessMessage("Meta criada com sucesso!");
         HeaderViewModel.updateHeader("Goal.fxml");
 
         // CORREÇÃO DE NAVEGAÇÃO: Volta para a lista de metas e força o refresh
@@ -357,7 +358,7 @@ public class GoalViewModel {
     @FXML
     private void handleConfirmEdit() {
         if (nameField.getText().trim().isEmpty()) {
-            TemplateViewModel.showErrorMessage("O nome não pode estar vazio.");
+            FXUtils.showErrorMessage("O nome não pode estar vazio.");
             return;
         }
 
@@ -365,7 +366,7 @@ public class GoalViewModel {
         goal.setDescription(descriptionField.getText());
         GoalController.updateGoal(goal);
 
-        TemplateViewModel.showSuccessMessage("Meta atualizada com sucesso!");
+        FXUtils.showSuccessMessage("Meta atualizada com sucesso!");
 
         disableEditingState();
     }

@@ -9,6 +9,7 @@ import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.Department;
 import com.dottec.pdi.project.pdi.model.Goal;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -384,7 +385,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
     @FXML
     private void handleConfirmEdit() {
         if (nameField.getText().trim().isEmpty()) {
-            TemplateViewModel.showErrorMessage("O nome não pode estar vazio.");
+            FXUtils.showErrorMessage("O nome não pode estar vazio.");
             return;
         }
 
@@ -393,7 +394,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
         collaborator.setDepartment(departmentField.getValue());
         CollaboratorController.updateCollaborator(collaborator);
 
-        TemplateViewModel.showSuccessMessage("Colaborador atualizado com sucesso!");
+        FXUtils.showSuccessMessage("Colaborador atualizado com sucesso!");
 
         // Retorna ao estado de visualização
         disableEditingState();
@@ -558,11 +559,11 @@ public class CollaboratorGoalsViewModel implements Initializable {
         String statusText = translateGoalStatus(newStatus.name());
         String confirmationMessage = "Confirmar mudança de status da meta '" + goal.getName() + "' para " + statusText + "?";
 
-        TemplateViewModel.showConfirmationMessage(confirmationMessage).setOnMouseClicked(e -> {
+        FXUtils.showConfirmationMessage(confirmationMessage).setOnMouseClicked(e -> {
             goal.setStatus(newStatus);
             GoalController.updateGoal(goal);
 
-            TemplateViewModel.showSuccessMessage("Status da meta atualizado com sucesso para " + statusText + "!");
+            FXUtils.showSuccessMessage("Status da meta atualizado com sucesso para " + statusText + "!");
 
             refreshGoalsList();
         });

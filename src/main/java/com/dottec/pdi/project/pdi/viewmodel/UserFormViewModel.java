@@ -198,18 +198,18 @@ public class UserFormViewModel {
 
                 boolean saved = UserController.addUser(newUser);
                 if (saved) {
-                    TemplateViewModel.showSuccessMessage("Usuário " + name + " cadastrado com sucesso.");
+                    FXUtils.showSuccessMessage("Usuário " + name + " cadastrado com sucesso.");
                 } else {
-                    TemplateViewModel.showErrorMessage("Erro no Cadastro", "Não foi possível adicionar o usuário. Email já em uso?");
+                    FXUtils.showErrorMessage("Erro no Cadastro", "Não foi possível adicionar o usuário. Email já em uso?");
                     return;
                 }
             } else {
                 // Edição (senha não é alterada aqui)
                 boolean updated = UserController.updateUser(newUser);
                 if (updated) {
-                    TemplateViewModel.showSuccessMessage("Usuário " + name + " atualizado com sucesso.");
+                    FXUtils.showSuccessMessage("Usuário " + name + " atualizado com sucesso.");
                 } else {
-                    TemplateViewModel.showErrorMessage("Erro na Atualização", "Não foi possível atualizar o usuário.");
+                    FXUtils.showErrorMessage("Erro na Atualização", "Não foi possível atualizar o usuário.");
                     return;
                 }
             }
@@ -218,7 +218,7 @@ public class UserFormViewModel {
             TemplateViewModel.switchScreen("UserManagement.fxml");
         } catch (Exception e) {
             e.printStackTrace();
-            TemplateViewModel.showErrorMessage("Erro no Processamento", "Ocorreu um erro ao salvar: " + e.getMessage());
+            FXUtils.showErrorMessage("Erro no Processamento", "Ocorreu um erro ao salvar: " + e.getMessage());
         }
     }
 
@@ -229,27 +229,27 @@ public class UserFormViewModel {
 
     private boolean validateFields() {
         if (!FieldValidator.validarCampo(txtName.getText())) {
-            TemplateViewModel.showErrorMessage("O nome é obrigatório.");
+            FXUtils.showErrorMessage("O nome é obrigatório.");
             return false;
         }
         if (!FieldValidator.validarCampo(txtEmail.getText()) || !FieldValidator.validarEmail(txtEmail.getText())) {
-            TemplateViewModel.showErrorMessage("O email é inválido ou obrigatório.");
+            FXUtils.showErrorMessage("O email é inválido ou obrigatório.");
             return false;
         }
         if (cbRole.getValue() == null) {
-            TemplateViewModel.showErrorMessage("O Cargo é obrigatório.");
+            FXUtils.showErrorMessage("O Cargo é obrigatório.");
             return false;
         }
 
         // Validação de senha na criação
         if (userToEdit == null && !FieldValidator.validarCampo(txtPassword.getText())) {
-            TemplateViewModel.showErrorMessage("A senha é obrigatória para o novo usuário.");
+            FXUtils.showErrorMessage("A senha é obrigatória para o novo usuário.");
             return false;
         }
 
         // Validação de departamento para Gerente de Departamento
         if (cbRole.getValue() == Role.department_manager && cbDepartment.getValue() == null) {
-            TemplateViewModel.showErrorMessage("O Setor é obrigatório para Gerentes de Departamento.");
+            FXUtils.showErrorMessage("O Setor é obrigatório para Gerentes de Departamento.");
             return false;
         }
 

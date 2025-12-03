@@ -8,6 +8,7 @@ import com.dottec.pdi.project.pdi.model.Activity;
 import com.dottec.pdi.project.pdi.model.Attachment;
 import com.dottec.pdi.project.pdi.model.Goal;
 import com.dottec.pdi.project.pdi.enums.ActivityStatus;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 
@@ -160,9 +161,9 @@ public class ActivityViewModel {
 
             if (!creatingGoalMode) {
                 ActivityController.updateActivity(activity);
-                TemplateViewModel.showSuccessMessage("Status da atividade atualizado!");
+                FXUtils.showSuccessMessage("Status da atividade atualizado!");
             } else {
-                TemplateViewModel.showSuccessMessage("Status da atividade alterado (será salvo com a meta).");
+                FXUtils.showSuccessMessage("Status da atividade alterado (será salvo com a meta).");
             }
 
             // Força o GoalViewModel a recarregar as atividades
@@ -254,9 +255,9 @@ public class ActivityViewModel {
                     activity.getAttachments().remove(attachment);
 
                     displayAttachments(activity.getAttachments());
-                    TemplateViewModel.showSuccessMessage("Sucesso!", "Anexo excluído com sucesso.");
+                    FXUtils.showSuccessMessage("Sucesso!", "Anexo excluído com sucesso.");
                 } else {
-                    TemplateViewModel.showErrorMessage("Erro ao excluir", "Falha ao excluir o anexo. Tente novamente.");
+                    FXUtils.showErrorMessage("Erro ao excluir", "Falha ao excluir o anexo. Tente novamente.");
                 }
             }
         });
@@ -272,14 +273,14 @@ public class ActivityViewModel {
                     // Tenta abrir o arquivo com o programa padrão do sistema
                     Desktop.getDesktop().open(file);
                 } catch (IOException ex) {
-                    TemplateViewModel.showErrorMessage("Erro ao abrir arquivo", "Não foi possível abrir o arquivo. Verifique se há um aplicativo associado a este tipo de arquivo.");
+                    FXUtils.showErrorMessage("Erro ao abrir arquivo", "Não foi possível abrir o arquivo. Verifique se há um aplicativo associado a este tipo de arquivo.");
                     ex.printStackTrace();
                 }
             } else {
-                TemplateViewModel.showErrorMessage("Recurso não suportado", "A abertura de arquivos nativa não é suportada neste sistema operacional.");
+                FXUtils.showErrorMessage("Recurso não suportado", "A abertura de arquivos nativa não é suportada neste sistema operacional.");
             }
         } else {
-            TemplateViewModel.showErrorMessage("Arquivo não encontrado", "O arquivo '" + file.getName() + "' não foi encontrado no caminho: " + file.getAbsolutePath());
+            FXUtils.showErrorMessage("Arquivo não encontrado", "O arquivo '" + file.getName() + "' não foi encontrado no caminho: " + file.getAbsolutePath());
         }
     }
 
@@ -334,10 +335,10 @@ public class ActivityViewModel {
     @FXML
     private void handleConfirmEdit() {
         if (nameField.getText().trim().isEmpty()) {
-            TemplateViewModel.showErrorMessage("O nome não pode estar vazio.");
+            FXUtils.showErrorMessage("O nome não pode estar vazio.");
             return;
         } else if (deadlineDatePicker.getValue().isBefore(LocalDate.now())) {
-            TemplateViewModel.showErrorMessage("O prazo deve ser uma data futura.");
+            FXUtils.showErrorMessage("O prazo deve ser uma data futura.");
             return;
         }
 
@@ -364,7 +365,7 @@ public class ActivityViewModel {
             goalViewModel.populateActivities();
         }
 
-        TemplateViewModel.showSuccessMessage("Meta atualizada com sucesso!");
+        FXUtils.showSuccessMessage("Meta atualizada com sucesso!");
 
         disableEditingState();
     }
@@ -417,13 +418,13 @@ public class ActivityViewModel {
             goalViewModel.removeActivity(activity);
             ActivityDAO.delete(activity);
         }
-        TemplateViewModel.showSuccessMessage("Atividade excluída com sucesso!");
+        FXUtils.showSuccessMessage("Atividade excluída com sucesso!");
     }
 
     @FXML
     private void handleUploadFile() {
         if (creatingGoalMode || activity.getId() == 0) {
-            TemplateViewModel.showErrorMessage("Erro de Upload", "É necessário salvar a meta antes de anexar arquivos.");
+            FXUtils.showErrorMessage("Erro de Upload", "É necessário salvar a meta antes de anexar arquivos.");
             return;
         }
 
@@ -450,9 +451,9 @@ public class ActivityViewModel {
                 activity.addAttachment(newAttachment);
 
                 displayAttachments(activity.getAttachments());
-                TemplateViewModel.showSuccessMessage("Upload de arquivo bem-sucedido!", "O arquivo " + selectedFile.getName() + " foi anexado.");
+                FXUtils.showSuccessMessage("Upload de arquivo bem-sucedido!", "O arquivo " + selectedFile.getName() + " foi anexado.");
             } else {
-                TemplateViewModel.showErrorMessage("Erro de Upload", "Falha ao salvar o anexo no banco de dados.");
+                FXUtils.showErrorMessage("Erro de Upload", "Falha ao salvar o anexo no banco de dados.");
             }
         }
     }

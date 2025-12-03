@@ -2,6 +2,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.enums.Role;
 import com.dottec.pdi.project.pdi.model.Collaborator;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
@@ -140,7 +141,7 @@ public class HeaderViewModel {
                         controller.handleExportData(e);
                     } else {
                         // Mensagem de fallback, caso o controller não tenha sido inicializado corretamente
-                        TemplateViewModel.showErrorMessage("Erro de Acesso", "A tela do Dashboard não está pronta para exportação. Tente novamente.");
+                        FXUtils.showErrorMessage("Erro de Acesso", "A tela do Dashboard não está pronta para exportação. Tente novamente.");
                     }
                 });
 

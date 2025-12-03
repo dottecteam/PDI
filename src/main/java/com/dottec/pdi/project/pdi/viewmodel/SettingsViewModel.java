@@ -2,6 +2,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.dao.DepartmentDAO;
 import com.dottec.pdi.project.pdi.model.Department;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,7 +59,7 @@ public class SettingsViewModel implements Initializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            TemplateViewModel.showErrorMessage("Erro ao carregar setores", e.getMessage());
+            FXUtils.showErrorMessage("Erro ao carregar setores", e.getMessage());
         }
     }
 
@@ -103,14 +104,14 @@ public class SettingsViewModel implements Initializable {
     private void deletarDepartamento(Department department) {
         try {
             Platform.runLater(() -> {
-                TemplateViewModel.showConfirmationMessage("Deletar departamento " + department.getName() + "?").setOnMouseClicked(e -> {
+                FXUtils.showConfirmationMessage("Deletar departamento " + department.getName() + "?").setOnMouseClicked(e -> {
                     DepartmentDAO.deleteById(department.getId());
-                    TemplateViewModel.showSuccessMessage("Setor removido com sucesso!");
+                    FXUtils.showSuccessMessage("Setor removido com sucesso!");
                     loadDepartments();
                 });
             });
         } catch (Exception e) {
-            TemplateViewModel.showErrorMessage("Erro ao excluir", e.getMessage());
+            FXUtils.showErrorMessage("Erro ao excluir", e.getMessage());
         }
     }
 

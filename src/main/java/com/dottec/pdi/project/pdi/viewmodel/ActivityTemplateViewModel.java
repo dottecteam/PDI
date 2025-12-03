@@ -3,6 +3,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 import com.dottec.pdi.project.pdi.controllers.ActivityTemplateController;
 import com.dottec.pdi.project.pdi.dao.ActivityTemplateDAO;
 import com.dottec.pdi.project.pdi.model.ActivityTemplate;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -72,7 +73,7 @@ public class ActivityTemplateViewModel {
     @FXML
     private void handleConfirmEdit() {
         if (nameField.getText().trim().isEmpty()) {
-            TemplateViewModel.showErrorMessage("O nome não pode estar vazio.");
+            FXUtils.showErrorMessage("O nome não pode estar vazio.");
             return;
         }
 
@@ -81,7 +82,7 @@ public class ActivityTemplateViewModel {
 
         if(!creatingGoalTemplateMode){
             ActivityTemplateDAO.update(activityTemplate);
-            TemplateViewModel.showSuccessMessage("Atividade Modelo atualizada com sucesso!");
+            FXUtils.showSuccessMessage("Atividade Modelo atualizada com sucesso!");
         }
 
         disableEditingState();
@@ -118,6 +119,6 @@ public class ActivityTemplateViewModel {
             templateGoalViewModel.removeActivityTemplate(activityTemplate);
             ActivityTemplateController.deleteActivityTemplate(activityTemplate);
         }
-        TemplateViewModel.showSuccessMessage("Atividade excluída com sucesso!");
+        FXUtils.showSuccessMessage("Atividade excluída com sucesso!");
     }
 }

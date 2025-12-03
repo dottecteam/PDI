@@ -4,6 +4,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 import com.dottec.pdi.project.pdi.controllers.UserController;
 import com.dottec.pdi.project.pdi.controllers.UserCardController;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.utils.FXUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +54,7 @@ public class UserManagementViewModel {
 
         } catch (IOException e) {
             e.printStackTrace();
-            TemplateViewModel.showErrorMessage("Erro de UI", "Falha ao carregar o card de usuário.");
+            FXUtils.showErrorMessage("Erro de UI", "Falha ao carregar o card de usuário.");
         }
     }
 
@@ -73,7 +74,7 @@ public class UserManagementViewModel {
                 : "Tem certeza que deseja REATIVAR o usuário " + userToDelete.getName() + "?";
 
         Platform.runLater(() -> {
-            TemplateViewModel.showConfirmationMessage(contentMsg).setOnMouseClicked(e -> {
+            FXUtils.showConfirmationMessage(contentMsg).setOnMouseClicked(e -> {
                 boolean success = false;
 
                 if (userToDelete.getStatus().name().equals("active")) {
@@ -85,10 +86,10 @@ public class UserManagementViewModel {
                 }
 
                 if (success) {
-                    TemplateViewModel.showSuccessMessage("Sucesso", "Usuário " + statusMsg + " com sucesso.");
+                    FXUtils.showSuccessMessage("Sucesso", "Usuário " + statusMsg + " com sucesso.");
                     loadUsers(); // Recarrega a lista
                 } else {
-                    TemplateViewModel.showErrorMessage("Erro", "Falha ao " + statusMsg + " o usuário.");
+                    FXUtils.showErrorMessage("Erro", "Falha ao " + statusMsg + " o usuário.");
                 }
             });
         });

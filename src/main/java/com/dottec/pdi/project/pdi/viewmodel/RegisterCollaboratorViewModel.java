@@ -85,7 +85,7 @@ public class RegisterCollaboratorViewModel {
     @FXML
     private void saveCollaborator(ActionEvent event) {
         if (!validateFields()) {
-            TemplateViewModel.showErrorMessage("Erro de validação", "Por favor, preencha todos os campos obrigatórios corretamente.");
+            FXUtils.showErrorMessage("Erro de validação", "Por favor, preencha todos os campos obrigatórios corretamente.");
             return;
         }
 
@@ -98,10 +98,10 @@ public class RegisterCollaboratorViewModel {
 
             CollaboratorController.saveCollaborator(name, cpf, email, selectedDepartment);
 
-            TemplateViewModel.showSuccessMessage("Colaborador cadastrado com sucesso.");
+            FXUtils.showSuccessMessage("Colaborador cadastrado com sucesso.");
             TemplateViewModel.switchScreen("Collaborators.fxml");
         } catch (Exception e) {
-            TemplateViewModel.showErrorMessage("Erro no Cadastro", "Ocorreu um erro ao salvar o colaborador: " + e.getMessage());
+            FXUtils.showErrorMessage("Erro no Cadastro", "Ocorreu um erro ao salvar o colaborador: " + e.getMessage());
         }
     }
 
