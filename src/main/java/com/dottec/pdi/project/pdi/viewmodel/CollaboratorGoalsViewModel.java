@@ -130,46 +130,14 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
     private void configHeaderButtons() {
         HeaderViewModel.clearButtons();
-
         createAddGoalButton();
-
-        User loggedUser = AuthController.getInstance().getLoggedUser();
-        if (loggedUser != null && (loggedUser.getRole() == Role.hr_manager || loggedUser.getRole() == Role.general_manager)) {
-            MenuButton statusMenu = new MenuButton(translateCollaboratorStatus(collaborator.getStatus().name()));
-            statusMenu.getStyleClass().add("basic-button");
-
-            // Adiciona as opções de status
-            for (CollaboratorStatus statusOption : CollaboratorStatus.values()) {
-                if (statusOption != collaborator.getStatus()) {
-                    MenuItem item = new MenuItem(translateCollaboratorStatus(statusOption.name()));
-                    item.setOnAction(e -> handleCollaboratorStatusChange(statusOption));
-                    statusMenu.getItems().add(item);
-                }
-            }
-            HeaderViewModel.addButton(statusMenu);
-        }
     }
-
-    // NOVO: Lógica de exclusão do colaborador
-    private void handleDeleteCollaborator() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Tem certeza que deseja INATIVAR o colaborador " + collaborator.getName() + "? Esta ação não pode ser desfeita.");
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            CollaboratorController.deleteCollaboratorById(collaborator.getId());
-            TemplateViewModel.showSuccessMessage("Colaborador inativado com sucesso!");
-            TemplateViewModel.goBack(); // Volta para a lista de colaboradores
-        }
-    }
-
 
     private void createAddGoalButton() {
         Button buttonAddGoal = new Button("Adicionar Meta");
         buttonAddGoal.getStyleClass().add("basic-button");
         MenuItem goalFromTemplateButton = new MenuItem("Templates");
         MenuItem emptyGoalButton = new MenuItem("Nova Meta");
-        goalFromTemplateButton.getStyleClass().add("basic-button");
-        emptyGoalButton.getStyleClass().add("basic-button");
 
         goalFromTemplateButton.setOnAction(ft -> {
             TemplateViewModel.switchScreen("AddGoalFromTemplate.fxml", controller -> {
@@ -384,7 +352,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
     }
 
     @FXML
-    private void handleEnableEditing() {
+    public void handleEnableEditing() {
         nameField.setEditable(true);
         nameField.getStyleClass().remove("label-not-editable");
         nameField.getStyleClass().add("label-editable");
@@ -534,54 +502,5 @@ public class CollaboratorGoalsViewModel implements Initializable {
         });
 
         new Thread(loadDataTask).start();
-    }
-
-
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private void handleCollaboratorStatusChange(CollaboratorStatus newStatus) {
-        String statusText = translateCollaboratorStatus(newStatus.name());
-        String confirmationMessage = "Confirmar mudança de status do colaborador " + collaborator.getName() + " para " + statusText + "?";
-
-        if (newStatus == CollaboratorStatus.inactive) {
-            confirmationMessage += " ATENÇÃO: O status 'Inativo' fará com que o colaborador seja logicamente excluído (soft-delete).";
-        }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, confirmationMessage);
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            // O CollaboratorController.updateCollaborator usa o DAO que atualiza o status
-            collaborator.setStatus(newStatus);
-            CollaboratorController.updateCollaborator(collaborator); // Persiste o novo status no banco
-
-            // Se for inativar, chamo a função que faz o soft delete.
-            if (newStatus == CollaboratorStatus.inactive) {
-                CollaboratorController.deleteCollaboratorById(collaborator.getId());
-            }
-
-            TemplateViewModel.showSuccessMessage("Status do colaborador atualizado com sucesso para " + statusText + "!");
-
-            // Força a atualização visual (campos, botões) e a lista de metas
-            updateCollaboratorFields();
-            configHeaderButtons();
-            loadAndDisplayGoals();
-        }
-    }
-
-    // NOVO MÉTODO: Tradução de Status de Colaborador
-    private String translateCollaboratorStatus(String status) {
-        return switch (status.toLowerCase()) {
-            case "active" -> "Ativo";
-            case "on_leave" -> "Afastado";
-            case "inactive" -> "Inativo";
-            default -> status;
-        };
     }
 }

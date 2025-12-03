@@ -467,3 +467,35 @@
 .titled-pane:expanded .arrow-button {
     -fx-rotate: 0;
 }
+
+.context-menu-buttons {
+    -fx-background-color: #F6F6F6;
+    -fx-padding: 15 5;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 5);
+}
+
+.context-menu-buttons * {
+    -fx-font-size: 16;
+    -fx-text-fill: white;
+}
+
+.menu-item {
+    -fx-background-color: transparent, #AF69CD;
+    -fx-background-insets: 0, 3;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-align: center;
+    -fx-cursor: hand;
+}
+
+.menu-item .label {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.menu-item:hover {
+    -fx-background-color: #9032BB;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 4)
+}

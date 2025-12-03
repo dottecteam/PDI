@@ -11,30 +11,17 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
+import javafx.geometry.Side;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 import animatefx.animation.*;
-
-import javafx.scene.control.ProgressIndicator;
-import javafx.animation.PauseTransition;
-import javafx.util.Duration;
-import javafx.concurrent.Task;
-
-import static java.util.Collections.sort;
 
 public class CollaboratorsViewModel {
     @FXML private VBox mainVBox;
@@ -192,7 +179,8 @@ public class CollaboratorsViewModel {
                 .collect(Collectors.toList());
 
 
-        filteredCollaborators.sort(Comparator.comparing(Collaborator::getStatus));
+        filteredCollaborators.sort(Comparator.comparing(Collaborator::getStatus)
+                .thenComparing(col -> col.getDepartment().getName()));
 
         if(filteredCollaborators.isEmpty()){
             Label label = new Label("Sem resultados a serem exibidos.");
@@ -202,10 +190,9 @@ public class CollaboratorsViewModel {
         }
 
         filteredCollaborators.forEach(collaborator -> {
-            StackPane stackPane = new StackPane();
-            stackPane.getStyleClass().add("stackpane-collaborator");
-            stackPane.setId(String.valueOf(collaborator.getId()));
-            stackPane.setOnMouseClicked(event -> openCollaboratorPage(collaborator));
+            HBox hbox = new HBox();
+            hbox.getStyleClass().add("stackpane-collaborator");
+            hbox.setOnMouseClicked(event -> openCollaboratorPage(collaborator));
 
             AnchorPane card = new AnchorPane();
             new animatefx.animation.FadeIn(card).play();
@@ -225,7 +212,7 @@ public class CollaboratorsViewModel {
             department.getStyleClass().addAll("label-collaborator-department", "mid-label");
 
             // --- NOVO: VBox para alinhar nome e departamento verticalmente ---
-            VBox textBox = new VBox(5); // ← o número é o "gap" (5px entre os labels)
+            VBox textBox = new VBox(3); // ← o número é o "gap" (5px entre os labels)
             textBox.getStyleClass().add("stackpane-inner-collaborator");
             textBox.getChildren().addAll(department, name);
             textBox.setAlignment(Pos.CENTER_LEFT);
@@ -245,33 +232,109 @@ public class CollaboratorsViewModel {
                 }
                 case on_leave -> {
                     status.setText("Afastado");
-                    status.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;");
+                    status.setStyle("-fx-background-color: #AF69CD; -fx-text-fill: white;");
                 }
                 default -> {
                     status.setText("Desconhecido");
                     status.setStyle("-fx-background-color: grey; -fx-text-fill: white;");
                 }
             }
+            ImageView im = new ImageView(new Image(getClass().getResource("/com/dottec/pdi/project/pdi/static/img/three-dots.png").toExternalForm()));
+            im.setFitHeight(20);
+            im.setFitWidth(5);
+            Button threeDotsButton = new Button();
+            threeDotsButton.setGraphic(im);
+            threeDotsButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 6;");
+            threeDotsButton.setOnMouseClicked(e -> {
+                createOptionsMenu(collaborator, threeDotsButton);
+            });
 
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            spacer.setStyle("-fx-background-color: transparent;");
             // --- Adiciona ao StackPane ---
-            stackPane.getChildren().addAll(textBox, status);
+            hbox.getChildren().addAll(textBox, spacer, status, threeDotsButton);
+            hbox.setSpacing(10);
+            hbox.setAlignment(Pos.CENTER_LEFT);
 
-            // Alinhamentos
-            StackPane.setAlignment(textBox, Pos.CENTER_LEFT);
-            StackPane.setAlignment(status, Pos.CENTER_RIGHT);
-
-            // --- 5. Adiciona Margem e ao VBox ---
-            VBox.setMargin(stackPane, new Insets(0, 0, 10, 0)); // Recupera a margem de 10px abaixo
-            mainVBox.getChildren().add(stackPane);
+            mainVBox.setSpacing(18);
+            mainVBox.getChildren().add(hbox);
         });
     }
 
     private void openCollaboratorPage(Collaborator collaborator) {
-
         TemplateViewModel.switchScreen("CollaboratorGoals.fxml", controller -> {
             if (controller instanceof CollaboratorGoalsViewModel c) {
                 c.setCollaborator(collaborator);
             }
         });
+    }
+
+    private void createOptionsMenu(Collaborator collaborator, Button button){
+        MenuItem inactivate = new MenuItem("Inativar");
+        MenuItem edit = new MenuItem("Editar");
+        MenuItem activate = new MenuItem("Ativar");
+        MenuItem setOnLeave = new MenuItem("Afastar");
+
+        ContextMenu cm = new ContextMenu();
+        cm.getStyleClass().add("context-menu-buttons");
+
+        if(collaborator.getStatus().equals(CollaboratorStatus.active)){
+            cm.getItems().addAll(edit, inactivate, setOnLeave);
+        } else {
+            cm.getItems().add(activate);
+        }
+
+        edit.setOnAction(e -> {
+            TemplateViewModel.switchScreen("CollaboratorGoals.fxml", controller -> {
+                if (controller instanceof CollaboratorGoalsViewModel c) {
+                    c.setCollaborator(collaborator);
+                    c.handleEnableEditing();
+                }
+            });
+        });
+
+        activate.setOnAction(e -> handleCollaboratorStatusChange(CollaboratorStatus.active, collaborator));
+        inactivate.setOnAction(e -> handleCollaboratorStatusChange(CollaboratorStatus.inactive, collaborator));
+        setOnLeave.setOnAction(e -> handleCollaboratorStatusChange(CollaboratorStatus.on_leave, collaborator));
+
+        cm.show(button, Side.LEFT, 20, 40);
+    }
+
+
+    private void handleCollaboratorStatusChange(CollaboratorStatus newStatus, Collaborator collaborator) {
+        String statusText = translateCollaboratorStatus(newStatus.name());
+        String confirmationMessage = "Confirmar mudança de status do colaborador " + collaborator.getName() + " para " + statusText + "?";
+
+        if (newStatus == CollaboratorStatus.inactive) {
+            confirmationMessage += " ATENÇÃO: O status 'Inativo' fará com que o colaborador seja logicamente excluído (soft-delete).";
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, confirmationMessage);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // O CollaboratorController.updateCollaborator usa o DAO que atualiza o status
+            collaborator.setStatus(newStatus);
+            CollaboratorController.updateCollaborator(collaborator); // Persiste o novo status no banco
+
+            // Se for inativar, chamo a função que faz o soft delete.
+            if (newStatus == CollaboratorStatus.inactive) {
+                CollaboratorController.deleteCollaboratorById(collaborator.getId());
+            }
+
+            TemplateViewModel.showSuccessMessage("Status do colaborador atualizado com sucesso para " + statusText + "!");
+            listCollaborators();
+        }
+    }
+
+    // NOVO MÉTODO: Tradução de Status de Colaborador
+    private String translateCollaboratorStatus(String status) {
+        return switch (status.toLowerCase()) {
+            case "active" -> "Ativo";
+            case "on_leave" -> "Afastado";
+            case "inactive" -> "Inativo";
+            default -> status;
+        };
     }
 }
