@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.text.Font?>
-<?import java.net.URL?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane fx:controller="com.dottec.pdi.project.pdi.controllers.UserCardController"
-           styleClass="stackpane-collaborator" maxHeight="90.0" minHeight="90.0" prefWidth="550.0"
-           stylesheets="@../static/style/style_UserManagement.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="90.0" minHeight="90.0" prefWidth="550.0" styleClass="user-card" stylesheets="@../static/style/style_UserManagement.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.controllers.UserCardController">
     <children>
         <HBox alignment="CENTER_LEFT" maxHeight="90.0" maxWidth="1.7976931348623157E308" spacing="15.0" style="-fx-background-color: transparent;">
             <children>
-                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../static/img/user.png" />
                     </image>
@@ -26,15 +23,16 @@
                         <Insets left="10.0" />
                     </HBox.margin>
                 </ImageView>
-                <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="2.0">
+                <VBox alignment="CENTER_LEFT" spacing="2.0">
                     <children>
                         <Label fx:id="nameField" styleClass="label-collaborator-name" text="Nome do Usuário" />
-                        <Label fx:id="emailField" text="usuario@dominio.com" style="-fx-text-fill: #808080;" />
+                        <Label fx:id="emailField" style="-fx-text-fill: #808080;" text="usuario@dominio.com" />
                     </children>
                 </VBox>
-                <Label fx:id="roleLabel" text="CARGO" styleClass="label-collaborator-department" />
-                <Label fx:id="statusLabel" text="ATIVO" styleClass="label-collaborator-status" />
-                <Button fx:id="btnEdit" onAction="#handleEditAction" styleClass="button-icon">
+                <Label fx:id="roleLabel" styleClass="label-collaborator-department" text="CARGO" />
+            <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="statusLabel" styleClass="label-collaborator-status" text="ATIVO" />
+                <Button fx:id="editBtn" onAction="#handleEditAction" styleClass="button-icon">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -46,9 +44,9 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="btnDelete" onAction="#handleDeleteAction" styleClass="button-icon">
+                <Button fx:id="deleteBtn" onAction="#handleDeleteAction" styleClass="button-icon">
                     <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../static/img/trash.png" />
                             </image>

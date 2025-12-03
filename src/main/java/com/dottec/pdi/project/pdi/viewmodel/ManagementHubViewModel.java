@@ -55,7 +55,7 @@ public class ManagementHubViewModel {
     @FXML
     private void goToUserManagement(MouseEvent event) {
         if (userManagementCard.isDisable()) return;
-        TemplateViewModel.switchScreen("UserManagementList.fxml");
-        HeaderViewModel.updateHeader("UserManagementList.fxml");
+        TemplateViewModel.switchScreen("UserManagement.fxml");
+        HeaderViewModel.updateHeader("UserManagement.fxml");
     }
 }

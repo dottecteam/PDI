@@ -7,15 +7,12 @@ import com.dottec.pdi.project.pdi.model.User;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public class UserManagementViewModel {
     @FXML private VBox mainField;
@@ -75,26 +72,25 @@ public class UserManagementViewModel {
                 ? "Tem certeza que deseja INATIVAR o usuário " + userToDelete.getName() + "?"
                 : "Tem certeza que deseja REATIVAR o usuário " + userToDelete.getName() + "?";
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, contentMsg);
-        Optional<ButtonType> result = alert.showAndWait();
+        Platform.runLater(() -> {
+            TemplateViewModel.showConfirmationMessage(contentMsg).setOnMouseClicked(e -> {
+                boolean success = false;
 
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean success = false;
+                if (userToDelete.getStatus().name().equals("active")) {
+                    success = UserController.inactivateUser(userToDelete.getId()); // Inativa (soft delete)
+                } else {
+                    // Reativa o usuário
+                    userToDelete.setStatus(com.dottec.pdi.project.pdi.enums.UserStatus.active);
+                    success = UserController.updateUser(userToDelete);
+                }
 
-            if (userToDelete.getStatus().name().equals("active")) {
-                success = UserController.inactivateUser(userToDelete.getId()); // Inativa (soft delete)
-            } else {
-                // Reativa o usuário
-                userToDelete.setStatus(com.dottec.pdi.project.pdi.enums.UserStatus.active);
-                success = UserController.updateUser(userToDelete);
-            }
-
-            if (success) {
-                TemplateViewModel.showSuccessMessage("Sucesso", "Usuário " + statusMsg + " com sucesso.");
-                loadUsers(); // Recarrega a lista
-            } else {
-                TemplateViewModel.showErrorMessage("Erro", "Falha ao " + statusMsg + " o usuário.");
-            }
-        }
+                if (success) {
+                    TemplateViewModel.showSuccessMessage("Sucesso", "Usuário " + statusMsg + " com sucesso.");
+                    loadUsers(); // Recarrega a lista
+                } else {
+                    TemplateViewModel.showErrorMessage("Erro", "Falha ao " + statusMsg + " o usuário.");
+                }
+            });
+        });
     }
 }

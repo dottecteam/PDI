@@ -215,7 +215,7 @@ public class UserFormViewModel {
             }
 
             // Retorna para a lista de usuários
-            TemplateViewModel.switchScreen("UserManagementList.fxml");
+            TemplateViewModel.switchScreen("UserManagement.fxml");
         } catch (Exception e) {
             e.printStackTrace();
             TemplateViewModel.showErrorMessage("Erro no Processamento", "Ocorreu um erro ao salvar: " + e.getMessage());

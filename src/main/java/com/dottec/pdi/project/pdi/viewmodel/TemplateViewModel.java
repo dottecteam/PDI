@@ -232,7 +232,7 @@ public class TemplateViewModel implements Initializable {
             case "GoalTemplates.fxml":
                 menuGoalTemplates.getStyleClass().add("selecionado");
                 break;
-            case "Settings.fxml":
+            case "ManagementHub.fxml":
                 menuSettings.getStyleClass().add("selecionado");
                 break;
             case "Profile.fxml":
@@ -341,6 +341,6 @@ public class TemplateViewModel implements Initializable {
     }
 
     public static Button showConfirmationMessage(String message) {
-        return FXUtils.buildConfirmationMessageBox(instance.mainStackPane, message, "Confirmar?");
+        return FXUtils.buildConfirmationMessageBox(instance.mainStackPane, message, "Tem certeza?");
     }
 }

@@ -211,7 +211,7 @@ public class HeaderViewModel {
             case "AddSector.fxml" -> {
                 buildHeaderStructure("Adicionar Setor", true, false, false, showNotificationButton);
             }
-            case "UserManagementList.fxml" -> { // NOVO: Lista de Usuários
+            case "UserManagement.fxml" -> { // NOVO: Lista de Usuários
                 Button buttonAddUser = new Button("Adicionar Usuário");
                 buttonAddUser.setOnMouseClicked(event2 -> {
                     TemplateViewModel.switchScreen("UserForm.fxml");
@@ -227,9 +227,6 @@ public class HeaderViewModel {
             }
             case "AddActivityTemplate.fxml" -> {
                 buildHeaderStructure("Adicionar Atividade", true, false, false, false);
-            }
-            case "UserManagement.fxml" -> {
-                buildHeaderStructure("Gerenciar Usuários", true, false, false, false);
             }
             case "GoalTemplates.fxml" -> {
                 buildHeaderStructure("Modelos", false, false, false, false);

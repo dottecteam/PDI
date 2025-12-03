@@ -1,45 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox fx:id="mainField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="313.0" prefWidth="605.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.UserManagementViewModel">
-    <children>
-        <Pane fx:id="userCard" prefHeight="106.0" prefWidth="605.0" style="-fx-background-color: #eeeeee; -fx-background-radius: 20px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 3);" styleClass="stackpane-collaborator">
-            <children>
-                <ImageView fx:id="userPhoto" fitHeight="97.0" fitWidth="81.0" layoutX="14.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../static/img/user.png" />
-                    </image>
-                </ImageView>
-                <Label fx:id="nameField" layoutX="107.0" layoutY="29.0" prefHeight="23.0" prefWidth="332.0" styleClass="label-collaborator-name" text="Nome do UsuÃ¡rio">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
-                <Label fx:id="emailField" layoutX="108.0" layoutY="51.0" prefHeight="23.0" prefWidth="311.0" text="usuario@gerencia.com" textFill="#323232b2">
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Label>
-                <Button fx:id="btnEdit" layoutX="426.0" layoutY="39.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="30.0" style="-fx-background-color: transparent; -fx-cursor: hand;" />
-                <Button fx:id="btnDelete" layoutX="466.0" layoutY="39.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: transparent; -fx-cursor: hand;" />
-                <ImageView fitHeight="31.0" fitWidth="37.0" layoutX="503.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../static/img/edit.png" />
-                    </image>
-                </ImageView>
-                <ImageView fitHeight="33.0" fitWidth="31.0" layoutX="542.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../static/img/trash-2.png" />
-                    </image>
-                </ImageView>
-            </children>
-        </Pane>
-    </children>
+<VBox fx:id="mainField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="15.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.UserManagementViewModel">
+   <padding>
+      <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+   </padding>
 </VBox>

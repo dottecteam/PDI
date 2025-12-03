@@ -4,7 +4,7 @@
     -fx-border-radius: 10px;
     -fx-border-color: #4B0081;
     -fx-background-radius: 15;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1)
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1);
     -fx-cursor: move;
 }
 

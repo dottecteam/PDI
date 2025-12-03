@@ -1,6 +1,10 @@
 package com.dottec.pdi.project.pdi.controllers;
 
+import com.dottec.pdi.project.pdi.enums.UserStatus;
 import com.dottec.pdi.project.pdi.model.User;
+import com.dottec.pdi.project.pdi.viewmodel.HeaderViewModel;
+import com.dottec.pdi.project.pdi.viewmodel.TemplateViewModel;
+import com.dottec.pdi.project.pdi.viewmodel.UserFormViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -19,10 +23,8 @@ public class UserCardController {
     private Label roleLabel; // NOVO: Adicionado para o Cargo
     @FXML
     private Label statusLabel; // NOVO: Adicionado para o Status
-    @FXML
-    private Button btnEdit;
-    @FXML
-    private Button btnDelete;
+    @FXML private Button deleteBtn;
+    @FXML private Button editBtn;
 
     private User user; // Objeto de dados
     private Consumer<User> onEditCallback;
@@ -52,6 +54,13 @@ public class UserCardController {
             default -> user.getRole().name(); // Fallback para outros cargos
         };
         roleLabel.setText(cargo);
+
+        if(!user.getStatus().equals(UserStatus.active)){
+            deleteBtn.setManaged(false);
+            editBtn.setManaged(false);
+            deleteBtn.setVisible(false);
+            editBtn.setVisible(false);
+        }
 
         // NOVO: Adiciona o Status e o estilo
         String statusText = user.getStatus().name().equals("active") ? "ATIVO" : "INATIVO";

@@ -2,15 +2,14 @@
     -fx-background-color: fdfdfd;
 }
 
-.stackpane-collaborator{
+.user-card {
     -fx-min-height: 75;
     -fx-background-radius: 15;
     -fx-min-width: 400;
-    -fx-padding: 6 20 15 20;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 3)
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
 }
 
-.stackpane-collaborator:hover{
+.user-card:hover{
     -fx-border-color: #4B0081;
     -fx-border-width: 2;
     -fx-border-radius: 15;
@@ -87,7 +86,7 @@
 .add-user-button{
     -fx-background-color: #AF69CD;
     -fx-border-color: transparent;
-    -fx-border-radius: 30
+    -fx-border-radius: 30;
     -fx-text-fill: #f6f6f6;
     -fx-padding:0;
 }

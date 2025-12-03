@@ -2,6 +2,7 @@ package com.dottec.pdi.project.pdi.viewmodel;
 
 import com.dottec.pdi.project.pdi.dao.DepartmentDAO;
 import com.dottec.pdi.project.pdi.model.Department;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -101,9 +102,13 @@ public class SettingsViewModel implements Initializable {
 
     private void deletarDepartamento(Department department) {
         try {
-            DepartmentDAO.deleteById(department.getId());
-            TemplateViewModel.showSuccessMessage("Setor removido com sucesso!");
-            loadDepartments();
+            Platform.runLater(() -> {
+                TemplateViewModel.showConfirmationMessage("Deletar departamento " + department.getName() + "?").setOnMouseClicked(e -> {
+                    DepartmentDAO.deleteById(department.getId());
+                    TemplateViewModel.showSuccessMessage("Setor removido com sucesso!");
+                    loadDepartments();
+                });
+            });
         } catch (Exception e) {
             TemplateViewModel.showErrorMessage("Erro ao excluir", e.getMessage());
         }
