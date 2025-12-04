@@ -327,6 +327,7 @@ public class GoalViewModel {
             controller.updateFields();
             controller.setCreatingGoalMode(creatingGoalMode);
             controller.setGoalViewModel(this.goalViewModel);
+            activity.setGoal(goal);
 
             activitiesField.getChildren().add(activityPane);
         } catch (IOException e) {

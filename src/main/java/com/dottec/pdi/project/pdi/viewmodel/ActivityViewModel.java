@@ -9,19 +9,19 @@ import com.dottec.pdi.project.pdi.model.Attachment;
 import com.dottec.pdi.project.pdi.model.Goal;
 import com.dottec.pdi.project.pdi.enums.ActivityStatus;
 import com.dottec.pdi.project.pdi.utils.FXUtils;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 
-import com.dottec.pdi.project.pdi.model.Tag;
 import javafx.fxml.FXMLLoader;
 
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -35,7 +35,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.awt.Desktop;
-import java.util.Optional;
 
 public class ActivityViewModel {
     @FXML
@@ -43,24 +42,18 @@ public class ActivityViewModel {
     @FXML
     private Button confirmButton;
     @FXML
-    private ImageView editButton;
-    @FXML
-    private ImageView deleteButton;
+    private Button threeDotsButton;
     @FXML
     private TextField nameField;
     @FXML
     private TextField descriptionField;
 
-    // REMOVIDO: @FXML private Label statusLabel;
-
-    // NOVO: MenuButton para Status
-    @FXML
-    private MenuButton statusMenu;
+    @FXML private Label statusLabel;
 
     @FXML
     private DatePicker deadlineDatePicker;
     @FXML
-    private GridPane titledPaneHeader;
+    private HBox titledPaneHeader;
     @FXML
     private TitledPane activityTitledPane;
 
@@ -102,12 +95,12 @@ public class ActivityViewModel {
         loadTagsMenu();
         titledPaneHeader.setMinWidth(activityTitledPane.getWidth());
 
-        // Configuração inicial do MenuButton de Status
-        if (statusMenu != null) {
-            statusMenu.getStyleClass().add("label-status");
-            statusMenu.setMouseTransparent(true); // Inicialmente não clicável
-            statusMenu.setFocusTraversable(false);
+        if (statusLabel != null) {
+            statusLabel.getStyleClass().add("label-status");
+            statusLabel.setMouseTransparent(true);
         }
+
+        Platform.runLater(() -> titledPaneHeader.setMinWidth(activityBody.getWidth() - 20));
     }
 
     private void loadTagsMenu() {
@@ -122,6 +115,14 @@ public class ActivityViewModel {
     }
 
     public void updateFields() {
+        ActivityStatus status = activity.getStatus();
+        if(activity.getDeadline().isBefore(LocalDate.now())
+            && !status.equals(ActivityStatus.canceled)
+            && !status.equals(ActivityStatus.completed)){
+                activity.setStatus(ActivityStatus.pending);
+                ActivityController.updateActivity(activity);
+        }
+
         nameField.setText(activity.getName());
         descriptionField.setText(activity.getDescription());
         deadlineDatePicker.setValue(activity.getDeadline());
@@ -131,19 +132,9 @@ public class ActivityViewModel {
         tagsMenuViewModel.refresh();
 
         // Lógica de Status
-        if (statusMenu != null) {
-            updateStatusDisplay(activity.getStatus().name());
-
-            statusMenu.getItems().clear();
-            statusMenu.setText(translateActivityStatus(activity.getStatus().name()));
-
-            for (ActivityStatus statusOption : ActivityStatus.values()) {
-                if (statusOption != activity.getStatus()) {
-                    MenuItem item = new MenuItem(translateActivityStatus(statusOption.name()));
-                    item.setOnAction(e -> handleActivityStatusChange(statusOption));
-                    statusMenu.getItems().add(item);
-                }
-            }
+        if (statusLabel != null) {
+            updateStatusDisplay(status.name());
+            statusLabel.setText(translateActivityStatus(status.name()));
         }
 
         if (!creatingGoalMode) {
@@ -153,10 +144,7 @@ public class ActivityViewModel {
 
     // NOVO MÉTODO: Lógica de mudança de status da atividade
     private void handleActivityStatusChange(ActivityStatus newStatus) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Confirmar mudança de status para " + translateActivityStatus(newStatus.name()) + "?");
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        FXUtils.showConfirmationMessage("Confirmar mudança de status para " + translateActivityStatus(newStatus.name()) + "?").setOnMouseClicked(e-> {
             activity.setStatus(newStatus);
 
             if (!creatingGoalMode) {
@@ -172,7 +160,7 @@ public class ActivityViewModel {
             }
 
             updateStatusDisplay(newStatus.name());
-        }
+        });
     }
 
     // NOVO MÉTODO: Tradução de Status de Atividade
@@ -195,13 +183,13 @@ public class ActivityViewModel {
             case "completed" -> colorStyle = "-fx-background-color: #6D00A1; -fx-text-fill: white";
             case "in_progress" -> colorStyle = "-fx-background-color: #AF69CD; -fx-text-fill: white;";
             case "canceled" -> colorStyle = "-fx-background-color: #E6CCEF; -fx-text-fill: #5c5c5c";
-            case "pending" -> colorStyle = "-fx-background-color: #AF69CD; -fx-text-fill: #5c5c5c;";
+            case "pending" -> colorStyle = "-fx-background-color: #AF69CD; -fx-text-fill: white;";
             default -> colorStyle = "-fx-background-color: grey; -fx-text-fill: white;";
         }
 
-        if (statusMenu != null) {
-            statusMenu.setText(text);
-            statusMenu.setStyle(colorStyle);
+        if (statusLabel != null) {
+            statusLabel.setText(text);
+            statusLabel.setStyle(colorStyle);
         }
     }
 
@@ -242,23 +230,18 @@ public class ActivityViewModel {
     }
 
     private void handleDeleteAttachment(Attachment attachment) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmar Exclusão");
-        alert.setHeaderText(null);
-        alert.setContentText("Tem certeza que deseja excluir o anexo '" + attachment.getFilePath().substring(attachment.getFilePath().lastIndexOf('/') + 1) + "'?");
+        FXUtils.showConfirmationMessage(
+                "Tem certeza que deseja excluir o anexo '" + attachment.getFilePath().substring(attachment.getFilePath().lastIndexOf('/') + 1) + "'?")
+                .setOnMouseClicked(e -> {
+            boolean success = ActivityController.deleteAttachment(attachment);
 
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                boolean success = ActivityController.deleteAttachment(attachment);
+            if (success) {
+                activity.getAttachments().remove(attachment);
 
-                if (success) {
-                    activity.getAttachments().remove(attachment);
-
-                    displayAttachments(activity.getAttachments());
-                    FXUtils.showSuccessMessage("Sucesso!", "Anexo excluído com sucesso.");
-                } else {
-                    FXUtils.showErrorMessage("Erro ao excluir", "Falha ao excluir o anexo. Tente novamente.");
-                }
+                displayAttachments(activity.getAttachments());
+                FXUtils.showSuccessMessage("Sucesso!", "Anexo excluído com sucesso.");
+            } else {
+                FXUtils.showErrorMessage("Erro ao excluir", "Falha ao excluir o anexo. Tente novamente.");
             }
         });
     }
@@ -292,8 +275,7 @@ public class ActivityViewModel {
 
     @FXML
     private void handleEnableEditing() {
-        buttonVisible(deleteButton, false);
-        buttonVisible(editButton, false);
+        activityTitledPane.setExpanded(true);
         buttonVisible(confirmButton, true);
         buttonVisible(cancelButton, true);
 
@@ -318,11 +300,6 @@ public class ActivityViewModel {
         deadlineDatePicker.getStyleClass().remove("label-not-editable");
         deadlineDatePicker.getStyleClass().add("label-editable");
         deadlineDatePicker.setMouseTransparent(false);
-
-        // Habilita o MenuButton de Status
-        if (statusMenu != null) {
-            statusMenu.setMouseTransparent(false);
-        }
     }
 
     @FXML
@@ -341,7 +318,6 @@ public class ActivityViewModel {
             FXUtils.showErrorMessage("O prazo deve ser uma data futura.");
             return;
         }
-
         tagsMenuViewModel.confirmEdit();
 
         activity.setName(nameField.getText());
@@ -350,14 +326,14 @@ public class ActivityViewModel {
 
         if (!creatingGoalMode) {
             ActivityController.updateActivity(activity);
+            System.out.println(activity.toString());
             Goal goal = activity.getGoal();
             if(goal.getDeadline() == null) {
                 goal.setDeadline(activity.getDeadline());
-                GoalController.updateGoal(goal);
             } else if(activity.getDeadline().isAfter(goal.getDeadline())){
                 goal.setDeadline(activity.getDeadline());
-                GoalController.updateGoal(goal);
             }
+            GoalController.updateGoal(goal);
         }
 
         // Força a atualização do GoalViewModel para refletir a mudança no prazo/nome da Atividade
@@ -365,7 +341,7 @@ public class ActivityViewModel {
             goalViewModel.populateActivities();
         }
 
-        FXUtils.showSuccessMessage("Meta atualizada com sucesso!");
+        FXUtils.showSuccessMessage("Atividade atualizada com sucesso!");
 
         disableEditingState();
     }
@@ -384,41 +360,20 @@ public class ActivityViewModel {
         deadlineDatePicker.getStyleClass().add("label-not-editable");
         deadlineDatePicker.setMouseTransparent(true);
 
-        // Desabilita o MenuButton de Status
-        if (statusMenu != null) {
-            statusMenu.setMouseTransparent(true);
-        }
-
-        buttonVisible(editButton, true);
-        buttonVisible(deleteButton, true);
         buttonVisible(confirmButton, false);
         buttonVisible(cancelButton, false);
     }
 
-    @FXML
-    private void handleEnableDelete() {
-        buttonVisible(deleteButton, false);
-        buttonVisible(editButton, false);
-        buttonVisible(confirmButton, true);
-        buttonVisible(cancelButton, true);
-
-        confirmButton.setOnMouseClicked(mouseEvent -> {
-            handleConfirmDelete();
+    private void handleDeleteActivity() {
+        FXUtils.showConfirmationMessage("Deseja excluir a atividade" + activity.getName() + "?").setOnMouseClicked(e -> {
+            if (creatingGoalMode) {
+                goalViewModel.removeActivity(activity);
+            } else {
+                goalViewModel.removeActivity(activity);
+                ActivityDAO.delete(activity);
+            }
+            FXUtils.showSuccessMessage("Atividade excluída com sucesso!");
         });
-        cancelButton.setOnMouseClicked(mouseEvent -> {
-            handleCancelEditing();
-        });
-    }
-
-    @FXML
-    private void handleConfirmDelete() {
-        if (creatingGoalMode) {
-            goalViewModel.removeActivity(activity);
-        } else {
-            goalViewModel.removeActivity(activity);
-            ActivityDAO.delete(activity);
-        }
-        FXUtils.showSuccessMessage("Atividade excluída com sucesso!");
     }
 
     @FXML
@@ -456,5 +411,43 @@ public class ActivityViewModel {
                 FXUtils.showErrorMessage("Erro de Upload", "Falha ao salvar o anexo no banco de dados.");
             }
         }
+    }
+
+    @FXML
+    private void createOptionsMenu(){
+        MenuItem edit = new MenuItem("Editar");
+
+        ContextMenu cm = new ContextMenu();
+        cm.getStyleClass().add("context-menu-buttons");
+
+        if(!activity.getStatus().equals(ActivityStatus.canceled)){
+            cm.getItems().add(edit);
+        }
+
+        for(ActivityStatus activityStatus : ActivityStatus.values()){
+            if(activityStatus.equals(ActivityStatus.pending)) continue;
+
+            String status = activityStatus.toString();
+            String text = switch (status.toLowerCase()) {
+                case "in_progress" -> "Em Progresso";
+                case "completed" -> "Concluir";
+                case "canceled" -> "Cancelar";
+                default -> status;
+            };
+            MenuItem menuItem = new MenuItem(text);
+            if(!activityStatus.equals(ActivityStatus.canceled)){
+                menuItem.setOnAction(e -> handleActivityStatusChange(activityStatus));
+            } else {
+                menuItem.setOnAction(e -> handleDeleteActivity());
+            }
+
+            if(!activity.getStatus().equals(activityStatus)){
+                cm.getItems().add(menuItem);
+            }
+        }
+
+        edit.setOnAction(e -> handleEnableEditing());
+
+        cm.show(threeDotsButton, Side.LEFT, 20, 40);
     }
 }

@@ -252,7 +252,7 @@ public class TemplateViewModel implements Initializable {
 
             ScrollPane scrollPane = new ScrollPane(root);
             scrollPane.setFitToWidth(true);
-            scrollPane.setFitToHeight(true);
+            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
             if (tmpCenter.getCenter() != null) {
                 pageStack.push(tmpCenter.getCenter());

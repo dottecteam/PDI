@@ -42,13 +42,13 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="nameField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="1" />
+                  <TextField fx:id="nameField" editable="false" promptText="Digite o nome..." styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="1" />
                   <Label style="-fx-text-fill: #4B0081;" styleClass="mid-label" text="Descrição" GridPane.rowIndex="2">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="descriptionField" editable="false" styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="3" />
+                  <TextField fx:id="descriptionField" editable="false" promptText="Digite a descrição..." styleClass="label-not-editable" text="Carregando..." GridPane.rowIndex="3" />
                </children>
                <StackPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -96,6 +96,9 @@
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
+               <children>
+                  <Label text="Sem atividades a serem exibidas" />
+               </children>
             </VBox>
          </children>
          <padding>

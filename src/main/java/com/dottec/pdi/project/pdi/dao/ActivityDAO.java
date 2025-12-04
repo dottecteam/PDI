@@ -21,7 +21,7 @@ import static com.dottec.pdi.project.pdi.dao.GoalDAO.mapResultSetToGoal;
 
 public class ActivityDAO {
     private static final String INSERT_SQL = "INSERT INTO activities (act_name, act_description, act_status, act_deadline, goal_id) VALUES (?, ?, ?, ?, ?)";
-    private static final String DELETE_SQL = "DELETE FROM activities WHERE act_id = ?";
+    private static final String DELETE_SQL = "UPDATE activities SET act_status = 'canceled' WHERE act_id = ?";
     private static final String UPDATE_SQL = "UPDATE activities SET act_name = ?, act_description = ?, act_status = ?, act_deadline = ?, goal_id = ?, act_updated_at = CURRENT_TIMESTAMP WHERE act_id = ?";
     private static final String SELECT_ALL_SQL = "SELECT * FROM activities";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM activities WHERE act_id = ?";
@@ -74,21 +74,53 @@ public class ActivityDAO {
         }
     }
 
-    public static void update(Activity activity) {
-        try (Connection conn = Database.getConnection(); PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)){
-            stmt.setString(1, activity.getName());
-            stmt.setString(2, activity.getDescription());
-            stmt.setString(3, activity.getStatus().name());
-            stmt.setDate(4, Date.valueOf(activity.getDeadline()));
-            stmt.setInt(5, activity.getGoal().getId());
-            stmt.setInt(6, activity.getId());
+    public static boolean update(Activity activity) {
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)) {
 
-            updateActivityTags(conn, activity.getId(), activity.getTags());
+            boolean originalAutoCommit = conn.getAutoCommit();
+            conn.setAutoCommit(false);
+            try {
+                stmt.setString(1, activity.getName());
+                stmt.setString(2, activity.getDescription());
+                stmt.setString(3, activity.getStatus().name());
 
-            int rows = stmt.executeUpdate();
-            System.out.println("Atividade atualizada! Linhas afetadas: " + rows);
-        }
-        catch (SQLException e) {
+                if (activity.getDeadline() != null) {
+                    stmt.setDate(4, java.sql.Date.valueOf(activity.getDeadline()));
+                } else {
+                    stmt.setNull(4, java.sql.Types.DATE);
+                }
+
+                if (activity.getGoal() != null) {
+                    stmt.setInt(5, activity.getGoal().getId());
+                } else {
+                    stmt.setNull(5, java.sql.Types.INTEGER);
+                }
+
+                stmt.setInt(6, activity.getId());
+
+                int rows = stmt.executeUpdate();
+                if (rows == 0) {
+                    conn.rollback();
+                    conn.setAutoCommit(originalAutoCommit);
+                    return false;
+                }
+
+                updateActivityTags(conn, activity.getId(), activity.getTags());
+
+                conn.commit();
+                conn.setAutoCommit(originalAutoCommit);
+                System.out.println("Atividade atualizada! Linhas afetadas: " + rows);
+                return true;
+
+            } catch (SQLException | RuntimeException ex) {
+                try { conn.rollback(); } catch (SQLException rollbackEx) { /* log rollbackEx */ }
+                throw ex;
+            } finally {
+                try { conn.setAutoCommit(originalAutoCommit); } catch (SQLException ignored) {}
+            }
+
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar Atividade: " + e.getMessage(), e);
         }
     }

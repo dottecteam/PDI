@@ -50,7 +50,6 @@ public class ActivityController {
     }
 
     public static void updateActivity(Activity activity){
-
         ActivityDAO.update(activity);
 
         User loggedUser = AuthController.getInstance().getLoggedUser();

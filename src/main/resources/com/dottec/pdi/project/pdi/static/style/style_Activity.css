@@ -14,6 +14,15 @@
     -fx-border-color: #4B0081;
 }
 
+.activity-pane .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-opacity: 0;
+    -fx-managed: false;
+    -fx-scale-x: 0;
+    -fx-scale-y: 0;
+}
+
 .activity-pane .title{
     -fx-padding: 10;
 }

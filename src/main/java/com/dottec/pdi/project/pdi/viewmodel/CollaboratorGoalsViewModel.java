@@ -286,7 +286,9 @@ public class CollaboratorGoalsViewModel implements Initializable {
                 statusLabel.setStyle("-fx-background-color: #6D00A1; -fx-text-fill: white");
             }
             case in_progress -> {
-                if(goal.getDeadline().isBefore(LocalDate.now())){
+                if(goal.getDeadline().isBefore(LocalDate.now())
+                && !goal.getStatus().equals(GoalStatus.completed)
+                && !goal.getStatus().equals(GoalStatus.canceled)){
                     goal.setStatus(GoalStatus.pending);
                     GoalController.updateGoal(goal);
                     statusLabel.setText("Pendente");
@@ -565,7 +567,7 @@ public class CollaboratorGoalsViewModel implements Initializable {
 
             FXUtils.showSuccessMessage("Status da meta atualizado com sucesso para " + statusText + "!");
 
-            refreshGoalsList();
+            Platform.runLater(CollaboratorGoalsViewModel::refreshGoalsList);
         });
 
     }
