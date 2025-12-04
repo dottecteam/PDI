@@ -84,8 +84,8 @@ public class FXUtils {
         Label headerLabel = new Label(headerMessage);
         headerLabel.getStyleClass().add("message-header-label");
 
-        Button closeButton = new Button("X");
-        closeButton.getStyleClass().addAll("close-button");
+        Button closeButton = new Button();
+        closeButton.getStyleClass().addAll("x-button");
         closeButton.setOnAction(actionEvent -> {
             instance.mainStackPane.getChildren().remove(stackPane);
         });

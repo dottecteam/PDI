@@ -1,75 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.ProfileViewModel">
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.viewmodel.ProfileViewModel">
     <stylesheets>
-        <URL value="@../static/style/style_Profile.css"/>
-        <URL value="@../static/style/style_template.css"/>
+        <URL value="@../static/style/style_Profile.css" />
+        <URL value="@../static/style/style_template.css" />
     </stylesheets>
 
     <children>
-        <StackPane styleClass="card-profile" maxWidth="900.0" alignment="CENTER">
+        <StackPane alignment="CENTER" maxWidth="900.0" styleClass="card-profile">
             <children>
-                <GridPane prefHeight="544.0" prefWidth="850.0"
-                          style="-fx-background-color: F6F6F6; -fx-background-radius: 20;"
-                          styleClass="card-profile" hgap="20.0" vgap="10.0">
+                <GridPane hgap="20.0" prefHeight="544.0" prefWidth="850.0" style="-fx-background-color: F6F6F6; -fx-background-radius: 20;" styleClass="card-profile" vgap="10.0">
                     <children>
 
-                        <ImageView fitHeight="118.0" fitWidth="129.0" pickOnBounds="true" preserveRatio="true"
-                                   GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.halignment="CENTER">
+                        <ImageView fitHeight="118.0" fitWidth="129.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0">
                             <image>
-                                <Image url="@../static/img/user.png"/>
+                                <Image url="@../static/img/user.png" />
                             </image>
                             <GridPane.margin>
-                                <Insets top="20.0"/>
+                                <Insets top="20.0" />
                             </GridPane.margin>
                         </ImageView>
 
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <children>
 
-                                <AnchorPane onMouseClicked="#handlePasswordChange" prefHeight="35.0" prefWidth="180.0"
-                                            style="-fx-cursor: hand;" AnchorPane.leftAnchor="0.0"
-                                            AnchorPane.topAnchor="30.0">
+                                <AnchorPane onMouseClicked="#handlePasswordChange" prefHeight="35.0" prefWidth="180.0" style="-fx-cursor: hand;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
                                     <children>
-                                        <HBox alignment="CENTER_LEFT" spacing="10" AnchorPane.bottomAnchor="0.0"
-                                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                              AnchorPane.topAnchor="0.0">
+                                        <HBox alignment="CENTER_LEFT" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
                                                 <ImageView fitHeight="30" fitWidth="30" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../static/img/settings.png"/>
+                                                        <Image url="@../static/img/Sliders.png" />
                                                     </image>
                                                 </ImageView>
-                                                <Label styleClass="mid-label" text="Alterar Senha" textFill="#4B0081"/>
+                                                <Label styleClass="mid-label" text="Alterar Senha" textFill="#4B0081" />
                                             </children>
                                         </HBox>
                                     </children>
                                 </AnchorPane>
 
-                                <AnchorPane fx:id="anchorLogout" onMouseClicked="#logout" prefHeight="35.0"
-                                            prefWidth="120.0"
-                                            style="-fx-cursor: hand;" AnchorPane.leftAnchor="0.0"
-                                            AnchorPane.topAnchor="80.0">
+                                <AnchorPane fx:id="anchorLogout" onMouseClicked="#logout" prefHeight="35.0" prefWidth="120.0" style="-fx-cursor: hand;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
                                     <children>
-                                        <HBox alignment="CENTER_LEFT" spacing="10" AnchorPane.bottomAnchor="0.0"
-                                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                              AnchorPane.topAnchor="0.0">
+                                        <HBox alignment="CENTER_LEFT" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
                                                 <ImageView fitHeight="30" fitWidth="30" preserveRatio="true">
                                                     <image>
-                                                        <Image url="@../static/img/logout.png"/>
+                                                        <Image url="@../static/img/logout.png" />
                                                     </image>
                                                 </ImageView>
-                                                <Label styleClass="mid-label" text="Sair" textFill="#4B0081"/>
+                                                <Label styleClass="mid-label" text="Sair" textFill="#4B0081" />
                                             </children>
                                         </HBox>
                                     </children>
@@ -78,68 +71,63 @@
                             </children>
                         </AnchorPane>
 
-                        <Label styleClass="mid-label" text="Nome" textFill="#4B0081" GridPane.columnIndex="1"
-                               GridPane.rowIndex="1"/>
-                        <Label styleClass="mid-label" text="Email" textFill="#4B0081" GridPane.columnIndex="3"
-                               GridPane.rowIndex="1"/>
-                        <Label styleClass="mid-label" text="Cargo" textFill="#4B0081" GridPane.columnIndex="1"
-                               GridPane.rowIndex="3"/>
-                        <Label styleClass="mid-label" text="Status" textFill="#4B0081" GridPane.columnIndex="3"
-                               GridPane.rowIndex="3"/>
+                        <Label styleClass="mid-label" text="Nome" textFill="#4B0081" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label styleClass="mid-label" text="Email" textFill="#4B0081" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Label styleClass="mid-label" text="Cargo" textFill="#4B0081" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label styleClass="mid-label" text="Status" textFill="#4B0081" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
-                        <Label fx:id="labelNome" text="Carregando nome..." GridPane.columnIndex="1"
-                               GridPane.rowIndex="2" styleClass="big-label">
+                        <Label fx:id="labelNome" styleClass="big-label" text="Carregando nome..." GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <GridPane.margin>
-                                <Insets/>
+                                <Insets />
                             </GridPane.margin>
                             <font>
-                                <Font size="22.0"/>
+                                <Font size="22.0" />
                             </font>
                         </Label>
-                        <Label fx:id="labelEmail" text="Carregando email..." GridPane.columnIndex="3"
-                               GridPane.rowIndex="2" styleClass="big-label">
+                        <Label fx:id="labelEmail" styleClass="big-label" text="Carregando email..." GridPane.columnIndex="3" GridPane.rowIndex="2">
                             <font>
-                                <Font size="22.0"/>
+                                <Font size="22.0" />
                             </font>
                         </Label>
-                        <Label fx:id="labelCargo" prefHeight="85.0" prefWidth="400.0" text="Carregando cargo..."
-                               wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="big-label">
+                        <Label fx:id="labelCargo" prefHeight="85.0" prefWidth="400.0" styleClass="big-label" text="Carregando cargo..." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
                             <font>
-                                <Font size="22.0"/>
+                                <Font size="22.0" />
                             </font>
                         </Label>
-                        <Label fx:id="labelStatus" prefHeight="21.0" prefWidth="250.0" text="Carregando status..."
-                               GridPane.columnIndex="3" GridPane.rowIndex="4" styleClass="status-active">
+                        <Label fx:id="labelStatus" prefHeight="21.0" prefWidth="250.0" styleClass="status-active" text="Carregando status..." GridPane.columnIndex="3" GridPane.rowIndex="4">
                             <padding>
-                                <Insets left="15.0" right="15.0" top="5.0" bottom="5.0"/>
+                                <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                             </padding>
                             <font>
-                                <Font size="22.0"/>
+                                <Font size="22.0" />
                             </font>
                         </Label>
 
                     </children>
 
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="0.0" prefWidth="20.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="450.0" minWidth="10.0" prefWidth="400.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="20.0" minWidth="10.0" prefWidth="20.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="450.0" minWidth="10.0" prefWidth="400.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="0.0" prefWidth="20.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="0.0" prefWidth="20.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="450.0" minWidth="10.0" prefWidth="400.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="20.0" minWidth="10.0" prefWidth="20.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="450.0" minWidth="10.0" prefWidth="400.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="0.0" prefWidth="20.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="130.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="130.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
             </children>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
         </StackPane>
     </children>
     <padding>
-        <Insets/>
+        <Insets />
     </padding>
 </VBox>

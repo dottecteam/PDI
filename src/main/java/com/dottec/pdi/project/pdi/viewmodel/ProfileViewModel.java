@@ -10,18 +10,21 @@ import com.dottec.pdi.project.pdi.model.Collaborator;
 import com.dottec.pdi.project.pdi.model.User;
 import com.dottec.pdi.project.pdi.utils.FXUtils;
 import com.dottec.pdi.project.pdi.utils.PasswordHasher;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -32,11 +35,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import com.dottec.pdi.project.pdi.viewmodel.TemplateViewModel;
+import javafx.util.Duration;
 import javafx.util.Pair;
+import org.apache.poi.xslf.draw.geom.XSLFXYAdjustHandle;
 
 
 public class ProfileViewModel implements Initializable {
@@ -71,12 +75,7 @@ public class ProfileViewModel implements Initializable {
             FXMLLoader loader = new FXMLLoader(resource);
             Parent root = loader.load();
 
-            Stage stage = (Stage) sourceNode.getScene().getWindow();
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("Login - PDI");
-            stage.show();
-
+            FXUtils.switchPage(root);
         } catch (IOException e) {
             System.err.println("Erro ao carregar a tela de Login. Caminho FXML incorreto: " + resource);
             e.printStackTrace();
@@ -177,52 +176,77 @@ public class ProfileViewModel implements Initializable {
 
     @FXML
     private void handlePasswordChange() {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("Alterar Senha");
-        dialog.setHeaderText("Insira sua senha atual e a nova senha.");
-
         // Configura o botão de confirmação
-        ButtonType loginButtonType = new ButtonType("Confirmar", ButtonType.OK.getButtonData());
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        Button confirmButton = new Button("Confirmar");
+        confirmButton.getStyleClass().add("basic-button");
+        Button cancelButton = new Button("Cancelar");
+        cancelButton.getStyleClass().add("cancel-button");
 
-        // Cria os campos de entrada (senha atual, nova senha)
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        StackPane currentPassword = createPasswordField("Senha Atual");
+        StackPane newPassword = createPasswordField("Nova Senha");
+        StackPane confirmNewPassword = createPasswordField("Confirmar Nova Senha");
 
-        PasswordField currentPassword = new PasswordField();
-        currentPassword.setPromptText("Senha Atual");
-        PasswordField newPassword = new PasswordField();
-        newPassword.setPromptText("Nova Senha");
-        PasswordField confirmNewPassword = new PasswordField();
-        confirmNewPassword.setPromptText("Confirmar Nova Senha");
+        StackPane mainStackPane = FXUtils.getMainStackPane();
 
-        grid.add(new Label("Senha Atual:"), 0, 0);
-        grid.add(currentPassword, 1, 0);
-        grid.add(new Label("Nova Senha:"), 0, 1);
-        grid.add(newPassword, 1, 1);
-        grid.add(new Label("Confirmar Senha:"), 0, 2);
-        grid.add(confirmNewPassword, 1, 2);
+        StackPane confirmationModal = new StackPane();
+        confirmationModal.getStyleClass().add("message");
 
-        dialog.getDialogPane().setContent(grid);
+        VBox vbox = new VBox();
+        HBox header = new HBox();
+        header.getStyleClass().add("message-header");
+        header.getStyleClass().add("message-header-success");
+
+        Label headerLabel = new Label("Confirmar Senha");
+        headerLabel.getStyleClass().add("message-header-label");
+
+        Button closeButton = new Button();
+        closeButton.getStyleClass().addAll("x-button");
+        closeButton.setOnAction(actionEvent -> {
+            mainStackPane.getChildren().remove(confirmationModal);
+        });
+        header.getChildren().addAll(headerLabel, closeButton);
+
+        HBox buttons = new HBox(cancelButton, confirmButton);
+        buttons.setSpacing(10);
+        buttons.setStyle("-fx-padding: 10;");
+        buttons.setAlignment(Pos.CENTER_RIGHT);
+
+        VBox passwords = new VBox(currentPassword, newPassword, confirmNewPassword);
+        passwords.setSpacing(5);
+        passwords.setStyle("-fx-padding: 10;");
+
+        vbox.getChildren().addAll(header, passwords, buttons);
+        confirmationModal.getChildren().add(vbox);
+
+        mainStackPane.getChildren().addLast(confirmationModal);
+
+        Platform.runLater(() -> {
+            mainStackPane.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+                if(!mainStackPane.getChildren().contains(confirmationModal)) return;
+                if (!confirmationModal.contains(confirmationModal.screenToLocal(e.getScreenX(), e.getScreenY()))) {
+                    mainStackPane.getChildren().remove(confirmationModal);
+                }
+            });
+        });
 
         // Adiciona a lógica de validação
         Platform.runLater(currentPassword::requestFocus);
 
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                return new Pair<>(currentPassword.getText(), newPassword.getText());
-            }
-            return null;
+        cancelButton.setOnMouseClicked(e -> {
+            mainStackPane.getChildren().remove(confirmationModal);
+            return;
         });
 
-        Optional<Pair<String, String>> result = dialog.showAndWait();
+        confirmButton.setOnMouseClicked(e -> {
+            String currentPass = "";
+            if(currentPassword.getChildren().getFirst() instanceof PasswordField pf) currentPass = pf.getText();
 
-        result.ifPresent(passwords -> {
-            String currentPass = passwords.getKey();
-            String newPass = passwords.getValue();
-            String confirmedPass = confirmNewPassword.getText();
+            String newPass = "";
+            if(newPassword.getChildren().getFirst() instanceof PasswordField pf) newPass = pf.getText();
+
+            String confirmedPass = "";
+            if(confirmNewPassword.getChildren().getFirst() instanceof PasswordField pf) confirmedPass = pf.getText();
+
 
             if (newPass.isEmpty() || currentPass.isEmpty() || confirmedPass.isEmpty()) {
                 FXUtils.showErrorMessage("Erro de Validação", "Todos os campos de senha são obrigatórios.");
@@ -242,7 +266,52 @@ public class ProfileViewModel implements Initializable {
 
             // Lógica de Atualização
             performPasswordUpdate(currentPass, newPass);
+            mainStackPane.getChildren().remove(confirmationModal);
         });
+    }
+
+    private StackPane createPasswordField(String promptText){
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText(promptText);
+        passwordField.getStyleClass().add("formInput");
+        TextField textField = new TextField();
+        textField.setPromptText(promptText);
+        textField.getStyleClass().add("formInput");
+
+        passwordField.setMinHeight(37);
+        textField.textProperty().bindBidirectional(passwordField.textProperty());
+
+        passwordField.textProperty().addListener((oldVal, newVal, obs) -> {
+            if(passwordField.getText().isBlank()){
+                passwordField.setStyle("-fx-text-fill: #4B0081;");
+            } else {
+                passwordField.setStyle("-fx-font-size: 8; -fx-text-fill: #4B0081;");
+            }
+        });
+
+        Button showPasswordButton = new Button();
+        showPasswordButton.setOnMouseClicked(e -> switchPasswordVisibility(passwordField, textField, showPasswordButton));
+        showPasswordButton.setStyle("-fx-background-color: transparent;");
+
+        switchPasswordVisibility(passwordField, textField, showPasswordButton);
+        StackPane stackPane = new StackPane(passwordField, textField, showPasswordButton);
+        stackPane.setAlignment(Pos.CENTER_RIGHT);
+        return stackPane;
+    }
+
+    private void switchPasswordVisibility(PasswordField passwordField, TextField passwordTextField, Button showPasswordButton){
+        passwordField.setManaged(passwordTextField.isManaged());
+        passwordField.setVisible(passwordTextField.isVisible());
+        passwordTextField.setManaged(!passwordTextField.isManaged());
+        passwordTextField.setVisible(!passwordField.isVisible());
+
+        boolean passwordVisible = passwordTextField.isVisible();
+        String imagePath = "/com/dottec/pdi/project/pdi/static/img/Eye.png";
+        if(passwordVisible) imagePath = "/com/dottec/pdi/project/pdi/static/img/EyeOff.png";
+        ImageView iv = new ImageView(new Image(getClass().getResource(imagePath).toExternalForm()));
+        iv.setFitHeight(25);
+        iv.setFitWidth(25);
+        showPasswordButton.setGraphic(iv);
     }
 
     // NOVO MÉTODO: Executa a atualização da senha no banco de dados

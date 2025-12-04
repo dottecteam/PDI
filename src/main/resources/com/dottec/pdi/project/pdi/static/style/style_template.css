@@ -61,6 +61,7 @@
 }
 
 .x-button {
+    -fx-background-color: transparent;
     -fx-background-image: url("../img/xButton.png");
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;
