@@ -13,7 +13,7 @@
 
 <StackPane maxHeight="90.0" minHeight="90.0" prefWidth="550.0" styleClass="user-card" stylesheets="@../static/style/style_UserManagement.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dottec.pdi.project.pdi.controllers.UserCardController">
     <children>
-        <HBox alignment="CENTER_LEFT" maxHeight="90.0" maxWidth="1.7976931348623157E308" spacing="15.0" style="-fx-background-color: transparent;">
+        <HBox alignment="CENTER_LEFT" maxHeight="90.0" maxWidth="1.7976931348623157E308" spacing="10.0" style="-fx-background-color: transparent;">
             <children>
                 <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -43,10 +43,13 @@
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
+               <HBox.margin>
+                  <Insets right="-10.0" />
+               </HBox.margin>
                 </Button>
                 <Button fx:id="deleteBtn" onAction="#handleDeleteAction" styleClass="button-icon">
                     <graphic>
-                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../static/img/trash.png" />
                             </image>

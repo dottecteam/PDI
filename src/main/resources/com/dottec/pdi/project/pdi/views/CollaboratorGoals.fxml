@@ -80,7 +80,7 @@
                                 <ChoiceBox id="selectDepartment" fx:id="departmentField" mouseTransparent="true" prefWidth="1500.0" styleClass="label-not-editable" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                             </children>
                         </GridPane>
-                  <HBox maxHeight="30.0" maxWidth="200.0" spacing="10.0">
+                  <HBox alignment="CENTER_RIGHT" maxHeight="30.0" spacing="10.0">
                      <children>
                                 <Button fx:id="confirmEditButton" mnemonicParsing="false" onAction="#handleConfirmEdit" styleClass="basic-button" text="Confirmar" visible="false" />
                                 <Button fx:id="cancelEditButton" mnemonicParsing="false" onAction="#handleCancelEditing" styleClass="cancel-button" text="Cancelar" visible="false" />

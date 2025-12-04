@@ -137,7 +137,7 @@ public class TemplateGoalViewModel {
 
         disableCreationMode();
         creatingGoalTemplateMode = false;
-        FXUtils.showSuccessMessage("Modelo Meta criada com sucesso!");
+        FXUtils.showSuccessMessage("Modelo criado com sucesso!");
         HeaderViewModel.updateHeader("TemplateGoal.fxml");
     }
 
@@ -148,7 +148,7 @@ public class TemplateGoalViewModel {
         createAddActivityTemplateButton();
     }
 
-        public void addActivityTemplate(ActivityTemplate activityTemplate){
+    public void addActivityTemplate(ActivityTemplate activityTemplate){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/dottec/pdi/project/pdi/views/ActivityTemplate.fxml"));
             Parent activityPane = loader.load();

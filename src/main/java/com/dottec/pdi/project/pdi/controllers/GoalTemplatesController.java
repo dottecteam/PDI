@@ -21,7 +21,7 @@ public final class GoalTemplatesController{
             GoalTemplatesDAO.insert(goalTemplate);
             if (goalTemplate.getActivityTemplates() != null) {
                 for (ActivityTemplate activityTemplate : goalTemplate.getActivityTemplates()) {
-                    ActivityTemplateController.updateActivityTemplate(activityTemplate);
+                    ActivityTemplateController.saveActivityTemplate(activityTemplate);
                 }
             }
             System.out.println("GoalTemplate '" + goalTemplate.getGoa_tmp_name() + "' inserido com sucesso!");

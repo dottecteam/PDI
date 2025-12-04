@@ -145,6 +145,7 @@
     -fx-text-fill: #555555;
     -fx-font-size: 20;
     -fx-padding: 3;
+    -fx-cursor: hand;
 }
 
 .cancel-button:hover{
@@ -484,18 +485,13 @@
 .menu-item {
     -fx-background-color: transparent, #AF69CD;
     -fx-background-insets: 0, 3;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
+    -fx-padding: 5 8;
     -fx-text-align: center;
     -fx-cursor: hand;
 }
 
-.menu-item .label {
-    -fx-alignment: center;
-    -fx-text-alignment: center;
-}
-
 .menu-item:hover {
     -fx-background-color: #9032BB;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 4, 0, 0, 4)
 }
