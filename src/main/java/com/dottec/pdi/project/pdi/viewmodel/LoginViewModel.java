@@ -7,6 +7,7 @@ import com.dottec.pdi.project.pdi.model.User;
 import com.dottec.pdi.project.pdi.utils.FXUtils;
 import com.dottec.pdi.project.pdi.utils.PasswordUtil;
 import javafx.animation.Animation;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.StackPane;
@@ -45,6 +47,12 @@ public class LoginViewModel implements Initializable {
 
     @FXML
     private PasswordField passwordField;
+
+    @FXML
+    private TextField passwordTextField;
+
+    @FXML
+    private Button showPasswordButton;
 
     @FXML
     private Button logar;
@@ -89,6 +97,34 @@ public class LoginViewModel implements Initializable {
             animacao.play();
         });
 
+        Platform.runLater(() -> passwordField.setMinHeight(emailField.getHeight()));
+        passwordField.textProperty().addListener((oldVal, newVal, obs) -> {
+            if(passwordField.getText().isBlank()){
+                passwordField.setStyle("-fx-font-size: 14; -fx-text-fill: #4B0081;");
+            } else {
+                passwordField.setStyle("-fx-font-size: 8; -fx-text-fill: #4B0081;");
+            }
+        });
+
+        switchPasswordVisibility();
+        passwordTextField.textProperty().bindBidirectional(passwordField.textProperty());
+
+        showPasswordButton.setOnMouseClicked(e -> switchPasswordVisibility());
+    }
+
+    private void switchPasswordVisibility(){
+        passwordField.setManaged(passwordTextField.isManaged());
+        passwordField.setVisible(passwordTextField.isVisible());
+        passwordTextField.setManaged(!passwordTextField.isManaged());
+        passwordTextField.setVisible(!passwordField.isVisible());
+
+        boolean passwordVisible = passwordTextField.isVisible();
+        String imagePath = "/com/dottec/pdi/project/pdi/static/img/Eye.png";
+        if(passwordVisible) imagePath = "/com/dottec/pdi/project/pdi/static/img/EyeOff.png";
+        ImageView iv = new ImageView(new Image(getClass().getResource(imagePath).toExternalForm()));
+        iv.setFitHeight(25);
+        iv.setFitWidth(25);
+        showPasswordButton.setGraphic(iv);
     }
 
     private void updatePolygonPoints() {

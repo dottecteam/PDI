@@ -5,9 +5,8 @@
     -fx-border-color: #A97CC7;
     -fx-background-color: white;
     -fx-padding: 12 12;
-    -fx-font-size: 13px;
+    -fx-font-size: 16px;
     -fx-border-width: 1.5px;
-
     -fx-transition: all 0.2s ease-in-out;
 }
 
@@ -15,7 +14,6 @@
     -fx-border-color: #7d519a;
     -fx-effect: dropshadow(gaussian, rgba(169, 124, 199, 0.5), 8, 0, 0, 0);
 }
-
 
 .form-label {
     -fx-text-fill: #A97CC7;
