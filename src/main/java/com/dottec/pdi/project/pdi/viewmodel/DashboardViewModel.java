@@ -206,7 +206,7 @@ public class DashboardViewModel implements Initializable {
         // Load Skills Distribution (Pie Chart) - Global Available
         loadSkillsDistributionChartData(filteredTagTypes);
 
-        FXUtils.showErrorMessage("Aviso", "Na visão Geral, a filtragem por Setor e a maioria dos gráficos detalhados não estão disponíveis, pois exigem agregação de dados não implementada no sistema.");
+        FXUtils.showErrorMessage("Aviso", "Gráficos limitados por dados ausentes.");
     }
 
     /**

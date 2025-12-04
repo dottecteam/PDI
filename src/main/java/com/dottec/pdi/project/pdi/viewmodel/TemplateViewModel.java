@@ -66,8 +66,6 @@ public class TemplateViewModel implements Initializable {
 
     //BorderPane
     @FXML
-    private BorderPane mainPane;
-    @FXML
     private BorderPane tmpCenter;
 
     //ImageView

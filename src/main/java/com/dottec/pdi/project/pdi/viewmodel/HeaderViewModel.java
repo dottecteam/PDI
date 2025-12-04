@@ -262,11 +262,11 @@ public class HeaderViewModel {
         });
     }
 
-
-
-        public static void setNotificationButtonVisible(Boolean visible) {
+    public static void setNotificationButtonVisible(Boolean visible) {
         instance.notificationButton.setVisible(visible);
         instance.notificationButton.setManaged(visible);
+        instance.notificationBadge.setVisible(visible);
+        instance.notificationBadge.setManaged(visible);
     }
 
     public static void setReturnButtonVisible(Boolean visible) {
@@ -327,11 +327,9 @@ public class HeaderViewModel {
         instance.headerButtonsField.getChildren().add(position, node);
     }
 
-
     public static void clearButtons() {
         instance.headerButtonsField.getChildren().clear();
     }
-
 
     public static void clear() {
         clearButtons();

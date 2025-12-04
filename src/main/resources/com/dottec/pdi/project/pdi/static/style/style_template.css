@@ -24,7 +24,7 @@
     -fx-text-fill: #4B0081;
     -fx-background-color: white;
     -fx-background-radius: 10;
-    -fx-max-width: 400;
+    -fx-max-width: 450;
     -fx-max-height: 150;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 0);
     -fx-alignment: center;
@@ -88,7 +88,7 @@
 
 .menuLabel {
     -fx-pick-on-bounds: false;
-    -fx-font-size: 20px;
+    -fx-font-size: 18px;
 }
 
 .hBox{

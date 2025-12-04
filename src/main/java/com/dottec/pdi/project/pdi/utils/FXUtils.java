@@ -94,7 +94,7 @@ public class FXUtils {
         Label label = new Label(message);
         label.setWrapText(true);
         label.setMaxWidth(500);
-        label.setStyle("-fx-padding: 10");
+        label.setStyle("-fx-padding: 10; -fx-font-size: 14;");
 
         for(Node node : nodes){
             if(node instanceof Button){
